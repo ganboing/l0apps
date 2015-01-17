@@ -1,0 +1,3405 @@
+invoking "cc0 -c strsplitted-lr-frompmem.c0 -o strsplitted-lr-frompmem.o -g"
+temp file is: strsplitted-lr-frompmem.c0.tmp
+Preprocessing with cmd "cpp -nostdinc --sysroot . -I/home/progman/workspace/d-thinker/libi0/libi0 strsplitted-lr-frompmem.c0 -o strsplitted-lr-frompmem.c0.tmp"
+--------------------------------------
+parsing...
+Calling altlr3CommonTokenStreamSourceNew...
+Called altlr3CommonTokenStreamSourceNew...
+Parse: calling translation_unit...
+Parse: cleanup
+finished Parse
+--------------------------------------
+ConstantPropagation...
+--------------------------------------
+ConstantPropagation...
+--------------------------------------
+codeDom Dump:
+*************************************
+FUNCTION: get_points_range
+RETURN: void
+PARAMETERS:
+    NAME: i, TYPE: int64
+    NAME: p_begin, TYPE: int64*
+    NAME: p_end, TYPE: int64*
+BODY:
+{
+    ((*p_begin) = ((pcnt / 0x1e):5 * i):5)
+        branch
+        (i == 0x1d):1:
+                        {
+                ((*p_end) = pcnt)
+            }
+        default:
+                        {
+                ((*p_end) = ((pcnt / 0x1e):5 * (i + 0x1):5):5)
+            }
+
+        return
+
+}
+FUNCTION: create_new_iter_task
+RETURN: void
+PARAMETERS:
+BODY:
+{
+    (space = 0x0)
+    runner new_iter_task() watching () using (iter, pcnt, ppoints, task_status[0x0,, (0x1e * 0x200):5]) in (space)
+        return
+
+}
+FUNCTION: calc_task
+RETURN: void
+PARAMETERS:
+    NAME: id, TYPE: int64
+BODY:
+{
+    get_points_range(id, (&p_begin), (&p_end))
+    (ps = 0x400000008)
+    (gradient = (&ws[(id * 0x200):5]))
+        branch
+        (iter == (~0x1)):1:
+                        {
+                                branch
+                    ((*0x400000000) != 0x8829eff20):1:
+                                                {
+                            memcpy(                            (int8*)(&ppoints[(p_begin * (0x14 + 0x1):5):5]), (0x8 * ((p_end - p_begin):5 * (0x14 + 0x1):5):5):5,                             (int8*)(&ps[(p_begin * (0x14 + 0x1):5):5]))
+                            ((*0x400000000) = 0x8829eff20)
+                        }
+                    default:
+                                                {
+                        }
+
+            }
+        default:
+                        {
+                                
+LOOP
+                INIT
+(i = 0x0)
+                COND
+(i < 0x14):1
+                INCR
+(i = (i + 0x1):5)
+                BODY
+                {
+                    (gradient[i] = 0.000000)
+                }
+
+
+                                
+LOOP
+                INIT
+(i = p_begin)
+                COND
+(i < p_end):1
+                INCR
+(i = (i + 0x1):5)
+                BODY
+                {
+                    (p = (&ps[(i * 0x15):5]))
+                    (y = p[0x0])
+                    (x = (&p[0x1]))
+                    (factor =                     (double)0x0)
+                                        
+LOOP
+                    INIT
+(j = 0x0)
+                    COND
+(j < 0x14):1
+                    INCR
+(j = (j + 0x1):5)
+                    BODY
+                    {
+                        (factor = (factor + (w[j] * x[j]):12):12)
+                    }
+
+
+                    (factor = ((1.000000 / (1.000000 + exp((factor * (0.000000 - 1.000000):12):12)):12):12 - y):12)
+                                        
+LOOP
+                    INIT
+(j = 0x0)
+                    COND
+(j < 0x14):1
+                    INCR
+(j = (j + 0x1):5)
+                    BODY
+                    {
+                        (gradient[j] = (gradient[j] + (x[j] * factor):12):12)
+                    }
+
+
+                }
+
+
+            }
+
+    (task_status[(id * 0x200):5] = 0x1)
+    commit
+
+}
+FUNCTION: new_iter_task
+RETURN: void
+PARAMETERS:
+BODY:
+{
+        
+LOOP
+    INIT
+(i = 0x0)
+    COND
+(i < 0x1e):1
+    INCR
+(i = (i + 0x1):5)
+    BODY
+    {
+        get_points_range(i, (&p_begin), (&p_end))
+        (space = (0x400000000000 * (i + 0x1):5):5)
+                branch
+            (iter == (~0x1)):1:
+                                {
+                    runner calc_task(i) watching () using (iter, pcnt, ppoints, task_status[(i * 0x200):5,, ((i * 0x200):5 + 0x1):5], ws[(i * 0x200):5,, ((i + 0x1):5 * 0x200):5], w[0x0,, 0x14], ppoints[(p_begin * (0x14 + 0x1):5):5,, (p_end * (0x14 + 0x1):5):5]) in (space)
+                }
+            default:
+                                {
+                    runner calc_task(i) watching () using (iter, pcnt, task_status[(i * 0x200):5,, ((i * 0x200):5 + 0x1):5], ws[(i * 0x200):5,, ((i + 0x1):5 * 0x200):5], w[0x0,, 0x14]) in (space)
+                }
+
+        (task_status[(i * 0x200):5] = 0x0)
+    }
+
+
+    (space = 0x0)
+    runner barrier_task(iter) watching (task_status[0x0,, (0x1e * 0x200):5]) using (iter, pcnt, begin_time_sec, begin_time_nsec, ws[0x0,, ((0x1e + 0x1):5 * 0x200):5], w[0x0,, 0x14]) in (space)
+    commit
+
+}
+FUNCTION: barrier_task
+RETURN: void
+PARAMETERS:
+    NAME: cur_iter, TYPE: int64
+BODY:
+{
+        branch
+        (cur_iter != iter):1:
+                        {
+                abortd
+
+            }
+        default:
+                        {
+            }
+
+        
+LOOP
+    INIT
+(i = 0x0)
+    COND
+(i < 0x1e):1
+    INCR
+(i = (i + 0x1):5)
+    BODY
+    {
+                branch
+            (task_status[(i * 0x200):5] != 0x1):1:
+                                {
+                    abort
+
+                }
+            default:
+                                {
+                }
+
+    }
+
+
+        branch
+        (iter == (~0x1)):1:
+                        {
+                (i = gettime((&begin_time_sec), (&begin_time_nsec)))
+            }
+        default:
+                        {
+                (factor = (1.000000 / sqrt(                (double)(iter + 0x1):5)):12)
+                                
+LOOP
+                INIT
+(j = 0x0)
+                COND
+(j < 0x1e):1
+                INCR
+(j = (j + 0x1):5)
+                BODY
+                {
+                    (wj = (&ws[(j * 0x200):5]))
+                                        
+LOOP
+                    INIT
+(i = 0x0)
+                    COND
+(i < 0x14):1
+                    INCR
+(i = (i + 0x1):5)
+                    BODY
+                    {
+                        (w[i] = (w[i] - ((factor * wj[i]):12 /                         (double)pcnt):12):12)
+                    }
+
+
+                }
+
+
+            }
+
+    (iter = (iter + 0x1):5)
+        branch
+        (iter == 0xa):1:
+                        {
+                output_char(0x52)
+                output_char(0x65)
+                output_char(0x61)
+                output_char(0x63)
+                output_char(0x68)
+                output_char(0x65)
+                output_char(0x64)
+                output_char(0x20)
+                output_char(0x6d)
+                output_char(0x61)
+                output_char(0x78)
+                output_char(0x20)
+                output_char(0x69)
+                output_char(0x74)
+                output_char(0x65)
+                output_char(0x72)
+                output_char(0x3a)
+                output_q(0xa)
+                output_char(0x2e)
+                {
+                    output_char(0xa)
+                }
+                                
+
+                output_char(0x54)
+                output_char(0x69)
+                output_char(0x6d)
+                output_char(0x65)
+                output_char(0x20)
+                output_char(0x75)
+                output_char(0x73)
+                output_char(0x65)
+                output_char(0x64)
+                output_char(0x3a)
+                output_char(0x20)
+                (i = print_time_diff_and_update((&begin_time_sec), (&begin_time_nsec)))
+                output_char(0x20)
+                output_char(0x73)
+                output_char(0x65)
+                output_char(0x63)
+                output_char(0x6f)
+                output_char(0x6e)
+                output_char(0x64)
+                output_char(0x73)
+                output_char(0x2e)
+                {
+                    output_char(0xa)
+                }
+                                
+
+                                
+LOOP
+                INIT
+(i = 0x0)
+                COND
+(i < 0x14):1
+                INCR
+(i = (i + 0x1):5)
+                BODY
+                {
+                    output_double(w[i])
+                                        branch
+                        (i != 0x13):1:
+                                                        {
+                                output_char(0x2c)
+                            }
+                        default:
+                                                        {
+                                {
+                                    output_char(0xa)
+                                }
+                                                                
+
+                            }
+
+                }
+
+
+                commitd
+
+            }
+        default:
+                        {
+            }
+
+    create_new_iter_task()
+    commitd
+
+}
+FUNCTION: init_task
+RETURN: void
+PARAMETERS:
+BODY:
+{
+    (pcnt = (*0x40800000000))
+    (ppoints = 0x40800000008)
+    (iter = (~0x1))
+        
+LOOP
+    INIT
+(j = 0x0)
+    COND
+(j < 0x14):1
+    INCR
+(j = (j + 0x1):5)
+    BODY
+    {
+        (w[j] = 0.000000)
+    }
+
+
+    create_new_iter_task()
+    commit
+
+}
+FUNCTION: main
+RETURN: void
+PARAMETERS:
+BODY:
+{
+    (space = 0x0)
+    runner init_task() watching () using (iter, w[0x0,, 0x14], begin_time_sec, begin_time_nsec, pcnt, ppoints,     (double*)((((((0x800000000 + 0x20000000000):5 - 0x1):5 + 0x1):5 + 0x20000000000):5 - 0x1):5 + 0x1):5[0x0,, (0x8 + ((0x8 * 0xf4240):5 * (0x14 + 0x1):5):5):5]) in (space)
+    commit
+
+}
+*************************************
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 12
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 1
+DBG: IL generating: comparison: 1, 5, 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+DBG: IL generating: comparison: type 5
+Optimizing: function START
+Optimizing: mul __temp_1$0x1ef32b0, __temp_0$0x1ef32b0, i$0x1ef2f70
+Optimizing: sti p_begin$0x1ef2f70, __temp_1$0x1ef32b0
+Optimizing: ceq __temp_3$0x1ef32b0, i$0x1ef2f70, 0x1D:i8
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_3$0x1ef32b0, __temp_4$0x1ef32b0
+Optimized: beq i$0x1ef2f70, 0x1D:i8, __temp_4$0x1ef32b0
+Optimizing: nop
+Optimizing: div __temp_5$0x1ef47a0, pcnt$0x1ebe300, 0x1E:i8
+Optimizing: add __temp_6$0x1ef47a0, i$0x1ef2f70, 0x1:i8
+Optimizing: mul __temp_7$0x1ef47a0, __temp_5$0x1ef47a0, __temp_6$0x1ef47a0
+Optimizing: sti p_end$0x1ef2f70, __temp_7$0x1ef47a0
+Optimizing: br __temp_2$0x1ef32b0
+Optimizing: __temp_4$0x1ef32b0:
+Optimizing: sti p_end$0x1ef2f70, pcnt$0x1ebe300
+Optimizing: __temp_2$0x1ef32b0:
+Optimized: Deleted 1 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: mul __temp_1$0x1ef32b0, __temp_0$0x1ef32b0, i$0x1ef2f70
+Optimizing: sti p_begin$0x1ef2f70, __temp_1$0x1ef32b0
+Optimizing: beq i$0x1ef2f70, 0x1D:i8, __temp_4$0x1ef32b0
+Optimizing: div __temp_5$0x1ef47a0, pcnt$0x1ebe300, 0x1E:i8
+Optimizing: add __temp_6$0x1ef47a0, i$0x1ef2f70, 0x1:i8
+Optimizing: mul __temp_7$0x1ef47a0, __temp_5$0x1ef47a0, __temp_6$0x1ef47a0
+Optimizing: sti p_end$0x1ef2f70, __temp_7$0x1ef47a0
+Optimizing: br __temp_2$0x1ef32b0
+Optimizing: __temp_4$0x1ef32b0:
+Optimizing: sti p_end$0x1ef2f70, pcnt$0x1ebe300
+Optimizing: __temp_2$0x1ef32b0:
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x4:msq, 0x200001010:msq"
+Optimizing: lda __temp_11$0x1f07c00, iter$0x1ebe300
+Optimizing: mov __temp_12$0x1f07c00, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_11$0x1f07c00
+Optimizing: sti 0x200001020:i, __temp_12$0x1f07c00
+Optimizing: lda __temp_13$0x1f07c00, pcnt$0x1ebe300
+Optimizing: mov __temp_14$0x1f07c00, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_13$0x1f07c00
+Optimizing: sti 0x200001030:i, __temp_14$0x1f07c00
+Optimizing: lda __temp_15$0x1f07c00, ppoints$0x1ebe300
+Optimizing: mov __temp_16$0x1f07c00, 0x8:i
+Optimizing: sti 0x200001038:i, __temp_15$0x1f07c00
+Optimizing: sti 0x200001040:i, __temp_16$0x1f07c00
+Optimizing: mul __temp_19$0x1f07c00, 0x1E:i8, 0x200:i8
+Optimizing: ldelema __temp_17$0x1f07c00, task_status$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_18$0x1f07c00, __temp_19$0x1f07c00, 0x0:i8
+Optimizing: mul __temp_18$0x1f07c00, 0x8:i, __temp_18$0x1f07c00
+Optimizing: sti 0x200001048:i, __temp_17$0x1f07c00
+Optimizing: sti 0x200001050:i, __temp_18$0x1f07c00
+Optimizing: asm "mov $0x0:msq, 0x200001058:msq"
+Optimizing: asm "mov $__newr0:msq, 0x200001060:msq"
+Optimizing: mov __temp_20$0x1f07c00, space$0x1f07c00
+Optimizing: sti 0x200001068:i, __temp_20$0x1f07c00
+Optimizing: asm "mov $0x200001000:msq, 0x200001070:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x200001078:msq"
+Optimizing: asm "mov $0x200001058:msq, 0x200001080:msq"
+Optimizing: asm "mov $0x200001060:msq, 0x200001088:msq"
+Optimizing: asm "mov $0x200001068:msq, 0x200001090:msq"
+Optimizing: asm "spawnx 0x200001070, 0x200001078, 0x200001080, 0x200001088, 0x200001090"
+Optimizing: ldi __temp_8$0x1f07c00, 0x100000400:i
+Optimizing: ldi __temp_9$0x1f07c00, 0x100000408:i
+Optimizing: add __temp_10$0x1f07c00, __temp_8$0x1f07c00, __temp_9$0x1f07c00
+Optimizing: lda __temp_21$0x1f07c00, new_iter_task$0x1ebe300
+Optimizing: sub __temp_10$0x1f07c00, __temp_10$0x1f07c00, 0x8:i8
+Optimizing: sti __temp_10$0x1f07c00, __temp_21$0x1f07c00
+Optimizing: sub __temp_10$0x1f07c00, __temp_10$0x1f07c00, 0x8:i8
+Optimizing: sti __temp_10$0x1f07c00, 0x0:i8
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: lda __temp_23$0x1f36eb0, p_end$0x1f36eb0
+Optimizing: call get_points_range$0x1ebe300, <missing>, id$0x1f36c80, __temp_22$0x1f36eb0, __temp_23$0x1f36eb0
+Optimizing: mov ps$0x1f36eb0, 0x400000008:i
+Optimizing: mul __temp_25$0x1f36eb0, id$0x1f36c80, 0x200:i8
+Optimizing: ldelema __temp_24$0x1f36eb0, ws$0x1ebe300, __temp_25$0x1f36eb0
+Optimizing: mov gradient$0x1f36eb0, __temp_24$0x1f36eb0
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: ldelema gradient$0x1f36eb0, ws$0x1ebe300, __temp_25$0x1f36eb0
+Optimized: nop
+Optimizing: neg __temp_27$0x1f36eb0, 0x1:i8
+Optimizing: ceq __temp_28$0x1f36eb0, iter$0x1ebe300, __temp_27$0x1f36eb0
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_28$0x1f36eb0, __temp_29$0x1f36eb0
+Optimized: beq iter$0x1ebe300, __temp_27$0x1f36eb0, __temp_29$0x1f36eb0
+Optimizing: nop
+Optimizing: mov i$0x1f36eb0, 0x0:i8
+Optimizing: __temp_30$0x1f3e1f0:
+Optimizing: clt __temp_33$0x1f3e1f0, i$0x1f36eb0, 0x14:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_33$0x1f3e1f0, __temp_32$0x1f3e1f0
+Optimized: ble 0x14:i8, i$0x1f36eb0, __temp_32$0x1f3e1f0
+Optimizing: nop
+Optimizing: stelem gradient$0x1f36eb0, i$0x1f36eb0, 0.000000:r8
+Optimizing: __temp_31$0x1f3e1f0:
+Optimizing: add __temp_34$0x1f3e1f0, i$0x1f36eb0, 0x1:i8
+Optimizing: mov i$0x1f36eb0, __temp_34$0x1f3e1f0
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add i$0x1f36eb0, i$0x1f36eb0, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_30$0x1f3e1f0
+Optimizing: __temp_32$0x1f3e1f0:
+Optimizing: mov i$0x1f36eb0, p_begin$0x1f36eb0
+Optimizing: __temp_35$0x1f3e1f0:
+Optimizing: clt __temp_38$0x1f3e1f0, i$0x1f36eb0, p_end$0x1f36eb0
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_38$0x1f3e1f0, __temp_37$0x1f3e1f0
+Optimized: ble p_end$0x1f36eb0, i$0x1f36eb0, __temp_37$0x1f3e1f0
+Optimizing: nop
+Optimizing: mul __temp_40$0x1f40520, i$0x1f36eb0, 0x15:i8
+Optimizing: ldelema __temp_39$0x1f40520, ps$0x1f36eb0, __temp_40$0x1f40520
+Optimizing: mov p$0x1f36eb0, __temp_39$0x1f40520
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: ldelema p$0x1f36eb0, ps$0x1f36eb0, __temp_40$0x1f40520
+Optimized: nop
+Optimizing: ldelem __temp_41$0x1f40520, p$0x1f36eb0, 0x0:i8
+Optimizing: mov y$0x1f36eb0, __temp_41$0x1f40520
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: ldelem y$0x1f36eb0, p$0x1f36eb0, 0x0:i8
+Optimized: nop
+Optimizing: ldelema __temp_42$0x1f40520, p$0x1f36eb0, 0x1:i8
+Optimizing: mov x$0x1f36eb0, __temp_42$0x1f40520
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: ldelema x$0x1f36eb0, p$0x1f36eb0, 0x1:i8
+Optimized: nop
+Optimizing: conv __temp_43$0x1f40520, 0x0:i8
+Optimizing: mov factor$0x1f36eb0, __temp_43$0x1f40520
+Ah ha! I got you! mov after conv instructions -->Good to optimize.
+Optimized: conv factor$0x1f36eb0, 0x0:i8
+Optimized: nop
+Optimizing: mov j$0x1f36eb0, 0x0:i8
+Optimizing: __temp_44$0x1f40520:
+Optimizing: clt __temp_47$0x1f40520, j$0x1f36eb0, 0x14:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_47$0x1f40520, __temp_46$0x1f40520
+Optimized: ble 0x14:i8, j$0x1f36eb0, __temp_46$0x1f40520
+Optimizing: nop
+Optimizing: ldelem __temp_48$0x1f42e60, w$0x1ebe300, j$0x1f36eb0
+Optimizing: ldelem __temp_49$0x1f42e60, x$0x1f36eb0, j$0x1f36eb0
+Optimizing: mul __temp_50$0x1f42e60, __temp_48$0x1f42e60, __temp_49$0x1f42e60
+Optimizing: add __temp_51$0x1f42e60, factor$0x1f36eb0, __temp_50$0x1f42e60
+Optimizing: mov factor$0x1f36eb0, __temp_51$0x1f42e60
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add factor$0x1f36eb0, factor$0x1f36eb0, __temp_50$0x1f42e60
+Optimized: nop
+Optimizing: __temp_45$0x1f40520:
+Optimizing: add __temp_52$0x1f40520, j$0x1f36eb0, 0x1:i8
+Optimizing: mov j$0x1f36eb0, __temp_52$0x1f40520
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add j$0x1f36eb0, j$0x1f36eb0, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_44$0x1f40520
+Optimizing: __temp_46$0x1f40520:
+Optimizing: sub __temp_54$0x1f40520, 0.000000:r8, 1.000000:r8
+Optimizing: mul __temp_55$0x1f40520, factor$0x1f36eb0, __temp_54$0x1f40520
+Optimizing: call exp$0x1ebe300, __temp_53$0x1f40520, __temp_55$0x1f40520
+Optimizing: add __temp_56$0x1f40520, 1.000000:r8, __temp_53$0x1f40520
+Optimizing: div __temp_57$0x1f40520, 1.000000:r8, __temp_56$0x1f40520
+Optimizing: sub __temp_58$0x1f40520, __temp_57$0x1f40520, y$0x1f36eb0
+Optimizing: mov factor$0x1f36eb0, __temp_58$0x1f40520
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: sub factor$0x1f36eb0, __temp_57$0x1f40520, y$0x1f36eb0
+Optimized: nop
+Optimizing: mov j$0x1f36eb0, 0x0:i8
+Optimizing: __temp_59$0x1f40520:
+Optimizing: clt __temp_62$0x1f40520, j$0x1f36eb0, 0x14:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_62$0x1f40520, __temp_61$0x1f40520
+Optimized: ble 0x14:i8, j$0x1f36eb0, __temp_61$0x1f40520
+Optimizing: nop
+Optimizing: ldelem __temp_63$0x1f45a30, gradient$0x1f36eb0, j$0x1f36eb0
+Optimizing: ldelem __temp_64$0x1f45a30, x$0x1f36eb0, j$0x1f36eb0
+Optimizing: mul __temp_65$0x1f45a30, __temp_64$0x1f45a30, factor$0x1f36eb0
+Optimizing: add __temp_66$0x1f45a30, __temp_63$0x1f45a30, __temp_65$0x1f45a30
+Optimizing: stelem gradient$0x1f36eb0, j$0x1f36eb0, __temp_66$0x1f45a30
+Optimizing: __temp_60$0x1f40520:
+Optimizing: add __temp_67$0x1f40520, j$0x1f36eb0, 0x1:i8
+Optimizing: mov j$0x1f36eb0, __temp_67$0x1f40520
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add j$0x1f36eb0, j$0x1f36eb0, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_59$0x1f40520
+Optimizing: __temp_61$0x1f40520:
+Optimizing: __temp_36$0x1f3e1f0:
+Optimizing: add __temp_68$0x1f3e1f0, i$0x1f36eb0, 0x1:i8
+Optimizing: mov i$0x1f36eb0, __temp_68$0x1f3e1f0
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add i$0x1f36eb0, i$0x1f36eb0, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_35$0x1f3e1f0
+Optimizing: __temp_37$0x1f3e1f0:
+Optimizing: br __temp_26$0x1f36eb0
+Optimizing: __temp_29$0x1f36eb0:
+Optimizing: ldi __temp_70$0x1f3af50, 0x400000000:i
+Optimizing: cne __temp_71$0x1f3af50, __temp_70$0x1f3af50, 0x8829EFF20:i8
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_71$0x1f3af50, __temp_72$0x1f3af50
+Optimized: bne __temp_70$0x1f3af50, 0x8829EFF20:i8, __temp_72$0x1f3af50
+Optimizing: nop
+Optimizing: br __temp_69$0x1f3af50
+Optimizing: __temp_72$0x1f3af50:
+Optimizing: add __temp_74$0x1f3b6b0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_75$0x1f3b6b0, p_begin$0x1f36eb0, __temp_74$0x1f3b6b0
+Optimizing: ldelema __temp_73$0x1f3b6b0, ppoints$0x1ebe300, __temp_75$0x1f3b6b0
+Optimizing: sub __temp_76$0x1f3b6b0, p_end$0x1f36eb0, p_begin$0x1f36eb0
+Optimizing: add __temp_77$0x1f3b6b0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_78$0x1f3b6b0, __temp_76$0x1f3b6b0, __temp_77$0x1f3b6b0
+Optimizing: mul __temp_79$0x1f3b6b0, 0x8:i8, __temp_78$0x1f3b6b0
+Optimizing: add __temp_81$0x1f3b6b0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_82$0x1f3b6b0, p_begin$0x1f36eb0, __temp_81$0x1f3b6b0
+Optimizing: ldelema __temp_80$0x1f3b6b0, ps$0x1f36eb0, __temp_82$0x1f3b6b0
+Optimizing: call memcpy$0x1ebe300, <missing>, __temp_73$0x1f3b6b0, __temp_79$0x1f3b6b0, __temp_80$0x1f3b6b0
+Optimizing: sti 0x400000000:i, 0x8829EFF20:i8
+Optimizing: __temp_69$0x1f3af50:
+Optimizing: __temp_26$0x1f36eb0:
+Optimizing: mul __temp_83$0x1f36eb0, id$0x1f36c80, 0x200:i8
+Optimizing: stelem task_status$0x1ebe300, __temp_83$0x1f36eb0, 0x1:i8
+Optimized: Deleted 17 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: lda __temp_23$0x1f36eb0, p_end$0x1f36eb0
+Optimizing: call get_points_range$0x1ebe300, <missing>, id$0x1f36c80, __temp_22$0x1f36eb0, __temp_23$0x1f36eb0
+Optimizing: mov ps$0x1f36eb0, 0x400000008:i
+Optimizing: mul __temp_25$0x1f36eb0, id$0x1f36c80, 0x200:i8
+Optimizing: ldelema gradient$0x1f36eb0, ws$0x1ebe300, __temp_25$0x1f36eb0
+Optimizing: neg __temp_27$0x1f36eb0, 0x1:i8
+Optimizing: beq iter$0x1ebe300, __temp_27$0x1f36eb0, __temp_29$0x1f36eb0
+Optimizing: mov i$0x1f36eb0, 0x0:i8
+Optimizing: __temp_30$0x1f3e1f0:
+Optimizing: ble 0x14:i8, i$0x1f36eb0, __temp_32$0x1f3e1f0
+Optimizing: stelem gradient$0x1f36eb0, i$0x1f36eb0, 0.000000:r8
+Optimizing: __temp_31$0x1f3e1f0:
+Optimizing: add i$0x1f36eb0, i$0x1f36eb0, 0x1:i8
+Optimizing: br __temp_30$0x1f3e1f0
+Optimizing: __temp_32$0x1f3e1f0:
+Optimizing: mov i$0x1f36eb0, p_begin$0x1f36eb0
+Optimizing: __temp_35$0x1f3e1f0:
+Optimizing: ble p_end$0x1f36eb0, i$0x1f36eb0, __temp_37$0x1f3e1f0
+Optimizing: mul __temp_40$0x1f40520, i$0x1f36eb0, 0x15:i8
+Optimizing: ldelema p$0x1f36eb0, ps$0x1f36eb0, __temp_40$0x1f40520
+Optimizing: ldelem y$0x1f36eb0, p$0x1f36eb0, 0x0:i8
+Optimizing: ldelema x$0x1f36eb0, p$0x1f36eb0, 0x1:i8
+Optimizing: conv factor$0x1f36eb0, 0x0:i8
+Optimizing: mov j$0x1f36eb0, 0x0:i8
+Sadly not okay to optimize.
+Optimizing: __temp_44$0x1f40520:
+Optimizing: ble 0x14:i8, j$0x1f36eb0, __temp_46$0x1f40520
+Optimizing: ldelem __temp_48$0x1f42e60, w$0x1ebe300, j$0x1f36eb0
+Optimizing: ldelem __temp_49$0x1f42e60, x$0x1f36eb0, j$0x1f36eb0
+Optimizing: mul __temp_50$0x1f42e60, __temp_48$0x1f42e60, __temp_49$0x1f42e60
+Optimizing: add factor$0x1f36eb0, factor$0x1f36eb0, __temp_50$0x1f42e60
+Optimizing: __temp_45$0x1f40520:
+Optimizing: add j$0x1f36eb0, j$0x1f36eb0, 0x1:i8
+Optimizing: br __temp_44$0x1f40520
+Optimizing: __temp_46$0x1f40520:
+Optimizing: sub __temp_54$0x1f40520, 0.000000:r8, 1.000000:r8
+Optimizing: mul __temp_55$0x1f40520, factor$0x1f36eb0, __temp_54$0x1f40520
+Optimizing: call exp$0x1ebe300, __temp_53$0x1f40520, __temp_55$0x1f40520
+Optimizing: add __temp_56$0x1f40520, 1.000000:r8, __temp_53$0x1f40520
+Optimizing: div __temp_57$0x1f40520, 1.000000:r8, __temp_56$0x1f40520
+Optimizing: sub factor$0x1f36eb0, __temp_57$0x1f40520, y$0x1f36eb0
+Optimizing: mov j$0x1f36eb0, 0x0:i8
+Sadly not okay to optimize.
+Optimizing: __temp_59$0x1f40520:
+Optimizing: ble 0x14:i8, j$0x1f36eb0, __temp_61$0x1f40520
+Optimizing: ldelem __temp_63$0x1f45a30, gradient$0x1f36eb0, j$0x1f36eb0
+Optimizing: ldelem __temp_64$0x1f45a30, x$0x1f36eb0, j$0x1f36eb0
+Optimizing: mul __temp_65$0x1f45a30, __temp_64$0x1f45a30, factor$0x1f36eb0
+Optimizing: add __temp_66$0x1f45a30, __temp_63$0x1f45a30, __temp_65$0x1f45a30
+Optimizing: stelem gradient$0x1f36eb0, j$0x1f36eb0, __temp_66$0x1f45a30
+Optimizing: __temp_60$0x1f40520:
+Optimizing: add j$0x1f36eb0, j$0x1f36eb0, 0x1:i8
+Optimizing: br __temp_59$0x1f40520
+Optimizing: __temp_61$0x1f40520:
+Optimizing: __temp_36$0x1f3e1f0:
+Optimizing: add i$0x1f36eb0, i$0x1f36eb0, 0x1:i8
+Optimizing: br __temp_35$0x1f3e1f0
+Optimizing: __temp_37$0x1f3e1f0:
+Optimizing: br __temp_26$0x1f36eb0
+Optimizing: __temp_29$0x1f36eb0:
+Optimizing: ldi __temp_70$0x1f3af50, 0x400000000:i
+Optimizing: bne __temp_70$0x1f3af50, 0x8829EFF20:i8, __temp_72$0x1f3af50
+Optimizing: br __temp_69$0x1f3af50
+Optimizing: __temp_72$0x1f3af50:
+Optimizing: add __temp_74$0x1f3b6b0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_75$0x1f3b6b0, p_begin$0x1f36eb0, __temp_74$0x1f3b6b0
+Optimizing: ldelema __temp_73$0x1f3b6b0, ppoints$0x1ebe300, __temp_75$0x1f3b6b0
+Optimizing: sub __temp_76$0x1f3b6b0, p_end$0x1f36eb0, p_begin$0x1f36eb0
+Optimizing: add __temp_77$0x1f3b6b0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_78$0x1f3b6b0, __temp_76$0x1f3b6b0, __temp_77$0x1f3b6b0
+Optimizing: mul __temp_79$0x1f3b6b0, 0x8:i8, __temp_78$0x1f3b6b0
+Optimizing: add __temp_81$0x1f3b6b0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_82$0x1f3b6b0, p_begin$0x1f36eb0, __temp_81$0x1f3b6b0
+Optimizing: ldelema __temp_80$0x1f3b6b0, ps$0x1f36eb0, __temp_82$0x1f3b6b0
+Optimizing: call memcpy$0x1ebe300, <missing>, __temp_73$0x1f3b6b0, __temp_79$0x1f3b6b0, __temp_80$0x1f3b6b0
+Optimizing: sti 0x400000000:i, 0x8829EFF20:i8
+Optimizing: __temp_69$0x1f3af50:
+Optimizing: __temp_26$0x1f36eb0:
+Optimizing: mul __temp_83$0x1f36eb0, id$0x1f36c80, 0x200:i8
+Optimizing: stelem task_status$0x1ebe300, __temp_83$0x1f36eb0, 0x1:i8
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: __temp_84$0x1f74410:
+Optimizing: clt __temp_87$0x1f74410, i$0x1f74410, 0x1E:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_87$0x1f74410, __temp_86$0x1f74410
+Optimized: ble 0x1E:i8, i$0x1f74410, __temp_86$0x1f74410
+Optimizing: nop
+Optimizing: lda __temp_88$0x1f76250, p_begin$0x1f74410
+Optimizing: lda __temp_89$0x1f76250, p_end$0x1f74410
+Optimizing: call get_points_range$0x1ebe300, <missing>, i$0x1f74410, __temp_88$0x1f76250, __temp_89$0x1f76250
+Optimizing: add __temp_90$0x1f76250, i$0x1f74410, 0x1:i8
+Optimizing: mul __temp_91$0x1f76250, 0x400000000000:i8, __temp_90$0x1f76250
+Optimizing: mov space$0x1f74410, __temp_91$0x1f76250
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: mul space$0x1f74410, 0x400000000000:i8, __temp_90$0x1f76250
+Optimized: nop
+Optimizing: neg __temp_93$0x1f76250, 0x1:i8
+Optimizing: ceq __temp_94$0x1f76250, iter$0x1ebe300, __temp_93$0x1f76250
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_94$0x1f76250, __temp_95$0x1f76250
+Optimized: beq iter$0x1ebe300, __temp_93$0x1f76250, __temp_95$0x1f76250
+Optimizing: nop
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x5:msq, 0x200001010:msq"
+Optimizing: lda __temp_99$0x1f7b1d0, iter$0x1ebe300
+Optimizing: mov __temp_100$0x1f7b1d0, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_99$0x1f7b1d0
+Optimizing: sti 0x200001020:i, __temp_100$0x1f7b1d0
+Optimizing: lda __temp_101$0x1f7b1d0, pcnt$0x1ebe300
+Optimizing: mov __temp_102$0x1f7b1d0, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_101$0x1f7b1d0
+Optimizing: sti 0x200001030:i, __temp_102$0x1f7b1d0
+Optimizing: mul __temp_105$0x1f7b1d0, i$0x1f74410, 0x200:i8
+Optimizing: mul __temp_106$0x1f7b1d0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_107$0x1f7b1d0, __temp_106$0x1f7b1d0, 0x1:i8
+Optimizing: ldelema __temp_103$0x1f7b1d0, task_status$0x1ebe300, __temp_105$0x1f7b1d0
+Optimizing: sub __temp_104$0x1f7b1d0, __temp_107$0x1f7b1d0, __temp_105$0x1f7b1d0
+Optimizing: mul __temp_104$0x1f7b1d0, 0x8:i, __temp_104$0x1f7b1d0
+Optimizing: sti 0x200001038:i, __temp_103$0x1f7b1d0
+Optimizing: sti 0x200001040:i, __temp_104$0x1f7b1d0
+Optimizing: mul __temp_110$0x1f7b1d0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_111$0x1f7b1d0, i$0x1f74410, 0x1:i8
+Optimizing: mul __temp_112$0x1f7b1d0, __temp_111$0x1f7b1d0, 0x200:i8
+Optimizing: ldelema __temp_108$0x1f7b1d0, ws$0x1ebe300, __temp_110$0x1f7b1d0
+Optimizing: sub __temp_109$0x1f7b1d0, __temp_112$0x1f7b1d0, __temp_110$0x1f7b1d0
+Optimizing: mul __temp_109$0x1f7b1d0, 0x8:i, __temp_109$0x1f7b1d0
+Optimizing: sti 0x200001048:i, __temp_108$0x1f7b1d0
+Optimizing: sti 0x200001050:i, __temp_109$0x1f7b1d0
+Optimizing: ldelema __temp_113$0x1f7b1d0, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_114$0x1f7b1d0, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_114$0x1f7b1d0, 0x8:i, __temp_114$0x1f7b1d0
+Optimizing: sti 0x200001058:i, __temp_113$0x1f7b1d0
+Optimizing: sti 0x200001060:i, __temp_114$0x1f7b1d0
+Optimizing: asm "mov $0x0:msq, 0x200001068:msq"
+Optimizing: asm "mov $__newr0:msq, 0x200001070:msq"
+Optimizing: mov __temp_115$0x1f7b1d0, space$0x1f74410
+Optimizing: sti 0x200001078:i, __temp_115$0x1f7b1d0
+Optimizing: asm "mov $0x200001000:msq, 0x200001080:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x200001088:msq"
+Optimizing: asm "mov $0x200001068:msq, 0x200001090:msq"
+Optimizing: asm "mov $0x200001070:msq, 0x200001098:msq"
+Optimizing: asm "mov $0x200001078:msq, 0x2000010a0:msq"
+Optimizing: asm "spawnx 0x200001080, 0x200001088, 0x200001090, 0x200001098, 0x2000010a0"
+Optimizing: ldi __temp_96$0x1f7b1d0, 0x100000400:i
+Optimizing: ldi __temp_97$0x1f7b1d0, 0x100000408:i
+Optimizing: add __temp_98$0x1f7b1d0, __temp_96$0x1f7b1d0, __temp_97$0x1f7b1d0
+Optimizing: lda __temp_116$0x1f7b1d0, calc_task$0x1ebe300
+Optimizing: sub __temp_98$0x1f7b1d0, __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sti __temp_98$0x1f7b1d0, __temp_116$0x1f7b1d0
+Optimizing: sub __temp_98$0x1f7b1d0, __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sti __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sub __temp_98$0x1f7b1d0, __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sti __temp_98$0x1f7b1d0, i$0x1f74410
+Optimizing: br __temp_92$0x1f76250
+Optimizing: __temp_95$0x1f76250:
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x7:msq, 0x200001010:msq"
+Optimizing: lda __temp_120$0x1f779a0, iter$0x1ebe300
+Optimizing: mov __temp_121$0x1f779a0, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_120$0x1f779a0
+Optimizing: sti 0x200001020:i, __temp_121$0x1f779a0
+Optimizing: lda __temp_122$0x1f779a0, pcnt$0x1ebe300
+Optimizing: mov __temp_123$0x1f779a0, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_122$0x1f779a0
+Optimizing: sti 0x200001030:i, __temp_123$0x1f779a0
+Optimizing: lda __temp_124$0x1f779a0, ppoints$0x1ebe300
+Optimizing: mov __temp_125$0x1f779a0, 0x8:i
+Optimizing: sti 0x200001038:i, __temp_124$0x1f779a0
+Optimizing: sti 0x200001040:i, __temp_125$0x1f779a0
+Optimizing: mul __temp_128$0x1f779a0, i$0x1f74410, 0x200:i8
+Optimizing: mul __temp_129$0x1f779a0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_130$0x1f779a0, __temp_129$0x1f779a0, 0x1:i8
+Optimizing: ldelema __temp_126$0x1f779a0, task_status$0x1ebe300, __temp_128$0x1f779a0
+Optimizing: sub __temp_127$0x1f779a0, __temp_130$0x1f779a0, __temp_128$0x1f779a0
+Optimizing: mul __temp_127$0x1f779a0, 0x8:i, __temp_127$0x1f779a0
+Optimizing: sti 0x200001048:i, __temp_126$0x1f779a0
+Optimizing: sti 0x200001050:i, __temp_127$0x1f779a0
+Optimizing: mul __temp_133$0x1f779a0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_134$0x1f779a0, i$0x1f74410, 0x1:i8
+Optimizing: mul __temp_135$0x1f779a0, __temp_134$0x1f779a0, 0x200:i8
+Optimizing: ldelema __temp_131$0x1f779a0, ws$0x1ebe300, __temp_133$0x1f779a0
+Optimizing: sub __temp_132$0x1f779a0, __temp_135$0x1f779a0, __temp_133$0x1f779a0
+Optimizing: mul __temp_132$0x1f779a0, 0x8:i, __temp_132$0x1f779a0
+Optimizing: sti 0x200001058:i, __temp_131$0x1f779a0
+Optimizing: sti 0x200001060:i, __temp_132$0x1f779a0
+Optimizing: ldelema __temp_136$0x1f779a0, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_137$0x1f779a0, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_137$0x1f779a0, 0x8:i, __temp_137$0x1f779a0
+Optimizing: sti 0x200001068:i, __temp_136$0x1f779a0
+Optimizing: sti 0x200001070:i, __temp_137$0x1f779a0
+Optimizing: add __temp_140$0x1f779a0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_141$0x1f779a0, p_begin$0x1f74410, __temp_140$0x1f779a0
+Optimizing: add __temp_142$0x1f779a0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_143$0x1f779a0, p_end$0x1f74410, __temp_142$0x1f779a0
+Optimizing: ldelema __temp_138$0x1f779a0, ppoints$0x1ebe300, __temp_141$0x1f779a0
+Optimizing: sub __temp_139$0x1f779a0, __temp_143$0x1f779a0, __temp_141$0x1f779a0
+Optimizing: mul __temp_139$0x1f779a0, 0x8:i, __temp_139$0x1f779a0
+Optimizing: sti 0x200001078:i, __temp_138$0x1f779a0
+Optimizing: sti 0x200001080:i, __temp_139$0x1f779a0
+Optimizing: asm "mov $0x0:msq, 0x200001088:msq"
+Optimizing: asm "mov $__newr0:msq, 0x200001090:msq"
+Optimizing: mov __temp_144$0x1f779a0, space$0x1f74410
+Optimizing: sti 0x200001098:i, __temp_144$0x1f779a0
+Optimizing: asm "mov $0x200001000:msq, 0x2000010a0:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x2000010a8:msq"
+Optimizing: asm "mov $0x200001088:msq, 0x2000010b0:msq"
+Optimizing: asm "mov $0x200001090:msq, 0x2000010b8:msq"
+Optimizing: asm "mov $0x200001098:msq, 0x2000010c0:msq"
+Optimizing: asm "spawnx 0x2000010a0, 0x2000010a8, 0x2000010b0, 0x2000010b8, 0x2000010c0"
+Optimizing: ldi __temp_117$0x1f779a0, 0x100000400:i
+Optimizing: ldi __temp_118$0x1f779a0, 0x100000408:i
+Optimizing: add __temp_119$0x1f779a0, __temp_117$0x1f779a0, __temp_118$0x1f779a0
+Optimizing: lda __temp_145$0x1f779a0, calc_task$0x1ebe300
+Optimizing: sub __temp_119$0x1f779a0, __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sti __temp_119$0x1f779a0, __temp_145$0x1f779a0
+Optimizing: sub __temp_119$0x1f779a0, __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sti __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sub __temp_119$0x1f779a0, __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sti __temp_119$0x1f779a0, i$0x1f74410
+Optimizing: __temp_92$0x1f76250:
+Optimizing: mul __temp_146$0x1f76250, i$0x1f74410, 0x200:i8
+Optimizing: stelem task_status$0x1ebe300, __temp_146$0x1f76250, 0x0:i8
+Optimizing: __temp_85$0x1f74410:
+Optimizing: add __temp_147$0x1f74410, i$0x1f74410, 0x1:i8
+Optimizing: mov i$0x1f74410, __temp_147$0x1f74410
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add i$0x1f74410, i$0x1f74410, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_84$0x1f74410
+Optimizing: __temp_86$0x1f74410:
+Optimizing: mov space$0x1f74410, 0x0:i8
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x6:msq, 0x200001010:msq"
+Optimizing: lda __temp_151$0x1f74410, iter$0x1ebe300
+Optimizing: mov __temp_152$0x1f74410, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_151$0x1f74410
+Optimizing: sti 0x200001020:i, __temp_152$0x1f74410
+Optimizing: lda __temp_153$0x1f74410, pcnt$0x1ebe300
+Optimizing: mov __temp_154$0x1f74410, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_153$0x1f74410
+Optimizing: sti 0x200001030:i, __temp_154$0x1f74410
+Optimizing: lda __temp_155$0x1f74410, begin_time_sec$0x1ebe300
+Optimizing: mov __temp_156$0x1f74410, 0x8:i
+Optimizing: sti 0x200001038:i, __temp_155$0x1f74410
+Optimizing: sti 0x200001040:i, __temp_156$0x1f74410
+Optimizing: lda __temp_157$0x1f74410, begin_time_nsec$0x1ebe300
+Optimizing: mov __temp_158$0x1f74410, 0x8:i
+Optimizing: sti 0x200001048:i, __temp_157$0x1f74410
+Optimizing: sti 0x200001050:i, __temp_158$0x1f74410
+Optimizing: add __temp_161$0x1f74410, 0x1E:i8, 0x1:i8
+Optimizing: mul __temp_162$0x1f74410, __temp_161$0x1f74410, 0x200:i8
+Optimizing: ldelema __temp_159$0x1f74410, ws$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_160$0x1f74410, __temp_162$0x1f74410, 0x0:i8
+Optimizing: mul __temp_160$0x1f74410, 0x8:i, __temp_160$0x1f74410
+Optimizing: sti 0x200001058:i, __temp_159$0x1f74410
+Optimizing: sti 0x200001060:i, __temp_160$0x1f74410
+Optimizing: ldelema __temp_163$0x1f74410, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_164$0x1f74410, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_164$0x1f74410, 0x8:i, __temp_164$0x1f74410
+Optimizing: sti 0x200001068:i, __temp_163$0x1f74410
+Optimizing: sti 0x200001070:i, __temp_164$0x1f74410
+Optimizing: asm "mov $0x1:msq, 0x200001078:msq"
+Optimizing: mul __temp_167$0x1f74410, 0x1E:i8, 0x200:i8
+Optimizing: ldelema __temp_165$0x1f74410, task_status$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_166$0x1f74410, __temp_167$0x1f74410, 0x0:i8
+Optimizing: mul __temp_166$0x1f74410, 0x8:i, __temp_166$0x1f74410
+Optimizing: sti 0x200001080:i, __temp_165$0x1f74410
+Optimizing: sti 0x200001088:i, __temp_166$0x1f74410
+Optimizing: asm "mov $__newr0:msq, 0x200001090:msq"
+Optimizing: mov __temp_168$0x1f74410, space$0x1f74410
+Optimizing: sti 0x200001098:i, __temp_168$0x1f74410
+Optimizing: asm "mov $0x200001000:msq, 0x2000010a0:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x2000010a8:msq"
+Optimizing: asm "mov $0x200001078:msq, 0x2000010b0:msq"
+Optimizing: asm "mov $0x200001090:msq, 0x2000010b8:msq"
+Optimizing: asm "mov $0x200001098:msq, 0x2000010c0:msq"
+Optimizing: asm "spawnx 0x2000010a0, 0x2000010a8, 0x2000010b0, 0x2000010b8, 0x2000010c0"
+Optimizing: ldi __temp_148$0x1f74410, 0x100000400:i
+Optimizing: ldi __temp_149$0x1f74410, 0x100000408:i
+Optimizing: add __temp_150$0x1f74410, __temp_148$0x1f74410, __temp_149$0x1f74410
+Optimizing: lda __temp_169$0x1f74410, barrier_task$0x1ebe300
+Optimizing: sub __temp_150$0x1f74410, __temp_150$0x1f74410, 0x8:i8
+Optimizing: sti __temp_150$0x1f74410, __temp_169$0x1f74410
+Optimizing: sub __temp_150$0x1f74410, __temp_150$0x1f74410, 0x8:i8
+Optimizing: sti __temp_150$0x1f74410, 0x8:i8
+Optimizing: sub __temp_150$0x1f74410, __temp_150$0x1f74410, 0x8:i8
+Optimizing: sti __temp_150$0x1f74410, iter$0x1ebe300
+Optimized: Deleted 4 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: __temp_84$0x1f74410:
+Optimizing: ble 0x1E:i8, i$0x1f74410, __temp_86$0x1f74410
+Optimizing: lda __temp_88$0x1f76250, p_begin$0x1f74410
+Optimizing: lda __temp_89$0x1f76250, p_end$0x1f74410
+Optimizing: call get_points_range$0x1ebe300, <missing>, i$0x1f74410, __temp_88$0x1f76250, __temp_89$0x1f76250
+Optimizing: add __temp_90$0x1f76250, i$0x1f74410, 0x1:i8
+Optimizing: mul space$0x1f74410, 0x400000000000:i8, __temp_90$0x1f76250
+Optimizing: neg __temp_93$0x1f76250, 0x1:i8
+Optimizing: beq iter$0x1ebe300, __temp_93$0x1f76250, __temp_95$0x1f76250
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x5:msq, 0x200001010:msq"
+Optimizing: lda __temp_99$0x1f7b1d0, iter$0x1ebe300
+Optimizing: mov __temp_100$0x1f7b1d0, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_99$0x1f7b1d0
+Optimizing: sti 0x200001020:i, __temp_100$0x1f7b1d0
+Optimizing: lda __temp_101$0x1f7b1d0, pcnt$0x1ebe300
+Optimizing: mov __temp_102$0x1f7b1d0, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_101$0x1f7b1d0
+Optimizing: sti 0x200001030:i, __temp_102$0x1f7b1d0
+Optimizing: mul __temp_105$0x1f7b1d0, i$0x1f74410, 0x200:i8
+Optimizing: mul __temp_106$0x1f7b1d0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_107$0x1f7b1d0, __temp_106$0x1f7b1d0, 0x1:i8
+Optimizing: ldelema __temp_103$0x1f7b1d0, task_status$0x1ebe300, __temp_105$0x1f7b1d0
+Optimizing: sub __temp_104$0x1f7b1d0, __temp_107$0x1f7b1d0, __temp_105$0x1f7b1d0
+Optimizing: mul __temp_104$0x1f7b1d0, 0x8:i, __temp_104$0x1f7b1d0
+Optimizing: sti 0x200001038:i, __temp_103$0x1f7b1d0
+Optimizing: sti 0x200001040:i, __temp_104$0x1f7b1d0
+Optimizing: mul __temp_110$0x1f7b1d0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_111$0x1f7b1d0, i$0x1f74410, 0x1:i8
+Optimizing: mul __temp_112$0x1f7b1d0, __temp_111$0x1f7b1d0, 0x200:i8
+Optimizing: ldelema __temp_108$0x1f7b1d0, ws$0x1ebe300, __temp_110$0x1f7b1d0
+Optimizing: sub __temp_109$0x1f7b1d0, __temp_112$0x1f7b1d0, __temp_110$0x1f7b1d0
+Optimizing: mul __temp_109$0x1f7b1d0, 0x8:i, __temp_109$0x1f7b1d0
+Optimizing: sti 0x200001048:i, __temp_108$0x1f7b1d0
+Optimizing: sti 0x200001050:i, __temp_109$0x1f7b1d0
+Optimizing: ldelema __temp_113$0x1f7b1d0, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_114$0x1f7b1d0, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_114$0x1f7b1d0, 0x8:i, __temp_114$0x1f7b1d0
+Optimizing: sti 0x200001058:i, __temp_113$0x1f7b1d0
+Optimizing: sti 0x200001060:i, __temp_114$0x1f7b1d0
+Optimizing: asm "mov $0x0:msq, 0x200001068:msq"
+Optimizing: asm "mov $__newr0:msq, 0x200001070:msq"
+Optimizing: mov __temp_115$0x1f7b1d0, space$0x1f74410
+Optimizing: sti 0x200001078:i, __temp_115$0x1f7b1d0
+Optimizing: asm "mov $0x200001000:msq, 0x200001080:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x200001088:msq"
+Optimizing: asm "mov $0x200001068:msq, 0x200001090:msq"
+Optimizing: asm "mov $0x200001070:msq, 0x200001098:msq"
+Optimizing: asm "mov $0x200001078:msq, 0x2000010a0:msq"
+Optimizing: asm "spawnx 0x200001080, 0x200001088, 0x200001090, 0x200001098, 0x2000010a0"
+Optimizing: ldi __temp_96$0x1f7b1d0, 0x100000400:i
+Optimizing: ldi __temp_97$0x1f7b1d0, 0x100000408:i
+Optimizing: add __temp_98$0x1f7b1d0, __temp_96$0x1f7b1d0, __temp_97$0x1f7b1d0
+Optimizing: lda __temp_116$0x1f7b1d0, calc_task$0x1ebe300
+Optimizing: sub __temp_98$0x1f7b1d0, __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sti __temp_98$0x1f7b1d0, __temp_116$0x1f7b1d0
+Optimizing: sub __temp_98$0x1f7b1d0, __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sti __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sub __temp_98$0x1f7b1d0, __temp_98$0x1f7b1d0, 0x8:i8
+Optimizing: sti __temp_98$0x1f7b1d0, i$0x1f74410
+Optimizing: br __temp_92$0x1f76250
+Optimizing: __temp_95$0x1f76250:
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x7:msq, 0x200001010:msq"
+Optimizing: lda __temp_120$0x1f779a0, iter$0x1ebe300
+Optimizing: mov __temp_121$0x1f779a0, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_120$0x1f779a0
+Optimizing: sti 0x200001020:i, __temp_121$0x1f779a0
+Optimizing: lda __temp_122$0x1f779a0, pcnt$0x1ebe300
+Optimizing: mov __temp_123$0x1f779a0, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_122$0x1f779a0
+Optimizing: sti 0x200001030:i, __temp_123$0x1f779a0
+Optimizing: lda __temp_124$0x1f779a0, ppoints$0x1ebe300
+Optimizing: mov __temp_125$0x1f779a0, 0x8:i
+Optimizing: sti 0x200001038:i, __temp_124$0x1f779a0
+Optimizing: sti 0x200001040:i, __temp_125$0x1f779a0
+Optimizing: mul __temp_128$0x1f779a0, i$0x1f74410, 0x200:i8
+Optimizing: mul __temp_129$0x1f779a0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_130$0x1f779a0, __temp_129$0x1f779a0, 0x1:i8
+Optimizing: ldelema __temp_126$0x1f779a0, task_status$0x1ebe300, __temp_128$0x1f779a0
+Optimizing: sub __temp_127$0x1f779a0, __temp_130$0x1f779a0, __temp_128$0x1f779a0
+Optimizing: mul __temp_127$0x1f779a0, 0x8:i, __temp_127$0x1f779a0
+Optimizing: sti 0x200001048:i, __temp_126$0x1f779a0
+Optimizing: sti 0x200001050:i, __temp_127$0x1f779a0
+Optimizing: mul __temp_133$0x1f779a0, i$0x1f74410, 0x200:i8
+Optimizing: add __temp_134$0x1f779a0, i$0x1f74410, 0x1:i8
+Optimizing: mul __temp_135$0x1f779a0, __temp_134$0x1f779a0, 0x200:i8
+Optimizing: ldelema __temp_131$0x1f779a0, ws$0x1ebe300, __temp_133$0x1f779a0
+Optimizing: sub __temp_132$0x1f779a0, __temp_135$0x1f779a0, __temp_133$0x1f779a0
+Optimizing: mul __temp_132$0x1f779a0, 0x8:i, __temp_132$0x1f779a0
+Optimizing: sti 0x200001058:i, __temp_131$0x1f779a0
+Optimizing: sti 0x200001060:i, __temp_132$0x1f779a0
+Optimizing: ldelema __temp_136$0x1f779a0, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_137$0x1f779a0, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_137$0x1f779a0, 0x8:i, __temp_137$0x1f779a0
+Optimizing: sti 0x200001068:i, __temp_136$0x1f779a0
+Optimizing: sti 0x200001070:i, __temp_137$0x1f779a0
+Optimizing: add __temp_140$0x1f779a0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_141$0x1f779a0, p_begin$0x1f74410, __temp_140$0x1f779a0
+Optimizing: add __temp_142$0x1f779a0, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_143$0x1f779a0, p_end$0x1f74410, __temp_142$0x1f779a0
+Optimizing: ldelema __temp_138$0x1f779a0, ppoints$0x1ebe300, __temp_141$0x1f779a0
+Optimizing: sub __temp_139$0x1f779a0, __temp_143$0x1f779a0, __temp_141$0x1f779a0
+Optimizing: mul __temp_139$0x1f779a0, 0x8:i, __temp_139$0x1f779a0
+Optimizing: sti 0x200001078:i, __temp_138$0x1f779a0
+Optimizing: sti 0x200001080:i, __temp_139$0x1f779a0
+Optimizing: asm "mov $0x0:msq, 0x200001088:msq"
+Optimizing: asm "mov $__newr0:msq, 0x200001090:msq"
+Optimizing: mov __temp_144$0x1f779a0, space$0x1f74410
+Optimizing: sti 0x200001098:i, __temp_144$0x1f779a0
+Optimizing: asm "mov $0x200001000:msq, 0x2000010a0:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x2000010a8:msq"
+Optimizing: asm "mov $0x200001088:msq, 0x2000010b0:msq"
+Optimizing: asm "mov $0x200001090:msq, 0x2000010b8:msq"
+Optimizing: asm "mov $0x200001098:msq, 0x2000010c0:msq"
+Optimizing: asm "spawnx 0x2000010a0, 0x2000010a8, 0x2000010b0, 0x2000010b8, 0x2000010c0"
+Optimizing: ldi __temp_117$0x1f779a0, 0x100000400:i
+Optimizing: ldi __temp_118$0x1f779a0, 0x100000408:i
+Optimizing: add __temp_119$0x1f779a0, __temp_117$0x1f779a0, __temp_118$0x1f779a0
+Optimizing: lda __temp_145$0x1f779a0, calc_task$0x1ebe300
+Optimizing: sub __temp_119$0x1f779a0, __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sti __temp_119$0x1f779a0, __temp_145$0x1f779a0
+Optimizing: sub __temp_119$0x1f779a0, __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sti __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sub __temp_119$0x1f779a0, __temp_119$0x1f779a0, 0x8:i8
+Optimizing: sti __temp_119$0x1f779a0, i$0x1f74410
+Optimizing: __temp_92$0x1f76250:
+Optimizing: mul __temp_146$0x1f76250, i$0x1f74410, 0x200:i8
+Optimizing: stelem task_status$0x1ebe300, __temp_146$0x1f76250, 0x0:i8
+Optimizing: __temp_85$0x1f74410:
+Optimizing: add i$0x1f74410, i$0x1f74410, 0x1:i8
+Optimizing: br __temp_84$0x1f74410
+Optimizing: __temp_86$0x1f74410:
+Optimizing: mov space$0x1f74410, 0x0:i8
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x6:msq, 0x200001010:msq"
+Optimizing: lda __temp_151$0x1f74410, iter$0x1ebe300
+Optimizing: mov __temp_152$0x1f74410, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_151$0x1f74410
+Optimizing: sti 0x200001020:i, __temp_152$0x1f74410
+Optimizing: lda __temp_153$0x1f74410, pcnt$0x1ebe300
+Optimizing: mov __temp_154$0x1f74410, 0x8:i
+Optimizing: sti 0x200001028:i, __temp_153$0x1f74410
+Optimizing: sti 0x200001030:i, __temp_154$0x1f74410
+Optimizing: lda __temp_155$0x1f74410, begin_time_sec$0x1ebe300
+Optimizing: mov __temp_156$0x1f74410, 0x8:i
+Optimizing: sti 0x200001038:i, __temp_155$0x1f74410
+Optimizing: sti 0x200001040:i, __temp_156$0x1f74410
+Optimizing: lda __temp_157$0x1f74410, begin_time_nsec$0x1ebe300
+Optimizing: mov __temp_158$0x1f74410, 0x8:i
+Optimizing: sti 0x200001048:i, __temp_157$0x1f74410
+Optimizing: sti 0x200001050:i, __temp_158$0x1f74410
+Optimizing: add __temp_161$0x1f74410, 0x1E:i8, 0x1:i8
+Optimizing: mul __temp_162$0x1f74410, __temp_161$0x1f74410, 0x200:i8
+Optimizing: ldelema __temp_159$0x1f74410, ws$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_160$0x1f74410, __temp_162$0x1f74410, 0x0:i8
+Optimizing: mul __temp_160$0x1f74410, 0x8:i, __temp_160$0x1f74410
+Optimizing: sti 0x200001058:i, __temp_159$0x1f74410
+Optimizing: sti 0x200001060:i, __temp_160$0x1f74410
+Optimizing: ldelema __temp_163$0x1f74410, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_164$0x1f74410, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_164$0x1f74410, 0x8:i, __temp_164$0x1f74410
+Optimizing: sti 0x200001068:i, __temp_163$0x1f74410
+Optimizing: sti 0x200001070:i, __temp_164$0x1f74410
+Optimizing: asm "mov $0x1:msq, 0x200001078:msq"
+Optimizing: mul __temp_167$0x1f74410, 0x1E:i8, 0x200:i8
+Optimizing: ldelema __temp_165$0x1f74410, task_status$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_166$0x1f74410, __temp_167$0x1f74410, 0x0:i8
+Optimizing: mul __temp_166$0x1f74410, 0x8:i, __temp_166$0x1f74410
+Optimizing: sti 0x200001080:i, __temp_165$0x1f74410
+Optimizing: sti 0x200001088:i, __temp_166$0x1f74410
+Optimizing: asm "mov $__newr0:msq, 0x200001090:msq"
+Optimizing: mov __temp_168$0x1f74410, space$0x1f74410
+Optimizing: sti 0x200001098:i, __temp_168$0x1f74410
+Optimizing: asm "mov $0x200001000:msq, 0x2000010a0:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x2000010a8:msq"
+Optimizing: asm "mov $0x200001078:msq, 0x2000010b0:msq"
+Optimizing: asm "mov $0x200001090:msq, 0x2000010b8:msq"
+Optimizing: asm "mov $0x200001098:msq, 0x2000010c0:msq"
+Optimizing: asm "spawnx 0x2000010a0, 0x2000010a8, 0x2000010b0, 0x2000010b8, 0x2000010c0"
+Optimizing: ldi __temp_148$0x1f74410, 0x100000400:i
+Optimizing: ldi __temp_149$0x1f74410, 0x100000408:i
+Optimizing: add __temp_150$0x1f74410, __temp_148$0x1f74410, __temp_149$0x1f74410
+Optimizing: lda __temp_169$0x1f74410, barrier_task$0x1ebe300
+Optimizing: sub __temp_150$0x1f74410, __temp_150$0x1f74410, 0x8:i8
+Optimizing: sti __temp_150$0x1f74410, __temp_169$0x1f74410
+Optimizing: sub __temp_150$0x1f74410, __temp_150$0x1f74410, 0x8:i8
+Optimizing: sti __temp_150$0x1f74410, 0x8:i8
+Optimizing: sub __temp_150$0x1f74410, __temp_150$0x1f74410, 0x8:i8
+Optimizing: sti __temp_150$0x1f74410, iter$0x1ebe300
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: bnz __temp_171$0x1fcac20, __temp_172$0x1fcac20
+Optimizing: br __temp_170$0x1fcac20
+Optimizing: __temp_172$0x1fcac20:
+Optimizing: asm "exit:ad"
+Optimizing: __temp_170$0x1fcac20:
+Optimizing: mov i$0x1fcac20, 0x0:i8
+Optimizing: __temp_173$0x1fcac20:
+Optimizing: clt __temp_176$0x1fcac20, i$0x1fcac20, 0x1E:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_176$0x1fcac20, __temp_175$0x1fcac20
+Optimized: ble 0x1E:i8, i$0x1fcac20, __temp_175$0x1fcac20
+Optimizing: nop
+Optimizing: mul __temp_178$0x1fcd050, i$0x1fcac20, 0x200:i8
+Optimizing: ldelem __temp_179$0x1fcd050, task_status$0x1ebe300, __temp_178$0x1fcd050
+Optimizing: cne __temp_180$0x1fcd050, __temp_179$0x1fcd050, 0x1:i8
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_180$0x1fcd050, __temp_181$0x1fcd050
+Optimized: bne __temp_179$0x1fcd050, 0x1:i8, __temp_181$0x1fcd050
+Optimizing: nop
+Optimizing: br __temp_177$0x1fcd050
+Optimizing: __temp_181$0x1fcd050:
+Optimizing: asm "exit:a"
+Optimizing: __temp_177$0x1fcd050:
+Optimizing: __temp_174$0x1fcac20:
+Optimizing: add __temp_182$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimizing: mov i$0x1fcac20, __temp_182$0x1fcac20
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add i$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_173$0x1fcac20
+Optimizing: __temp_175$0x1fcac20:
+Optimizing: neg __temp_184$0x1fcac20, 0x1:i8
+Optimizing: ceq __temp_185$0x1fcac20, iter$0x1ebe300, __temp_184$0x1fcac20
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_185$0x1fcac20, __temp_186$0x1fcac20
+Optimized: beq iter$0x1ebe300, __temp_184$0x1fcac20, __temp_186$0x1fcac20
+Optimizing: nop
+Optimizing: add __temp_188$0x1fcec80, iter$0x1ebe300, 0x1:i8
+Optimizing: conv __temp_189$0x1fcec80, __temp_188$0x1fcec80
+Optimizing: call sqrt$0x1ebe300, __temp_187$0x1fcec80, __temp_189$0x1fcec80
+Optimizing: div __temp_190$0x1fcec80, 1.000000:r8, __temp_187$0x1fcec80
+Optimizing: mov factor$0x1fcac20, __temp_190$0x1fcec80
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: div factor$0x1fcac20, 1.000000:r8, __temp_187$0x1fcec80
+Optimized: nop
+Optimizing: mov j$0x1fcac20, 0x0:i8
+Optimizing: __temp_191$0x1fcec80:
+Optimizing: clt __temp_194$0x1fcec80, j$0x1fcac20, 0x1E:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_194$0x1fcec80, __temp_193$0x1fcec80
+Optimized: ble 0x1E:i8, j$0x1fcac20, __temp_193$0x1fcec80
+Optimizing: nop
+Optimizing: mul __temp_196$0x1fd07b0, j$0x1fcac20, 0x200:i8
+Optimizing: ldelema __temp_195$0x1fd07b0, ws$0x1ebe300, __temp_196$0x1fd07b0
+Optimizing: mov wj$0x1fcac20, __temp_195$0x1fd07b0
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: ldelema wj$0x1fcac20, ws$0x1ebe300, __temp_196$0x1fd07b0
+Optimized: nop
+Optimizing: mov i$0x1fcac20, 0x0:i8
+Optimizing: __temp_197$0x1fd07b0:
+Optimizing: clt __temp_200$0x1fd07b0, i$0x1fcac20, 0x14:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_200$0x1fd07b0, __temp_199$0x1fd07b0
+Optimized: ble 0x14:i8, i$0x1fcac20, __temp_199$0x1fd07b0
+Optimizing: nop
+Optimizing: ldelem __temp_201$0x1fd1f30, w$0x1ebe300, i$0x1fcac20
+Optimizing: ldelem __temp_202$0x1fd1f30, wj$0x1fcac20, i$0x1fcac20
+Optimizing: mul __temp_203$0x1fd1f30, factor$0x1fcac20, __temp_202$0x1fd1f30
+Optimizing: conv __temp_204$0x1fd1f30, pcnt$0x1ebe300
+Optimizing: div __temp_205$0x1fd1f30, __temp_203$0x1fd1f30, __temp_204$0x1fd1f30
+Optimizing: sub __temp_206$0x1fd1f30, __temp_201$0x1fd1f30, __temp_205$0x1fd1f30
+Optimizing: stelem w$0x1ebe300, i$0x1fcac20, __temp_206$0x1fd1f30
+Optimizing: __temp_198$0x1fd07b0:
+Optimizing: add __temp_207$0x1fd07b0, i$0x1fcac20, 0x1:i8
+Optimizing: mov i$0x1fcac20, __temp_207$0x1fd07b0
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add i$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_197$0x1fd07b0
+Optimizing: __temp_199$0x1fd07b0:
+Optimizing: __temp_192$0x1fcec80:
+Optimizing: add __temp_208$0x1fcec80, j$0x1fcac20, 0x1:i8
+Optimizing: mov j$0x1fcac20, __temp_208$0x1fcec80
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add j$0x1fcac20, j$0x1fcac20, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_191$0x1fcec80
+Optimizing: __temp_193$0x1fcec80:
+Optimizing: br __temp_183$0x1fcac20
+Optimizing: __temp_186$0x1fcac20:
+Optimizing: lda __temp_210$0x1fce200, begin_time_sec$0x1ebe300
+Optimizing: lda __temp_211$0x1fce200, begin_time_nsec$0x1ebe300
+Optimizing: call gettime$0x1ebe300, __temp_209$0x1fce200, __temp_210$0x1fce200, __temp_211$0x1fce200
+Optimizing: mov i$0x1fcac20, __temp_209$0x1fce200
+Optimizing: __temp_183$0x1fcac20:
+Optimizing: add __temp_212$0x1fcac20, iter$0x1ebe300, 0x1:i8
+Optimizing: mov iter$0x1ebe300, __temp_212$0x1fcac20
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add iter$0x1ebe300, iter$0x1ebe300, 0x1:i8
+Optimized: nop
+Optimizing: ceq __temp_214$0x1fcac20, iter$0x1ebe300, 0xA:i8
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_214$0x1fcac20, __temp_215$0x1fcac20
+Optimized: beq iter$0x1ebe300, 0xA:i8, __temp_215$0x1fcac20
+Optimizing: nop
+Optimizing: br __temp_213$0x1fcac20
+Optimizing: __temp_215$0x1fcac20:
+Optimizing: call output_char$0x1ebe300, <missing>, 0x52:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x61:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x63:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x68:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x64:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6D:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x61:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x78:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x69:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x74:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x72:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x3A:i1
+Optimizing: call output_q$0x1ebe300, <missing>, 0xA:i8
+Optimizing: call output_char$0x1ebe300, <missing>, 0x2E:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0xA:i8
+Optimizing: call output_char$0x1ebe300, <missing>, 0x54:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x69:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6D:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x75:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x73:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x64:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x3A:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: lda __temp_217$0x1fd3c50, begin_time_sec$0x1ebe300
+Optimizing: lda __temp_218$0x1fd3c50, begin_time_nsec$0x1ebe300
+Optimizing: call print_time_diff_and_update$0x1ebe300, __temp_216$0x1fd3c50, __temp_217$0x1fd3c50, __temp_218$0x1fd3c50
+Optimizing: mov i$0x1fcac20, __temp_216$0x1fd3c50
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x73:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x63:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6F:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6E:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x64:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x73:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x2E:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0xA:i8
+Optimizing: mov i$0x1fcac20, 0x0:i8
+Optimizing: __temp_219$0x1fd3c50:
+Optimizing: clt __temp_222$0x1fd3c50, i$0x1fcac20, 0x14:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_222$0x1fd3c50, __temp_221$0x1fd3c50
+Optimized: ble 0x14:i8, i$0x1fcac20, __temp_221$0x1fd3c50
+Optimizing: nop
+Optimizing: ldelem __temp_223$0x1fe0c80, w$0x1ebe300, i$0x1fcac20
+Optimizing: call output_double$0x1ebe300, <missing>, __temp_223$0x1fe0c80
+Optimizing: cne __temp_225$0x1fe0c80, i$0x1fcac20, 0x13:i8
+Ah ha! I got you! bnz after clt -->Good to optimize.
+Optimizing: bnz __temp_225$0x1fe0c80, __temp_226$0x1fe0c80
+Optimized: bne i$0x1fcac20, 0x13:i8, __temp_226$0x1fe0c80
+Optimizing: nop
+Optimizing: call output_char$0x1ebe300, <missing>, 0xA:i8
+Optimizing: br __temp_224$0x1fe0c80
+Optimizing: __temp_226$0x1fe0c80:
+Optimizing: call output_char$0x1ebe300, <missing>, 0x2C:i1
+Optimizing: __temp_224$0x1fe0c80:
+Optimizing: __temp_220$0x1fd3c50:
+Optimizing: add __temp_227$0x1fd3c50, i$0x1fcac20, 0x1:i8
+Optimizing: mov i$0x1fcac20, __temp_227$0x1fd3c50
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add i$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_219$0x1fd3c50
+Optimizing: __temp_221$0x1fd3c50:
+Optimizing: asm "exit:cd"
+Optimizing: __temp_213$0x1fcac20:
+Optimizing: call create_new_iter_task$0x1ebe300, <missing>
+Optimized: Deleted 15 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: bnz __temp_171$0x1fcac20, __temp_172$0x1fcac20
+Optimizing: br __temp_170$0x1fcac20
+Optimizing: __temp_172$0x1fcac20:
+Optimizing: asm "exit:ad"
+Optimizing: __temp_170$0x1fcac20:
+Optimizing: mov i$0x1fcac20, 0x0:i8
+Optimizing: __temp_173$0x1fcac20:
+Optimizing: ble 0x1E:i8, i$0x1fcac20, __temp_175$0x1fcac20
+Optimizing: mul __temp_178$0x1fcd050, i$0x1fcac20, 0x200:i8
+Optimizing: ldelem __temp_179$0x1fcd050, task_status$0x1ebe300, __temp_178$0x1fcd050
+Optimizing: bne __temp_179$0x1fcd050, 0x1:i8, __temp_181$0x1fcd050
+Optimizing: br __temp_177$0x1fcd050
+Optimizing: __temp_181$0x1fcd050:
+Optimizing: asm "exit:a"
+Optimizing: __temp_177$0x1fcd050:
+Optimizing: __temp_174$0x1fcac20:
+Optimizing: add i$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimizing: br __temp_173$0x1fcac20
+Optimizing: __temp_175$0x1fcac20:
+Optimizing: neg __temp_184$0x1fcac20, 0x1:i8
+Optimizing: beq iter$0x1ebe300, __temp_184$0x1fcac20, __temp_186$0x1fcac20
+Optimizing: add __temp_188$0x1fcec80, iter$0x1ebe300, 0x1:i8
+Optimizing: conv __temp_189$0x1fcec80, __temp_188$0x1fcec80
+Optimizing: call sqrt$0x1ebe300, __temp_187$0x1fcec80, __temp_189$0x1fcec80
+Optimizing: div factor$0x1fcac20, 1.000000:r8, __temp_187$0x1fcec80
+Optimizing: mov j$0x1fcac20, 0x0:i8
+Sadly not okay to optimize.
+Optimizing: __temp_191$0x1fcec80:
+Optimizing: ble 0x1E:i8, j$0x1fcac20, __temp_193$0x1fcec80
+Optimizing: mul __temp_196$0x1fd07b0, j$0x1fcac20, 0x200:i8
+Optimizing: ldelema wj$0x1fcac20, ws$0x1ebe300, __temp_196$0x1fd07b0
+Optimizing: mov i$0x1fcac20, 0x0:i8
+Sadly not okay to optimize.
+Optimizing: __temp_197$0x1fd07b0:
+Optimizing: ble 0x14:i8, i$0x1fcac20, __temp_199$0x1fd07b0
+Optimizing: ldelem __temp_201$0x1fd1f30, w$0x1ebe300, i$0x1fcac20
+Optimizing: ldelem __temp_202$0x1fd1f30, wj$0x1fcac20, i$0x1fcac20
+Optimizing: mul __temp_203$0x1fd1f30, factor$0x1fcac20, __temp_202$0x1fd1f30
+Optimizing: conv __temp_204$0x1fd1f30, pcnt$0x1ebe300
+Optimizing: div __temp_205$0x1fd1f30, __temp_203$0x1fd1f30, __temp_204$0x1fd1f30
+Optimizing: sub __temp_206$0x1fd1f30, __temp_201$0x1fd1f30, __temp_205$0x1fd1f30
+Optimizing: stelem w$0x1ebe300, i$0x1fcac20, __temp_206$0x1fd1f30
+Optimizing: __temp_198$0x1fd07b0:
+Optimizing: add i$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimizing: br __temp_197$0x1fd07b0
+Optimizing: __temp_199$0x1fd07b0:
+Optimizing: __temp_192$0x1fcec80:
+Optimizing: add j$0x1fcac20, j$0x1fcac20, 0x1:i8
+Optimizing: br __temp_191$0x1fcec80
+Optimizing: __temp_193$0x1fcec80:
+Optimizing: br __temp_183$0x1fcac20
+Optimizing: __temp_186$0x1fcac20:
+Optimizing: lda __temp_210$0x1fce200, begin_time_sec$0x1ebe300
+Optimizing: lda __temp_211$0x1fce200, begin_time_nsec$0x1ebe300
+Optimizing: call gettime$0x1ebe300, __temp_209$0x1fce200, __temp_210$0x1fce200, __temp_211$0x1fce200
+Optimizing: mov i$0x1fcac20, __temp_209$0x1fce200
+Optimizing: __temp_183$0x1fcac20:
+Optimizing: add iter$0x1ebe300, iter$0x1ebe300, 0x1:i8
+Optimizing: beq iter$0x1ebe300, 0xA:i8, __temp_215$0x1fcac20
+Optimizing: br __temp_213$0x1fcac20
+Optimizing: __temp_215$0x1fcac20:
+Optimizing: call output_char$0x1ebe300, <missing>, 0x52:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x61:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x63:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x68:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x64:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6D:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x61:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x78:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x69:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x74:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x72:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x3A:i1
+Optimizing: call output_q$0x1ebe300, <missing>, 0xA:i8
+Optimizing: call output_char$0x1ebe300, <missing>, 0x2E:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0xA:i8
+Optimizing: call output_char$0x1ebe300, <missing>, 0x54:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x69:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6D:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x75:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x73:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x64:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x3A:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: lda __temp_217$0x1fd3c50, begin_time_sec$0x1ebe300
+Optimizing: lda __temp_218$0x1fd3c50, begin_time_nsec$0x1ebe300
+Optimizing: call print_time_diff_and_update$0x1ebe300, __temp_216$0x1fd3c50, __temp_217$0x1fd3c50, __temp_218$0x1fd3c50
+Optimizing: mov i$0x1fcac20, __temp_216$0x1fd3c50
+Optimizing: call output_char$0x1ebe300, <missing>, 0x20:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x73:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x65:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x63:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6F:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x6E:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x64:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x73:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0x2E:i1
+Optimizing: call output_char$0x1ebe300, <missing>, 0xA:i8
+Optimizing: mov i$0x1fcac20, 0x0:i8
+Optimizing: __temp_219$0x1fd3c50:
+Optimizing: ble 0x14:i8, i$0x1fcac20, __temp_221$0x1fd3c50
+Optimizing: ldelem __temp_223$0x1fe0c80, w$0x1ebe300, i$0x1fcac20
+Optimizing: call output_double$0x1ebe300, <missing>, __temp_223$0x1fe0c80
+Optimizing: bne i$0x1fcac20, 0x13:i8, __temp_226$0x1fe0c80
+Optimizing: call output_char$0x1ebe300, <missing>, 0xA:i8
+Optimizing: br __temp_224$0x1fe0c80
+Optimizing: __temp_226$0x1fe0c80:
+Optimizing: call output_char$0x1ebe300, <missing>, 0x2C:i1
+Optimizing: __temp_224$0x1fe0c80:
+Optimizing: __temp_220$0x1fd3c50:
+Optimizing: add i$0x1fcac20, i$0x1fcac20, 0x1:i8
+Optimizing: br __temp_219$0x1fd3c50
+Optimizing: __temp_221$0x1fd3c50:
+Optimizing: asm "exit:cd"
+Optimizing: __temp_213$0x1fcac20:
+Optimizing: call create_new_iter_task$0x1ebe300, <missing>
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: mov pcnt$0x1ebe300, __temp_228$0x1ff1210
+Ah ha! I got you! mov after conv instructions -->Good to optimize.
+Optimized: ldi pcnt$0x1ebe300, 0x40800000000:i
+Optimized: nop
+Optimizing: mov ppoints$0x1ebe300, 0x40800000008:i
+Optimizing: neg __temp_229$0x1ff1210, 0x1:i8
+Optimizing: mov iter$0x1ebe300, __temp_229$0x1ff1210
+Ah ha! I got you! mov after conv instructions -->Good to optimize.
+Optimized: neg iter$0x1ebe300, 0x1:i8
+Optimized: nop
+Optimizing: mov j$0x1ff1210, 0x0:i8
+Optimizing: __temp_230$0x1ff1210:
+Optimizing: clt __temp_233$0x1ff1210, j$0x1ff1210, 0x14:i8
+Ah ha! I got you! bz after clt -->Good to optimize.
+Optimizing: bz __temp_233$0x1ff1210, __temp_232$0x1ff1210
+Optimized: ble 0x14:i8, j$0x1ff1210, __temp_232$0x1ff1210
+Optimizing: nop
+Optimizing: stelem w$0x1ebe300, j$0x1ff1210, 0.000000:r8
+Optimizing: __temp_231$0x1ff1210:
+Optimizing: add __temp_234$0x1ff1210, j$0x1ff1210, 0x1:i8
+Optimizing: mov j$0x1ff1210, __temp_234$0x1ff1210
+Ah ha! I got you! mov after some instructions -->Good to optimize.
+Optimized: add j$0x1ff1210, j$0x1ff1210, 0x1:i8
+Optimized: nop
+Optimizing: br __temp_230$0x1ff1210
+Optimizing: __temp_232$0x1ff1210:
+Optimizing: call create_new_iter_task$0x1ebe300, <missing>
+Optimized: Deleted 4 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: mov ppoints$0x1ebe300, 0x40800000008:i
+Sadly not okay to optimize.
+Optimizing: neg iter$0x1ebe300, 0x1:i8
+Optimizing: mov j$0x1ff1210, 0x0:i8
+Sadly not okay to optimize.
+Optimizing: __temp_230$0x1ff1210:
+Optimizing: ble 0x14:i8, j$0x1ff1210, __temp_232$0x1ff1210
+Optimizing: stelem w$0x1ebe300, j$0x1ff1210, 0.000000:r8
+Optimizing: __temp_231$0x1ff1210:
+Optimizing: add j$0x1ff1210, j$0x1ff1210, 0x1:i8
+Optimizing: br __temp_230$0x1ff1210
+Optimizing: __temp_232$0x1ff1210:
+Optimizing: call create_new_iter_task$0x1ebe300, <missing>
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+Optimizing: function START
+Optimizing: asm "mov $0x0:msq, 0x200001000:msq"
+Optimizing: asm "mov $0x0:msq, 0x200001008:msq"
+Optimizing: asm "mov $0x7:msq, 0x200001010:msq"
+Optimizing: lda __temp_238$0x2003f10, iter$0x1ebe300
+Optimizing: mov __temp_239$0x2003f10, 0x8:i
+Optimizing: sti 0x200001018:i, __temp_238$0x2003f10
+Optimizing: sti 0x200001020:i, __temp_239$0x2003f10
+Optimizing: ldelema __temp_240$0x2003f10, w$0x1ebe300, 0x0:i8
+Optimizing: sub __temp_241$0x2003f10, 0x14:i8, 0x0:i8
+Optimizing: mul __temp_241$0x2003f10, 0x8:i, __temp_241$0x2003f10
+Optimizing: sti 0x200001028:i, __temp_240$0x2003f10
+Optimizing: sti 0x200001030:i, __temp_241$0x2003f10
+Optimizing: lda __temp_242$0x2003f10, begin_time_sec$0x1ebe300
+Optimizing: mov __temp_243$0x2003f10, 0x8:i
+Optimizing: sti 0x200001038:i, __temp_242$0x2003f10
+Optimizing: sti 0x200001040:i, __temp_243$0x2003f10
+Optimizing: lda __temp_244$0x2003f10, begin_time_nsec$0x1ebe300
+Optimizing: mov __temp_245$0x2003f10, 0x8:i
+Optimizing: sti 0x200001048:i, __temp_244$0x2003f10
+Optimizing: sti 0x200001050:i, __temp_245$0x2003f10
+Optimizing: lda __temp_246$0x2003f10, pcnt$0x1ebe300
+Optimizing: mov __temp_247$0x2003f10, 0x8:i
+Optimizing: sti 0x200001058:i, __temp_246$0x2003f10
+Optimizing: sti 0x200001060:i, __temp_247$0x2003f10
+Optimizing: lda __temp_248$0x2003f10, ppoints$0x1ebe300
+Optimizing: mov __temp_249$0x2003f10, 0x8:i
+Optimizing: sti 0x200001068:i, __temp_248$0x2003f10
+Optimizing: sti 0x200001070:i, __temp_249$0x2003f10
+Optimizing: add __temp_252$0x2003f10, 0x800000000:i8, 0x20000000000:i8
+Optimizing: sub __temp_253$0x2003f10, __temp_252$0x2003f10, 0x1:i8
+Optimizing: add __temp_254$0x2003f10, __temp_253$0x2003f10, 0x1:i8
+Optimizing: add __temp_255$0x2003f10, __temp_254$0x2003f10, 0x20000000000:i8
+Optimizing: sub __temp_256$0x2003f10, __temp_255$0x2003f10, 0x1:i8
+Optimizing: add __temp_257$0x2003f10, __temp_256$0x2003f10, 0x1:i8
+Optimizing: conv __temp_258$0x2003f10, __temp_257$0x2003f10
+Optimizing: mul __temp_259$0x2003f10, 0x8:i8, 0xF4240:i8
+Optimizing: add __temp_260$0x2003f10, 0x14:i8, 0x1:i8
+Optimizing: mul __temp_261$0x2003f10, __temp_259$0x2003f10, __temp_260$0x2003f10
+Optimizing: add __temp_262$0x2003f10, 0x8:i8, __temp_261$0x2003f10
+Optimizing: ldelema __temp_250$0x2003f10, __temp_258$0x2003f10, 0x0:i8
+Optimizing: sub __temp_251$0x2003f10, __temp_262$0x2003f10, 0x0:i8
+Optimizing: mul __temp_251$0x2003f10, 0x8:i, __temp_251$0x2003f10
+Optimizing: sti 0x200001078:i, __temp_250$0x2003f10
+Optimizing: sti 0x200001080:i, __temp_251$0x2003f10
+Optimizing: asm "mov $0x0:msq, 0x200001088:msq"
+Optimizing: asm "mov $__newr0:msq, 0x200001090:msq"
+Optimizing: mov __temp_263$0x2003f10, space$0x2003f10
+Optimizing: sti 0x200001098:i, __temp_263$0x2003f10
+Optimizing: asm "mov $0x200001000:msq, 0x2000010a0:msq"
+Optimizing: asm "mov $0x200001010:msq, 0x2000010a8:msq"
+Optimizing: asm "mov $0x200001088:msq, 0x2000010b0:msq"
+Optimizing: asm "mov $0x200001090:msq, 0x2000010b8:msq"
+Optimizing: asm "mov $0x200001098:msq, 0x2000010c0:msq"
+Optimizing: asm "spawnx 0x2000010a0, 0x2000010a8, 0x2000010b0, 0x2000010b8, 0x2000010c0"
+Optimizing: ldi __temp_235$0x2003f10, 0x100000400:i
+Optimizing: ldi __temp_236$0x2003f10, 0x100000408:i
+Optimizing: add __temp_237$0x2003f10, __temp_235$0x2003f10, __temp_236$0x2003f10
+Optimizing: lda __temp_264$0x2003f10, init_task$0x1ebe300
+Optimizing: sub __temp_237$0x2003f10, __temp_237$0x2003f10, 0x8:i8
+Optimizing: sti __temp_237$0x2003f10, __temp_264$0x2003f10
+Optimizing: sub __temp_237$0x2003f10, __temp_237$0x2003f10, 0x8:i8
+Optimizing: sti __temp_237$0x2003f10, 0x0:i8
+Optimized: Deleted 0 Nops.
+Optimizing: function END
+invoking "ld0 -lcrt -o lr-frompmem.c0.bin strsplitted-lr-frompmem.o -g"
+ld0 search paths:
+/home/progman/workspace/d-thinker/libi0/libi0
+----------
+__memcmp_se with symbol == 0x246e2e0 on scope 0x23deca8
+__memcmp_se with symbol == 0x255fb90 on scope 0x23dd6f8
+__memcmp_se already inserted
+----------
+_get_from_sar_array with symbol == 0x24c4fa0 on scope 0x23dd6f8
+_get_from_sar_array already inserted
+----------
+_get_new_pa with symbol == 0x24d84c0 on scope 0x23dd6f8
+_get_new_pa already inserted
+----------
+_get_new_sar with symbol == 0x24b1500 on scope 0x23dd6f8
+_get_new_sar already inserted
+----------
+_get_new_sar_ext with symbol == 0x24b7120 on scope 0x23dd6f8
+_get_new_sar_ext already inserted
+----------
+_output_debug with symbol == 0x249be40 on scope 0x23dd6f8
+_output_debug already inserted
+----------
+_syscall_malloc with symbol == 0x2496ef0 on scope 0x23dd6f8
+_syscall_malloc already inserted
+----------
+_syscall_malloc_ext with symbol == 0x24a0f00 on scope 0x23dd6f8
+_syscall_malloc_ext already inserted
+----------
+barrier_task with symbol == 0x245ff40 on scope 0x23deca8
+barrier_task already inserted
+----------
+begin_time_nsec with symbol == 0x2425910 on scope 0x23deca8
+----------
+begin_time_sec with symbol == 0x24255f0 on scope 0x23deca8
+----------
+calc_task with symbol == 0x2408aa0 on scope 0x23deca8
+calc_task already inserted
+----------
+create_new_iter_task with symbol == 0x23e3cc0 on scope 0x23deca8
+create_new_iter_task already inserted
+----------
+exp with symbol == 0x23fbcc0 on scope 0x23deca8
+exp with symbol == 0x24fcd80 on scope 0x23dd6f8
+exp already inserted
+----------
+exp_remez13_05_05 with symbol == 0x2633480 on scope 0x23dd6f8
+exp_remez13_05_05 already inserted
+----------
+get_my_task_id with symbol == 0x246e970 on scope 0x23deca8
+get_my_task_id with symbol == 0x251f950 on scope 0x23dd6f8
+get_my_task_id already inserted
+----------
+get_new_task_id with symbol == 0x246ead0 on scope 0x23deca8
+get_new_task_id with symbol == 0x2520820 on scope 0x23dd6f8
+get_new_task_id already inserted
+----------
+get_points_range with symbol == 0x2404550 on scope 0x23deca8
+get_points_range already inserted
+----------
+get_time_diff_and_update with symbol == 0x246ed20 on scope 0x23deca8
+get_time_diff_and_update with symbol == 0x26318f0 on scope 0x23dd6f8
+get_time_diff_and_update already inserted
+----------
+gettime with symbol == 0x242c2a0 on scope 0x23deca8
+gettime with symbol == 0x256bc20 on scope 0x23dd6f8
+gettime already inserted
+----------
+init_PR_var with symbol == 0x249e0f0 on scope 0x23dd6f8
+init_PR_var already inserted
+----------
+init_task with symbol == 0x2465430 on scope 0x23deca8
+init_task already inserted
+----------
+input_char with symbol == 0x246f090 on scope 0x23deca8
+input_char with symbol == 0x256e2c0 on scope 0x23dd6f8
+input_char already inserted
+----------
+input_double with symbol == 0x246f1f0 on scope 0x23deca8
+input_double with symbol == 0x25f51f0 on scope 0x23dd6f8
+input_double already inserted
+----------
+input_double_after_dot with symbol == 0x25ee520 on scope 0x23dd6f8
+----------
+input_double_exit with symbol == 0x25efdf0 on scope 0x23dd6f8
+----------
+input_line with symbol == 0x246f410 on scope 0x23deca8
+input_line with symbol == 0x258db40 on scope 0x23dd6f8
+input_line already inserted
+----------
+input_line_exit with symbol == 0x258c410 on scope 0x23dd6f8
+----------
+input_long with symbol == 0x246f780 on scope 0x23deca8
+input_long with symbol == 0x25a5810 on scope 0x23dd6f8
+input_long already inserted
+----------
+input_long_exit with symbol == 0x25a3f70 on scope 0x23dd6f8
+----------
+input_q with symbol == 0x246f9b0 on scope 0x23deca8
+input_q with symbol == 0x25841b0 on scope 0x23dd6f8
+input_q already inserted
+----------
+input_q_exit with symbol == 0x2583160 on scope 0x23dd6f8
+----------
+ipow with symbol == 0x246fb10 on scope 0x23deca8
+ipow with symbol == 0x24c1020 on scope 0x23dd6f8
+ipow already inserted
+----------
+iter with symbol == 0x23e2180 on scope 0x23deca8
+----------
+main with symbol == 0x246e2a0 on scope 0x23deca8
+main already inserted
+----------
+memcmp with symbol == 0x246fe90 on scope 0x23deca8
+memcmp with symbol == 0x2564b50 on scope 0x23dd6f8
+memcmp already inserted
+----------
+memcpy with symbol == 0x23e5bd0 on scope 0x23deca8
+memcpy with symbol == 0x255d150 on scope 0x23dd6f8
+memcpy already inserted
+----------
+memset0 with symbol == 0x2470270 on scope 0x23deca8
+memset0 with symbol == 0x25683e0 on scope 0x23dd6f8
+memset0 already inserted
+----------
+new_iter_task with symbol == 0x2428b10 on scope 0x23deca8
+new_iter_task already inserted
+----------
+output_char with symbol == 0x24376e0 on scope 0x23deca8
+output_char with symbol == 0x2523320 on scope 0x23dd6f8
+output_char already inserted
+----------
+output_char_str with symbol == 0x2470600 on scope 0x23deca8
+output_char_str with symbol == 0x24f59c0 on scope 0x23dd6f8
+output_char_str already inserted
+----------
+output_double with symbol == 0x243a5d0 on scope 0x23deca8
+output_double with symbol == 0x25c5c40 on scope 0x23dd6f8
+output_double already inserted
+----------
+output_double_binary with symbol == 0x2470990 on scope 0x23deca8
+output_double_binary with symbol == 0x25b8d30 on scope 0x23dd6f8
+output_double_binary already inserted
+----------
+output_id with symbol == 0x2470b30 on scope 0x23deca8
+output_id with symbol == 0x24f1fb0 on scope 0x23dd6f8
+output_id already inserted
+----------
+output_q with symbol == 0x2414da0 on scope 0x23deca8
+output_q with symbol == 0x2532a90 on scope 0x23dd6f8
+output_q already inserted
+----------
+output_q_digits with symbol == 0x2470cf0 on scope 0x23deca8
+output_q_digits with symbol == 0x2544950 on scope 0x23dd6f8
+output_q_digits already inserted
+----------
+output_q_hex with symbol == 0x2470f80 on scope 0x23deca8
+output_q_hex with symbol == 0x24f08d0 on scope 0x23dd6f8
+output_q_hex already inserted
+----------
+output_q_hex_j1 with symbol == 0x254af90 on scope 0x23dd6f8
+----------
+output_q_hex_j2 with symbol == 0x24ec8f0 on scope 0x23dd6f8
+----------
+output_q_j1 with symbol == 0x2529050 on scope 0x23dd6f8
+----------
+output_q_j2 with symbol == 0x252dec0 on scope 0x23dd6f8
+----------
+output_str with symbol == 0x2471180 on scope 0x23deca8
+output_str with symbol == 0x24f9fa0 on scope 0x23dd6f8
+output_str already inserted
+----------
+output_str_j1 with symbol == 0x24f8a60 on scope 0x23dd6f8
+----------
+p_align_to with symbol == 0x24d38a0 on scope 0x23dd6f8
+p_align_to already inserted
+----------
+pc_get with symbol == 0x2505f40 on scope 0x23dd6f8
+pc_get already inserted
+----------
+pc_sync with symbol == 0x250c820 on scope 0x23dd6f8
+pc_sync already inserted
+----------
+pc_write with symbol == 0x250a070 on scope 0x23dd6f8
+pc_write already inserted
+----------
+pcnt with symbol == 0x23e2490 on scope 0x23deca8
+----------
+ppoints with symbol == 0x23e27e0 on scope 0x23deca8
+----------
+pralloc with symbol == 0x24dd7e0 on scope 0x23dd6f8
+pralloc already inserted
+----------
+print_time_diff_and_update with symbol == 0x2452e20 on scope 0x23deca8
+print_time_diff_and_update with symbol == 0x26292d0 on scope 0x23dd6f8
+print_time_diff_and_update already inserted
+----------
+reg1 with symbol == 0x2471530 on scope 0x23deca8
+reg1 with symbol == 0x24c2090 on scope 0x23dd6f8
+----------
+reg2 with symbol == 0x2471610 on scope 0x23deca8
+reg2 with symbol == 0x24c25a0 on scope 0x23dd6f8
+----------
+reg3 with symbol == 0x2471720 on scope 0x23deca8
+reg3 with symbol == 0x255ece0 on scope 0x23dd6f8
+----------
+reg4 with symbol == 0x2471830 on scope 0x23deca8
+reg4 with symbol == 0x255f680 on scope 0x23dd6f8
+----------
+s_align_to with symbol == 0x24a7670 on scope 0x23dd6f8
+s_align_to already inserted
+----------
+s_align_to_ext with symbol == 0x24a98f0 on scope 0x23dd6f8
+s_align_to_ext already inserted
+----------
+s_align_to_page with symbol == 0x24abb70 on scope 0x23dd6f8
+s_align_to_page already inserted
+----------
+shalloc with symbol == 0x24d1420 on scope 0x23dd6f8
+shalloc already inserted
+----------
+shalloc_ext with symbol == 0x24e9b20 on scope 0x23dd6f8
+shalloc_ext already inserted
+----------
+shalloced_replicas with symbol == 0x24bbde0 on scope 0x23dd6f8
+shalloced_replicas already inserted
+----------
+slisten with symbol == 0x251eaa0 on scope 0x23dd6f8
+slisten already inserted
+----------
+sqrt with symbol == 0x2434820 on scope 0x23deca8
+sqrt with symbol == 0x25014d0 on scope 0x23dd6f8
+sqrt already inserted
+----------
+sread with symbol == 0x25140c0 on scope 0x23dd6f8
+sread already inserted
+----------
+str_to_long with symbol == 0x254dc00 on scope 0x23dd6f8
+str_to_long already inserted
+----------
+str_to_long_exit with symbol == 0x2611c00 on scope 0x23dd6f8
+----------
+strncmp with symbol == 0x24719b0 on scope 0x23deca8
+strncmp with symbol == 0x2553300 on scope 0x23dd6f8
+strncmp already inserted
+----------
+strncmp_e with symbol == 0x25524c0 on scope 0x23dd6f8
+----------
+strncmp_g with symbol == 0x25516b0 on scope 0x23dd6f8
+----------
+strncmp_l with symbol == 0x2551d10 on scope 0x23dd6f8
+----------
+strncmp_ne with symbol == 0x2551150 on scope 0x23dd6f8
+----------
+strncmp_while with symbol == 0x2550760 on scope 0x23dd6f8
+----------
+swrite with symbol == 0x251c2d0 on scope 0x23dd6f8
+swrite already inserted
+----------
+task_id_to_ec_range with symbol == 0x2471d90 on scope 0x23deca8
+task_id_to_ec_range with symbol == 0x25220d0 on scope 0x23dd6f8
+task_id_to_ec_range already inserted
+----------
+task_status with symbol == 0x23e2d30 on scope 0x23deca8
+----------
+time_add with symbol == 0x2472110 on scope 0x23deca8
+time_add with symbol == 0x261e620 on scope 0x23dd6f8
+time_add already inserted
+----------
+time_subtract with symbol == 0x2472510 on scope 0x23deca8
+time_subtract with symbol == 0x2618020 on scope 0x23dd6f8
+time_subtract already inserted
+----------
+usleep with symbol == 0x2633320 on scope 0x23dd6f8
+usleep already inserted
+----------
+w with symbol == 0x23ef940 on scope 0x23deca8
+----------
+ws with symbol == 0x24060e0 on scope 0x23deca8
+----------
+new global symbols:
+├─__memcmp_se
+├─_get_from_sar_array
+├─_get_new_pa
+├─_get_new_sar
+├─_get_new_sar_ext
+├─_output_debug
+├─_syscall_malloc
+├─_syscall_malloc_ext
+├─barrier_task
+├─begin_time_nsec
+├─begin_time_sec
+├─calc_task
+├─create_new_iter_task
+├─exp
+├─exp_remez13_05_05
+├─get_my_task_id
+├─get_new_task_id
+├─get_points_range
+├─get_time_diff_and_update
+├─gettime
+├─init_PR_var
+├─init_task
+├─input_char
+├─input_double
+├─input_double_after_dot
+├─input_double_exit
+├─input_line
+├─input_line_exit
+├─input_long
+├─input_long_exit
+├─input_q
+├─input_q_exit
+├─ipow
+├─iter
+├─main
+├─memcmp
+├─memcpy
+├─memset0
+├─new_iter_task
+├─output_char
+├─output_char_str
+├─output_double
+├─output_double_binary
+├─output_id
+├─output_q
+├─output_q_digits
+├─output_q_hex
+├─output_q_hex_j1
+├─output_q_hex_j2
+├─output_q_j1
+├─output_q_j2
+├─output_str
+├─output_str_j1
+├─p_align_to
+├─pc_get
+├─pc_sync
+├─pc_write
+├─pcnt
+├─ppoints
+├─pralloc
+├─print_time_diff_and_update
+├─reg1
+├─reg2
+├─reg3
+├─reg4
+├─s_align_to
+├─s_align_to_ext
+├─s_align_to_page
+├─shalloc
+├─shalloc_ext
+├─shalloced_replicas
+├─slisten
+├─sqrt
+├─sread
+├─str_to_long
+├─str_to_long_exit
+├─strncmp
+├─strncmp_e
+├─strncmp_g
+├─strncmp_l
+├─strncmp_ne
+├─strncmp_while
+├─swrite
+├─task_id_to_ec_range
+├─task_status
+├─time_add
+├─time_subtract
+├─usleep
+├─w
+└─ws
+[LINK]: relinked symbol pcnt in function get_points_range
+[LINK]: relinked symbol pcnt in function get_points_range
+[LINK]: relinked symbol pcnt in function get_points_range
+[LINK]: relinked symbol iter in function create_new_iter_task
+[LINK]: relinked symbol pcnt in function create_new_iter_task
+[LINK]: relinked symbol ppoints in function create_new_iter_task
+[LINK]: relinked symbol task_status in function create_new_iter_task
+[LINK]: relinked symbol new_iter_task in function create_new_iter_task
+[LINK]: relinked symbol get_points_range in function calc_task
+[LINK]: relinked symbol ws in function calc_task
+[LINK]: relinked symbol iter in function calc_task
+[LINK]: relinked symbol w in function calc_task
+[LINK]: relinked symbol exp in function calc_task
+[LINK]: relinked symbol ppoints in function calc_task
+[LINK]: relinked symbol memcpy in function calc_task
+[LINK]: relinked symbol task_status in function calc_task
+[LINK]: relinked symbol get_points_range in function new_iter_task
+[LINK]: relinked symbol iter in function new_iter_task
+[LINK]: relinked symbol iter in function new_iter_task
+[LINK]: relinked symbol pcnt in function new_iter_task
+[LINK]: relinked symbol task_status in function new_iter_task
+[LINK]: relinked symbol ws in function new_iter_task
+[LINK]: relinked symbol w in function new_iter_task
+[LINK]: relinked symbol calc_task in function new_iter_task
+[LINK]: relinked symbol iter in function new_iter_task
+[LINK]: relinked symbol pcnt in function new_iter_task
+[LINK]: relinked symbol ppoints in function new_iter_task
+[LINK]: relinked symbol task_status in function new_iter_task
+[LINK]: relinked symbol ws in function new_iter_task
+[LINK]: relinked symbol w in function new_iter_task
+[LINK]: relinked symbol ppoints in function new_iter_task
+[LINK]: relinked symbol calc_task in function new_iter_task
+[LINK]: relinked symbol task_status in function new_iter_task
+[LINK]: relinked symbol iter in function new_iter_task
+[LINK]: relinked symbol pcnt in function new_iter_task
+[LINK]: relinked symbol begin_time_sec in function new_iter_task
+[LINK]: relinked symbol begin_time_nsec in function new_iter_task
+[LINK]: relinked symbol ws in function new_iter_task
+[LINK]: relinked symbol w in function new_iter_task
+[LINK]: relinked symbol task_status in function new_iter_task
+[LINK]: relinked symbol barrier_task in function new_iter_task
+[LINK]: relinked symbol iter in function new_iter_task
+[LINK]: relinked symbol iter in function barrier_task
+[LINK]: relinked symbol task_status in function barrier_task
+[LINK]: relinked symbol iter in function barrier_task
+[LINK]: relinked symbol iter in function barrier_task
+[LINK]: relinked symbol sqrt in function barrier_task
+[LINK]: relinked symbol ws in function barrier_task
+[LINK]: relinked symbol w in function barrier_task
+[LINK]: relinked symbol pcnt in function barrier_task
+[LINK]: relinked symbol w in function barrier_task
+[LINK]: relinked symbol begin_time_sec in function barrier_task
+[LINK]: relinked symbol begin_time_nsec in function barrier_task
+[LINK]: relinked symbol gettime in function barrier_task
+[LINK]: relinked symbol iter in function barrier_task
+[LINK]: relinked symbol iter in function barrier_task
+[LINK]: relinked symbol iter in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_q in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol begin_time_sec in function barrier_task
+[LINK]: relinked symbol begin_time_nsec in function barrier_task
+[LINK]: relinked symbol print_time_diff_and_update in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol w in function barrier_task
+[LINK]: relinked symbol output_double in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol output_char in function barrier_task
+[LINK]: relinked symbol create_new_iter_task in function barrier_task
+[LINK]: relinked symbol pcnt in function init_task
+[LINK]: relinked symbol ppoints in function init_task
+[LINK]: relinked symbol iter in function init_task
+[LINK]: relinked symbol w in function init_task
+[LINK]: relinked symbol create_new_iter_task in function init_task
+[LINK]: relinked symbol iter in function main
+[LINK]: relinked symbol w in function main
+[LINK]: relinked symbol begin_time_sec in function main
+[LINK]: relinked symbol begin_time_nsec in function main
+[LINK]: relinked symbol pcnt in function main
+[LINK]: relinked symbol ppoints in function main
+[LINK]: relinked symbol init_task in function main
+[LINK]: relinked symbol ipow in function exp_remez13_05_05
+[LINK]: relinked symbol _syscall_malloc in function _get_new_sar
+[LINK]: relinked symbol _syscall_malloc_ext in function _get_new_sar_ext
+[LINK]: relinked symbol s_align_to_page in function shalloc
+[LINK]: relinked symbol s_align_to in function shalloc
+[LINK]: relinked symbol _get_from_sar_array in function shalloc
+[LINK]: relinked symbol _get_new_sar in function shalloc
+[LINK]: relinked symbol init_PR_var in function shalloc
+[LINK]: relinked symbol _get_new_sar in function shalloc
+[LINK]: relinked symbol p_align_to in function pralloc
+[LINK]: relinked symbol init_PR_var in function pralloc
+[LINK]: relinked symbol _get_new_pa in function pralloc
+[LINK]: relinked symbol s_align_to_page in function shalloc_ext
+[LINK]: relinked symbol s_align_to_ext in function shalloc_ext
+[LINK]: relinked symbol _get_new_sar_ext in function shalloc_ext
+[LINK]: relinked symbol init_PR_var in function shalloc_ext
+[LINK]: relinked symbol _get_new_sar_ext in function shalloc_ext
+[LINK]: relinked symbol reg1 in function exp
+[LINK]: relinked symbol reg2 in function exp
+[LINK]: relinked symbol reg1 in function exp
+[LINK]: relinked symbol reg2 in function exp
+[LINK]: relinked symbol reg1 in function exp
+[LINK]: relinked symbol reg2 in function exp
+[LINK]: relinked symbol output_char in function output_q
+[LINK]: relinked symbol output_q_j1 in function output_q
+[LINK]: relinked symbol output_q_j2 in function output_q
+[LINK]: relinked symbol output_char in function output_q
+[LINK]: relinked symbol output_char in function output_q_digits
+[LINK]: relinked symbol output_char in function output_q_digits
+[LINK]: relinked symbol output_char in function output_q_digits
+[LINK]: relinked symbol output_char in function output_q_hex
+[LINK]: relinked symbol output_char in function output_q_hex
+[LINK]: relinked symbol output_q_hex_j1 in function output_q_hex
+[LINK]: relinked symbol output_q_hex_j2 in function output_q_hex
+[LINK]: relinked symbol output_char in function output_q_hex
+[LINK]: relinked symbol output_q_hex in function output_id
+[LINK]: relinked symbol output_char in function output_char_str
+[LINK]: relinked symbol output_str_j1 in function output_str
+[LINK]: relinked symbol output_char in function output_str
+[LINK]: relinked symbol input_q_exit in function input_q
+[LINK]: relinked symbol input_line_exit in function input_line
+[LINK]: relinked symbol input_long_exit in function input_long
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_q in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double_binary
+[LINK]: relinked symbol output_q in function output_double_binary
+[LINK]: relinked symbol output_char in function output_double
+[LINK]: relinked symbol output_double_binary in function output_double
+[LINK]: relinked symbol output_double_binary in function output_double
+[LINK]: relinked symbol output_q in function output_double
+[LINK]: relinked symbol output_char in function output_double
+[LINK]: relinked symbol output_q in function output_double
+[LINK]: relinked symbol input_double_after_dot in function input_double
+[LINK]: relinked symbol input_double_exit in function input_double
+[LINK]: relinked symbol input_long in function input_double
+[LINK]: relinked symbol input_long in function input_double
+[LINK]: relinked symbol ipow in function input_double
+[LINK]: relinked symbol ipow in function input_double
+[LINK]: relinked symbol str_to_long_exit in function str_to_long
+[LINK]: relinked symbol strncmp_while in function strncmp
+[LINK]: relinked symbol strncmp_ne in function strncmp
+[LINK]: relinked symbol strncmp_g in function strncmp
+[LINK]: relinked symbol strncmp_l in function strncmp
+[LINK]: relinked symbol strncmp_e in function strncmp
+[LINK]: relinked symbol reg1 in function __memcmp_se
+[LINK]: relinked symbol reg2 in function __memcmp_se
+[LINK]: relinked symbol reg3 in function __memcmp_se
+[LINK]: relinked symbol reg4 in function __memcmp_se
+[LINK]: relinked symbol reg1 in function memcmp
+[LINK]: relinked symbol reg2 in function memcmp
+[LINK]: relinked symbol reg3 in function memcmp
+[LINK]: relinked symbol reg4 in function memcmp
+[LINK]: relinked symbol reg1 in function memcmp
+[LINK]: relinked symbol reg2 in function memcmp
+[LINK]: relinked symbol reg3 in function memcmp
+[LINK]: relinked symbol reg4 in function memcmp
+[LINK]: relinked symbol reg1 in function memcmp
+[LINK]: relinked symbol reg2 in function memcmp
+[LINK]: relinked symbol reg3 in function memcmp
+[LINK]: relinked symbol reg4 in function memcmp
+[LINK]: relinked symbol gettime in function print_time_diff_and_update
+[LINK]: relinked symbol output_char in function print_time_diff_and_update
+[LINK]: relinked symbol output_char in function print_time_diff_and_update
+[LINK]: relinked symbol output_char in function print_time_diff_and_update
+[LINK]: relinked symbol output_char in function print_time_diff_and_update
+[LINK]: relinked symbol time_subtract in function print_time_diff_and_update
+[LINK]: relinked symbol output_q in function print_time_diff_and_update
+[LINK]: relinked symbol output_char in function print_time_diff_and_update
+[LINK]: relinked symbol output_q_digits in function print_time_diff_and_update
+[LINK]: relinked symbol gettime in function get_time_diff_and_update
+[LINK]: relinked symbol output_char in function get_time_diff_and_update
+[LINK]: relinked symbol output_char in function get_time_diff_and_update
+[LINK]: relinked symbol output_char in function get_time_diff_and_update
+[LINK]: relinked symbol output_char in function get_time_diff_and_update
+[LINK]: relinked symbol time_subtract in function get_time_diff_and_update
+[LINK]: fixed __memcmp_se
+[LINK]: fixed _get_from_sar_array
+[LINK]: fixed _get_new_pa
+[LINK]: fixed _get_new_sar
+[LINK]: fixed _get_new_sar_ext
+[LINK]: fixed _output_debug
+[LINK]: fixed _syscall_malloc
+[LINK]: fixed _syscall_malloc_ext
+[LINK]: fixed barrier_task
+[LINK]: fixed begin_time_nsec
+[LINK]: fixed begin_time_sec
+[LINK]: fixed calc_task
+[LINK]: fixed create_new_iter_task
+[LINK]: fixed exp
+[LINK]: fixed exp_remez13_05_05
+[LINK]: fixed get_my_task_id
+[LINK]: fixed get_new_task_id
+[LINK]: fixed get_points_range
+[LINK]: fixed get_time_diff_and_update
+[LINK]: fixed gettime
+[LINK]: fixed init_PR_var
+[LINK]: fixed init_task
+[LINK]: fixed input_char
+[LINK]: fixed input_double
+[LINK]: fixed input_double_after_dot
+[LINK]: fixed input_double_exit
+[LINK]: fixed input_line
+[LINK]: fixed input_line_exit
+[LINK]: fixed input_long
+[LINK]: fixed input_long_exit
+[LINK]: fixed input_q
+[LINK]: fixed input_q_exit
+[LINK]: fixed ipow
+[LINK]: fixed iter
+[LINK]: fixed main
+[LINK]: fixed memcmp
+[LINK]: fixed memcpy
+[LINK]: fixed memset0
+[LINK]: fixed new_iter_task
+[LINK]: fixed output_char
+[LINK]: fixed output_char_str
+[LINK]: fixed output_double
+[LINK]: fixed output_double_binary
+[LINK]: fixed output_id
+[LINK]: fixed output_q
+[LINK]: fixed output_q_digits
+[LINK]: fixed output_q_hex
+[LINK]: fixed output_q_hex_j1
+[LINK]: fixed output_q_hex_j2
+[LINK]: fixed output_q_j1
+[LINK]: fixed output_q_j2
+[LINK]: fixed output_str
+[LINK]: fixed output_str_j1
+[LINK]: fixed p_align_to
+[LINK]: fixed pc_get
+[LINK]: fixed pc_sync
+[LINK]: fixed pc_write
+[LINK]: fixed pcnt
+[LINK]: fixed ppoints
+[LINK]: fixed pralloc
+[LINK]: fixed print_time_diff_and_update
+[LINK]: fixed reg1
+[LINK]: fixed reg2
+[LINK]: fixed reg3
+[LINK]: fixed reg4
+[LINK]: fixed s_align_to
+[LINK]: fixed s_align_to_ext
+[LINK]: fixed s_align_to_page
+[LINK]: fixed shalloc
+[LINK]: fixed shalloc_ext
+[LINK]: fixed shalloced_replicas
+[LINK]: fixed slisten
+[LINK]: fixed sqrt
+[LINK]: fixed sread
+[LINK]: fixed str_to_long
+[LINK]: fixed str_to_long_exit
+[LINK]: fixed strncmp
+[LINK]: fixed strncmp_e
+[LINK]: fixed strncmp_g
+[LINK]: fixed strncmp_l
+[LINK]: fixed strncmp_ne
+[LINK]: fixed strncmp_while
+[LINK]: fixed swrite
+[LINK]: fixed task_id_to_ec_range
+[LINK]: fixed task_status
+[LINK]: fixed time_add
+[LINK]: fixed time_subtract
+[LINK]: fixed usleep
+[LINK]: fixed w
+[LINK]: fixed ws
+[LINK]: Dep: main
+[LINK]: Dep: init_task
+[LINK]: Dep: create_new_iter_task
+[LINK]: Dep: new_iter_task
+[LINK]: Dep: get_points_range
+[LINK]: Dep: calc_task
+[LINK]: Dep: calc_task
+[LINK]: Dep: barrier_task
+[LINK]: Dep: exp
+[LINK]: Dep: memcpy
+[LINK]: Dep: sqrt
+[LINK]: Dep: gettime
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_q
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: print_time_diff_and_update
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: output_double
+[LINK]: Dep: output_char
+[LINK]: Dep: output_char
+[LINK]: Dep: time_subtract
+[LINK]: Dep: output_q_digits
+[LINK]: Dep: output_double_binary
+[LINK]: Dep: output_double_binary
+[LINK]: purged sym: __memcmp_se
+[LINK]: purged sym: _get_from_sar_array
+[LINK]: purged sym: _get_new_pa
+[LINK]: purged sym: _get_new_sar
+[LINK]: purged sym: _get_new_sar_ext
+[LINK]: purged sym: _output_debug
+[LINK]: purged sym: _syscall_malloc
+[LINK]: purged sym: _syscall_malloc_ext
+[LINK]: purged sym: exp_remez13_05_05
+[LINK]: purged sym: get_my_task_id
+[LINK]: purged sym: get_new_task_id
+[LINK]: purged sym: get_time_diff_and_update
+[LINK]: purged sym: init_PR_var
+[LINK]: purged sym: input_char
+[LINK]: purged sym: input_double
+[LINK]: purged sym: input_double_after_dot
+[LINK]: purged sym: input_double_exit
+[LINK]: purged sym: input_line
+[LINK]: purged sym: input_line_exit
+[LINK]: purged sym: input_long
+[LINK]: purged sym: input_long_exit
+[LINK]: purged sym: input_q
+[LINK]: purged sym: input_q_exit
+[LINK]: purged sym: ipow
+[LINK]: purged sym: memcmp
+[LINK]: purged sym: memset0
+[LINK]: purged sym: output_char_str
+[LINK]: purged sym: output_id
+[LINK]: purged sym: output_q_hex
+[LINK]: purged sym: output_q_hex_j1
+[LINK]: purged sym: output_q_hex_j2
+[LINK]: purged sym: output_str
+[LINK]: purged sym: output_str_j1
+[LINK]: purged sym: p_align_to
+[LINK]: purged sym: pc_get
+[LINK]: purged sym: pc_sync
+[LINK]: purged sym: pc_write
+[LINK]: purged sym: pralloc
+[LINK]: purged sym: reg3
+[LINK]: purged sym: reg4
+[LINK]: purged sym: s_align_to
+[LINK]: purged sym: s_align_to_ext
+[LINK]: purged sym: s_align_to_page
+[LINK]: purged sym: shalloc
+[LINK]: purged sym: shalloc_ext
+[LINK]: purged sym: shalloced_replicas
+[LINK]: purged sym: slisten
+[LINK]: purged sym: sread
+[LINK]: purged sym: str_to_long
+[LINK]: purged sym: str_to_long_exit
+[LINK]: purged sym: strncmp
+[LINK]: purged sym: strncmp_e
+[LINK]: purged sym: strncmp_g
+[LINK]: purged sym: strncmp_l
+[LINK]: purged sym: strncmp_ne
+[LINK]: purged sym: strncmp_while
+[LINK]: purged sym: swrite
+[LINK]: purged sym: task_id_to_ec_range
+[LINK]: purged sym: time_add
+[LINK]: purged sym: usleep
+====================================================
+Global scope: SIZE: 0x3F000 {
+    NAME: barrier_task 	TYPE: FUNCTION (cur_iter:int64) =>void
+    NAME: begin_time_nsec 	TYPE: int64 	OFFSET: +0x20800000008
+    NAME: begin_time_sec 	TYPE: int64 	OFFSET: +0x20800000010
+    NAME: calc_task 	TYPE: FUNCTION (id:int64) =>void
+    NAME: create_new_iter_task 	TYPE: FUNCTION () =>void
+    NAME: exp 	TYPE: FUNCTION (x:double) =>double
+    NAME: get_points_range 	TYPE: FUNCTION (i:int64, p_begin:int64*, p_end:int64*) =>void
+    NAME: gettime 	TYPE: FUNCTION (tv_sec:int64*, tv_nsec:int64*) =>int64
+    NAME: init_task 	TYPE: FUNCTION () =>void
+    NAME: iter 	TYPE: int64 	OFFSET: +0x20800000018
+    NAME: main 	TYPE: FUNCTION () =>void
+    NAME: memcpy 	TYPE: FUNCTION (src:int8*, len:int64, dst:int8*) =>void
+    NAME: new_iter_task 	TYPE: FUNCTION () =>void
+    NAME: output_char 	TYPE: FUNCTION (c:int64) =>void
+    NAME: output_double 	TYPE: FUNCTION (d:double) =>void
+    NAME: output_double_binary 	TYPE: FUNCTION (d:double) =>void
+    NAME: output_q 	TYPE: FUNCTION (n:int64) =>void
+    NAME: output_q_digits 	TYPE: FUNCTION (n:int64, d:int64) =>void
+    NAME: output_q_j1 	TYPE: LABEL
+    NAME: output_q_j2 	TYPE: LABEL
+    NAME: pcnt 	TYPE: int64 	OFFSET: +0x20800000020
+    NAME: ppoints 	TYPE: double* 	OFFSET: +0x20800001000
+    NAME: print_time_diff_and_update 	TYPE: FUNCTION (base_sec:int64*, base_nsec:int64*) =>int64
+    NAME: reg1 	TYPE: int64 	OFFSET: +0x200000020
+    NAME: reg2 	TYPE: int64 	OFFSET: +0x200000028
+    NAME: sqrt 	TYPE: FUNCTION (x:double) =>double
+    NAME: task_status 	TYPE: int64[15360] 	OFFSET: +0x20800002000
+    NAME: time_subtract 	TYPE: FUNCTION (tv_sec_from:int64*, tv_nsec_from:int64*, tv_sec:int64, tv_nsec:int64) =>void
+    NAME: w 	TYPE: double[20] 	OFFSET: +0x20800020000
+    NAME: ws 	TYPE: double[15360] 	OFFSET: +0x20800021000
+    Function scope: SIZE: 0xF8 {
+        Local scope: SIZE: 0xF8 {
+            NAME: __temp_235 	TYPE: void* 	OFFSET: -0x8
+            NAME: __temp_236 	TYPE: void* 	OFFSET: -0x10
+            NAME: __temp_237 	TYPE: void* 	OFFSET: -0x18
+            NAME: __temp_238 	TYPE: void* 	OFFSET: -0x20
+            NAME: __temp_239 	TYPE: void* 	OFFSET: -0x28
+            NAME: __temp_240 	TYPE: void* 	OFFSET: -0x30
+            NAME: __temp_241 	TYPE: void* 	OFFSET: -0x38
+            NAME: __temp_242 	TYPE: void* 	OFFSET: -0x40
+            NAME: __temp_243 	TYPE: void* 	OFFSET: -0x48
+            NAME: __temp_244 	TYPE: void* 	OFFSET: -0x50
+            NAME: __temp_245 	TYPE: void* 	OFFSET: -0x58
+            NAME: __temp_246 	TYPE: void* 	OFFSET: -0x60
+            NAME: __temp_247 	TYPE: void* 	OFFSET: -0x68
+            NAME: __temp_248 	TYPE: void* 	OFFSET: -0x70
+            NAME: __temp_249 	TYPE: void* 	OFFSET: -0x78
+            NAME: __temp_250 	TYPE: void* 	OFFSET: -0x80
+            NAME: __temp_251 	TYPE: void* 	OFFSET: -0x88
+            NAME: __temp_252 	TYPE: int64 	OFFSET: -0x90
+            NAME: __temp_253 	TYPE: int64 	OFFSET: -0x98
+            NAME: __temp_254 	TYPE: int64 	OFFSET: -0xA0
+            NAME: __temp_255 	TYPE: int64 	OFFSET: -0xA8
+            NAME: __temp_256 	TYPE: int64 	OFFSET: -0xB0
+            NAME: __temp_257 	TYPE: int64 	OFFSET: -0xB8
+            NAME: __temp_258 	TYPE: double* 	OFFSET: -0xC0
+            NAME: __temp_259 	TYPE: int64 	OFFSET: -0xC8
+            NAME: __temp_260 	TYPE: int64 	OFFSET: -0xD0
+            NAME: __temp_261 	TYPE: int64 	OFFSET: -0xD8
+            NAME: __temp_262 	TYPE: int64 	OFFSET: -0xE0
+            NAME: __temp_263 	TYPE: void* 	OFFSET: -0xE8
+            NAME: __temp_264 	TYPE: void* 	OFFSET: -0xF0
+            NAME: space 	TYPE: int64 	OFFSET: -0xF8
+        }
+    }
+    Function scope: SIZE: 0x30 {
+        Local scope: SIZE: 0x30 {
+            NAME: __temp_228 	TYPE: int64 	OFFSET: -0x8
+            NAME: __temp_229 	TYPE: int64 	OFFSET: -0x10
+            NAME: __temp_230 	TYPE: LABEL
+            NAME: __temp_231 	TYPE: LABEL
+            NAME: __temp_232 	TYPE: LABEL
+            NAME: __temp_233 	TYPE: bool 	OFFSET: -0x18
+            NAME: __temp_234 	TYPE: int64 	OFFSET: -0x20
+            NAME: i 	TYPE: int64 	OFFSET: -0x28
+            NAME: j 	TYPE: int64 	OFFSET: -0x30
+            Local scope: SIZE: 0x0 {
+            }
+        }
+    }
+    Function scope: SIZE: 0x78 {
+        Local scope: SIZE: 0x78 {
+            NAME: __temp_10 	TYPE: void* 	OFFSET: -0x8
+            NAME: __temp_11 	TYPE: void* 	OFFSET: -0x10
+            NAME: __temp_12 	TYPE: void* 	OFFSET: -0x18
+            NAME: __temp_13 	TYPE: void* 	OFFSET: -0x20
+            NAME: __temp_14 	TYPE: void* 	OFFSET: -0x28
+            NAME: __temp_15 	TYPE: void* 	OFFSET: -0x30
+            NAME: __temp_16 	TYPE: void* 	OFFSET: -0x38
+            NAME: __temp_17 	TYPE: void* 	OFFSET: -0x40
+            NAME: __temp_18 	TYPE: void* 	OFFSET: -0x48
+            NAME: __temp_19 	TYPE: int64 	OFFSET: -0x50
+            NAME: __temp_20 	TYPE: void* 	OFFSET: -0x58
+            NAME: __temp_21 	TYPE: void* 	OFFSET: -0x60
+            NAME: __temp_8 	TYPE: void* 	OFFSET: -0x68
+            NAME: __temp_9 	TYPE: void* 	OFFSET: -0x70
+            NAME: space 	TYPE: int64 	OFFSET: -0x78
+        }
+    }
+    Function scope: SIZE: 0x200 {
+        Local scope: SIZE: 0x200 {
+            NAME: __temp_147 	TYPE: int64 	OFFSET: -0x8
+            NAME: __temp_148 	TYPE: void* 	OFFSET: -0x10
+            NAME: __temp_149 	TYPE: void* 	OFFSET: -0x18
+            NAME: __temp_150 	TYPE: void* 	OFFSET: -0x20
+            NAME: __temp_151 	TYPE: void* 	OFFSET: -0x28
+            NAME: __temp_152 	TYPE: void* 	OFFSET: -0x30
+            NAME: __temp_153 	TYPE: void* 	OFFSET: -0x38
+            NAME: __temp_154 	TYPE: void* 	OFFSET: -0x40
+            NAME: __temp_155 	TYPE: void* 	OFFSET: -0x48
+            NAME: __temp_156 	TYPE: void* 	OFFSET: -0x50
+            NAME: __temp_157 	TYPE: void* 	OFFSET: -0x58
+            NAME: __temp_158 	TYPE: void* 	OFFSET: -0x60
+            NAME: __temp_159 	TYPE: void* 	OFFSET: -0x68
+            NAME: __temp_160 	TYPE: void* 	OFFSET: -0x70
+            NAME: __temp_161 	TYPE: int64 	OFFSET: -0x78
+            NAME: __temp_162 	TYPE: int64 	OFFSET: -0x80
+            NAME: __temp_163 	TYPE: void* 	OFFSET: -0x88
+            NAME: __temp_164 	TYPE: void* 	OFFSET: -0x90
+            NAME: __temp_165 	TYPE: void* 	OFFSET: -0x98
+            NAME: __temp_166 	TYPE: void* 	OFFSET: -0xA0
+            NAME: __temp_167 	TYPE: int64 	OFFSET: -0xA8
+            NAME: __temp_168 	TYPE: void* 	OFFSET: -0xB0
+            NAME: __temp_169 	TYPE: void* 	OFFSET: -0xB8
+            NAME: __temp_84 	TYPE: LABEL
+            NAME: __temp_85 	TYPE: LABEL
+            NAME: __temp_86 	TYPE: LABEL
+            NAME: __temp_87 	TYPE: bool 	OFFSET: -0xC0
+            NAME: i 	TYPE: int64 	OFFSET: -0xC8
+            NAME: p_begin 	TYPE: int64 	OFFSET: -0xD0
+            NAME: p_end 	TYPE: int64 	OFFSET: -0xD8
+            NAME: space 	TYPE: int64 	OFFSET: -0xE0
+            Local scope: SIZE: 0x120 {
+                NAME: __temp_146 	TYPE: int64 	OFFSET: -0xE8
+                NAME: __temp_88 	TYPE: int64* 	OFFSET: -0xF0
+                NAME: __temp_89 	TYPE: int64* 	OFFSET: -0xF8
+                NAME: __temp_90 	TYPE: int64 	OFFSET: -0x100
+                NAME: __temp_91 	TYPE: int64 	OFFSET: -0x108
+                NAME: __temp_92 	TYPE: LABEL
+                NAME: __temp_93 	TYPE: int64 	OFFSET: -0x110
+                NAME: __temp_94 	TYPE: bool 	OFFSET: -0x118
+                NAME: __temp_95 	TYPE: LABEL
+                Local scope: SIZE: 0xE8 {
+                    NAME: __temp_117 	TYPE: void* 	OFFSET: -0x120
+                    NAME: __temp_118 	TYPE: void* 	OFFSET: -0x128
+                    NAME: __temp_119 	TYPE: void* 	OFFSET: -0x130
+                    NAME: __temp_120 	TYPE: void* 	OFFSET: -0x138
+                    NAME: __temp_121 	TYPE: void* 	OFFSET: -0x140
+                    NAME: __temp_122 	TYPE: void* 	OFFSET: -0x148
+                    NAME: __temp_123 	TYPE: void* 	OFFSET: -0x150
+                    NAME: __temp_124 	TYPE: void* 	OFFSET: -0x158
+                    NAME: __temp_125 	TYPE: void* 	OFFSET: -0x160
+                    NAME: __temp_126 	TYPE: void* 	OFFSET: -0x168
+                    NAME: __temp_127 	TYPE: void* 	OFFSET: -0x170
+                    NAME: __temp_128 	TYPE: int64 	OFFSET: -0x178
+                    NAME: __temp_129 	TYPE: int64 	OFFSET: -0x180
+                    NAME: __temp_130 	TYPE: int64 	OFFSET: -0x188
+                    NAME: __temp_131 	TYPE: void* 	OFFSET: -0x190
+                    NAME: __temp_132 	TYPE: void* 	OFFSET: -0x198
+                    NAME: __temp_133 	TYPE: int64 	OFFSET: -0x1A0
+                    NAME: __temp_134 	TYPE: int64 	OFFSET: -0x1A8
+                    NAME: __temp_135 	TYPE: int64 	OFFSET: -0x1B0
+                    NAME: __temp_136 	TYPE: void* 	OFFSET: -0x1B8
+                    NAME: __temp_137 	TYPE: void* 	OFFSET: -0x1C0
+                    NAME: __temp_138 	TYPE: void* 	OFFSET: -0x1C8
+                    NAME: __temp_139 	TYPE: void* 	OFFSET: -0x1D0
+                    NAME: __temp_140 	TYPE: int64 	OFFSET: -0x1D8
+                    NAME: __temp_141 	TYPE: int64 	OFFSET: -0x1E0
+                    NAME: __temp_142 	TYPE: int64 	OFFSET: -0x1E8
+                    NAME: __temp_143 	TYPE: int64 	OFFSET: -0x1F0
+                    NAME: __temp_144 	TYPE: void* 	OFFSET: -0x1F8
+                    NAME: __temp_145 	TYPE: void* 	OFFSET: -0x200
+                }
+                Local scope: SIZE: 0xA8 {
+                    NAME: __temp_100 	TYPE: void* 	OFFSET: -0x120
+                    NAME: __temp_101 	TYPE: void* 	OFFSET: -0x128
+                    NAME: __temp_102 	TYPE: void* 	OFFSET: -0x130
+                    NAME: __temp_103 	TYPE: void* 	OFFSET: -0x138
+                    NAME: __temp_104 	TYPE: void* 	OFFSET: -0x140
+                    NAME: __temp_105 	TYPE: int64 	OFFSET: -0x148
+                    NAME: __temp_106 	TYPE: int64 	OFFSET: -0x150
+                    NAME: __temp_107 	TYPE: int64 	OFFSET: -0x158
+                    NAME: __temp_108 	TYPE: void* 	OFFSET: -0x160
+                    NAME: __temp_109 	TYPE: void* 	OFFSET: -0x168
+                    NAME: __temp_110 	TYPE: int64 	OFFSET: -0x170
+                    NAME: __temp_111 	TYPE: int64 	OFFSET: -0x178
+                    NAME: __temp_112 	TYPE: int64 	OFFSET: -0x180
+                    NAME: __temp_113 	TYPE: void* 	OFFSET: -0x188
+                    NAME: __temp_114 	TYPE: void* 	OFFSET: -0x190
+                    NAME: __temp_115 	TYPE: void* 	OFFSET: -0x198
+                    NAME: __temp_116 	TYPE: void* 	OFFSET: -0x1A0
+                    NAME: __temp_96 	TYPE: void* 	OFFSET: -0x1A8
+                    NAME: __temp_97 	TYPE: void* 	OFFSET: -0x1B0
+                    NAME: __temp_98 	TYPE: void* 	OFFSET: -0x1B8
+                    NAME: __temp_99 	TYPE: void* 	OFFSET: -0x1C0
+                }
+            }
+        }
+    }
+    Function scope: SIZE: 0x30 {
+        NAME: i 	TYPE: int64 	OFFSET: +0x10
+        NAME: p_begin 	TYPE: int64* 	OFFSET: +0x18
+        NAME: p_end 	TYPE: int64* 	OFFSET: +0x20
+        Local scope: SIZE: 0x30 {
+            NAME: __temp_0 	TYPE: int64 	OFFSET: -0x8
+            NAME: __temp_1 	TYPE: int64 	OFFSET: -0x10
+            NAME: __temp_2 	TYPE: LABEL
+            NAME: __temp_3 	TYPE: bool 	OFFSET: -0x18
+            NAME: __temp_4 	TYPE: LABEL
+            Local scope: SIZE: 0x0 {
+            }
+            Local scope: SIZE: 0x18 {
+                NAME: __temp_5 	TYPE: int64 	OFFSET: -0x20
+                NAME: __temp_6 	TYPE: int64 	OFFSET: -0x28
+                NAME: __temp_7 	TYPE: int64 	OFFSET: -0x30
+            }
+        }
+    }
+    Function scope: SIZE: 0x140 {
+        NAME: id 	TYPE: int64 	OFFSET: +0x10
+        Local scope: SIZE: 0x140 {
+            NAME: __temp_22 	TYPE: int64* 	OFFSET: -0x8
+            NAME: __temp_23 	TYPE: int64* 	OFFSET: -0x10
+            NAME: __temp_24 	TYPE: double* 	OFFSET: -0x18
+            NAME: __temp_25 	TYPE: int64 	OFFSET: -0x20
+            NAME: __temp_26 	TYPE: LABEL
+            NAME: __temp_27 	TYPE: int64 	OFFSET: -0x28
+            NAME: __temp_28 	TYPE: bool 	OFFSET: -0x30
+            NAME: __temp_29 	TYPE: LABEL
+            NAME: __temp_83 	TYPE: int64 	OFFSET: -0x38
+            NAME: factor 	TYPE: double 	OFFSET: -0x40
+            NAME: gradient 	TYPE: double* 	OFFSET: -0x48
+            NAME: i 	TYPE: int64 	OFFSET: -0x50
+            NAME: j 	TYPE: int64 	OFFSET: -0x58
+            NAME: p 	TYPE: double* 	OFFSET: -0x60
+            NAME: p_begin 	TYPE: int64 	OFFSET: -0x68
+            NAME: p_end 	TYPE: int64 	OFFSET: -0x70
+            NAME: ps 	TYPE: double* 	OFFSET: -0x78
+            NAME: x 	TYPE: double* 	OFFSET: -0x80
+            NAME: y 	TYPE: double 	OFFSET: -0x88
+            Local scope: SIZE: 0x60 {
+                NAME: __temp_69 	TYPE: LABEL
+                NAME: __temp_70 	TYPE: int64 	OFFSET: -0x90
+                NAME: __temp_71 	TYPE: bool 	OFFSET: -0x98
+                NAME: __temp_72 	TYPE: LABEL
+                Local scope: SIZE: 0x50 {
+                    NAME: __temp_73 	TYPE: double* 	OFFSET: -0xA0
+                    NAME: __temp_74 	TYPE: int64 	OFFSET: -0xA8
+                    NAME: __temp_75 	TYPE: int64 	OFFSET: -0xB0
+                    NAME: __temp_76 	TYPE: int64 	OFFSET: -0xB8
+                    NAME: __temp_77 	TYPE: int64 	OFFSET: -0xC0
+                    NAME: __temp_78 	TYPE: int64 	OFFSET: -0xC8
+                    NAME: __temp_79 	TYPE: int64 	OFFSET: -0xD0
+                    NAME: __temp_80 	TYPE: double* 	OFFSET: -0xD8
+                    NAME: __temp_81 	TYPE: int64 	OFFSET: -0xE0
+                    NAME: __temp_82 	TYPE: int64 	OFFSET: -0xE8
+                }
+            }
+            Local scope: SIZE: 0xB8 {
+                NAME: __temp_30 	TYPE: LABEL
+                NAME: __temp_31 	TYPE: LABEL
+                NAME: __temp_32 	TYPE: LABEL
+                NAME: __temp_33 	TYPE: bool 	OFFSET: -0x90
+                NAME: __temp_34 	TYPE: int64 	OFFSET: -0x98
+                NAME: __temp_35 	TYPE: LABEL
+                NAME: __temp_36 	TYPE: LABEL
+                NAME: __temp_37 	TYPE: LABEL
+                NAME: __temp_38 	TYPE: bool 	OFFSET: -0xA0
+                NAME: __temp_68 	TYPE: int64 	OFFSET: -0xA8
+                Local scope: SIZE: 0x0 {
+                }
+                Local scope: SIZE: 0x98 {
+                    NAME: __temp_39 	TYPE: double* 	OFFSET: -0xB0
+                    NAME: __temp_40 	TYPE: int64 	OFFSET: -0xB8
+                    NAME: __temp_41 	TYPE: double 	OFFSET: -0xC0
+                    NAME: __temp_42 	TYPE: double* 	OFFSET: -0xC8
+                    NAME: __temp_43 	TYPE: double 	OFFSET: -0xD0
+                    NAME: __temp_44 	TYPE: LABEL
+                    NAME: __temp_45 	TYPE: LABEL
+                    NAME: __temp_46 	TYPE: LABEL
+                    NAME: __temp_47 	TYPE: bool 	OFFSET: -0xD8
+                    NAME: __temp_52 	TYPE: int64 	OFFSET: -0xE0
+                    NAME: __temp_53 	TYPE: double 	OFFSET: -0xE8
+                    NAME: __temp_54 	TYPE: double 	OFFSET: -0xF0
+                    NAME: __temp_55 	TYPE: double 	OFFSET: -0xF8
+                    NAME: __temp_56 	TYPE: double 	OFFSET: -0x100
+                    NAME: __temp_57 	TYPE: double 	OFFSET: -0x108
+                    NAME: __temp_58 	TYPE: double 	OFFSET: -0x110
+                    NAME: __temp_59 	TYPE: LABEL
+                    NAME: __temp_60 	TYPE: LABEL
+                    NAME: __temp_61 	TYPE: LABEL
+                    NAME: __temp_62 	TYPE: bool 	OFFSET: -0x118
+                    NAME: __temp_67 	TYPE: int64 	OFFSET: -0x120
+                    Local scope: SIZE: 0x20 {
+                        NAME: __temp_48 	TYPE: double 	OFFSET: -0x128
+                        NAME: __temp_49 	TYPE: double 	OFFSET: -0x130
+                        NAME: __temp_50 	TYPE: double 	OFFSET: -0x138
+                        NAME: __temp_51 	TYPE: double 	OFFSET: -0x140
+                    }
+                    Local scope: SIZE: 0x20 {
+                        NAME: __temp_63 	TYPE: double 	OFFSET: -0x128
+                        NAME: __temp_64 	TYPE: double 	OFFSET: -0x130
+                        NAME: __temp_65 	TYPE: double 	OFFSET: -0x138
+                        NAME: __temp_66 	TYPE: double 	OFFSET: -0x140
+                    }
+                }
+            }
+        }
+    }
+    Function scope: SIZE: 0xD8 {
+        NAME: cur_iter 	TYPE: int64 	OFFSET: +0x10
+        Local scope: SIZE: 0xD8 {
+            NAME: __temp_170 	TYPE: LABEL
+            NAME: __temp_171 	TYPE: bool 	OFFSET: -0x8
+            NAME: __temp_172 	TYPE: LABEL
+            NAME: __temp_173 	TYPE: LABEL
+            NAME: __temp_174 	TYPE: LABEL
+            NAME: __temp_175 	TYPE: LABEL
+            NAME: __temp_176 	TYPE: bool 	OFFSET: -0x10
+            NAME: __temp_182 	TYPE: int64 	OFFSET: -0x18
+            NAME: __temp_183 	TYPE: LABEL
+            NAME: __temp_184 	TYPE: int64 	OFFSET: -0x20
+            NAME: __temp_185 	TYPE: bool 	OFFSET: -0x28
+            NAME: __temp_186 	TYPE: LABEL
+            NAME: __temp_212 	TYPE: int64 	OFFSET: -0x30
+            NAME: __temp_213 	TYPE: LABEL
+            NAME: __temp_214 	TYPE: bool 	OFFSET: -0x38
+            NAME: __temp_215 	TYPE: LABEL
+            NAME: factor 	TYPE: double 	OFFSET: -0x40
+            NAME: i 	TYPE: int64 	OFFSET: -0x48
+            NAME: j 	TYPE: int64 	OFFSET: -0x50
+            NAME: wj 	TYPE: double* 	OFFSET: -0x58
+            Local scope: SIZE: 0x0 {
+            }
+            Local scope: SIZE: 0x18 {
+                NAME: __temp_177 	TYPE: LABEL
+                NAME: __temp_178 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_179 	TYPE: int64 	OFFSET: -0x68
+                NAME: __temp_180 	TYPE: bool 	OFFSET: -0x70
+                NAME: __temp_181 	TYPE: LABEL
+                Local scope: SIZE: 0x0 {
+                }
+            }
+            Local scope: SIZE: 0x18 {
+                NAME: __temp_209 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_210 	TYPE: int64* 	OFFSET: -0x68
+                NAME: __temp_211 	TYPE: int64* 	OFFSET: -0x70
+            }
+            Local scope: SIZE: 0x80 {
+                NAME: __temp_187 	TYPE: double 	OFFSET: -0x60
+                NAME: __temp_188 	TYPE: int64 	OFFSET: -0x68
+                NAME: __temp_189 	TYPE: double 	OFFSET: -0x70
+                NAME: __temp_190 	TYPE: double 	OFFSET: -0x78
+                NAME: __temp_191 	TYPE: LABEL
+                NAME: __temp_192 	TYPE: LABEL
+                NAME: __temp_193 	TYPE: LABEL
+                NAME: __temp_194 	TYPE: bool 	OFFSET: -0x80
+                NAME: __temp_208 	TYPE: int64 	OFFSET: -0x88
+                Local scope: SIZE: 0x50 {
+                    NAME: __temp_195 	TYPE: double* 	OFFSET: -0x90
+                    NAME: __temp_196 	TYPE: int64 	OFFSET: -0x98
+                    NAME: __temp_197 	TYPE: LABEL
+                    NAME: __temp_198 	TYPE: LABEL
+                    NAME: __temp_199 	TYPE: LABEL
+                    NAME: __temp_200 	TYPE: bool 	OFFSET: -0xA0
+                    NAME: __temp_207 	TYPE: int64 	OFFSET: -0xA8
+                    Local scope: SIZE: 0x30 {
+                        NAME: __temp_201 	TYPE: double 	OFFSET: -0xB0
+                        NAME: __temp_202 	TYPE: double 	OFFSET: -0xB8
+                        NAME: __temp_203 	TYPE: double 	OFFSET: -0xC0
+                        NAME: __temp_204 	TYPE: double 	OFFSET: -0xC8
+                        NAME: __temp_205 	TYPE: double 	OFFSET: -0xD0
+                        NAME: __temp_206 	TYPE: double 	OFFSET: -0xD8
+                    }
+                }
+            }
+            Local scope: SIZE: 0x38 {
+                NAME: __temp_216 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_217 	TYPE: int64* 	OFFSET: -0x68
+                NAME: __temp_218 	TYPE: int64* 	OFFSET: -0x70
+                NAME: __temp_219 	TYPE: LABEL
+                NAME: __temp_220 	TYPE: LABEL
+                NAME: __temp_221 	TYPE: LABEL
+                NAME: __temp_222 	TYPE: bool 	OFFSET: -0x78
+                NAME: __temp_227 	TYPE: int64 	OFFSET: -0x80
+                Local scope: SIZE: 0x0 {
+                }
+                Local scope: SIZE: 0x0 {
+                }
+                Local scope: SIZE: 0x10 {
+                    NAME: __temp_223 	TYPE: double 	OFFSET: -0x88
+                    NAME: __temp_224 	TYPE: LABEL
+                    NAME: __temp_225 	TYPE: bool 	OFFSET: -0x90
+                    NAME: __temp_226 	TYPE: LABEL
+                    Local scope: SIZE: 0x0 {
+                    }
+                    Local scope: SIZE: 0x0 {
+                        Local scope: SIZE: 0x0 {
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Function scope: SIZE: 0x30 {
+        NAME: x 	TYPE: double 	OFFSET: +0x18
+        Local scope: SIZE: 0x30 {
+            NAME: __temp_210 	TYPE: double* 	OFFSET: -0x8
+            NAME: __temp_211 	TYPE: int64 	OFFSET: -0x10
+            NAME: __temp_212 	TYPE: int64* 	OFFSET: -0x18
+            NAME: ret 	TYPE: int64 	OFFSET: -0x20
+            NAME: sreg1 	TYPE: int64 	OFFSET: -0x28
+            NAME: sreg2 	TYPE: int64 	OFFSET: -0x30
+        }
+    }
+    Function scope: SIZE: 0x58 {
+        NAME: dst 	TYPE: int8* 	OFFSET: +0x20
+        NAME: len 	TYPE: int64 	OFFSET: +0x18
+        NAME: src 	TYPE: int8* 	OFFSET: +0x10
+        Local scope: SIZE: 0x58 {
+            NAME: __temp_665 	TYPE: LABEL
+            NAME: __temp_666 	TYPE: bool 	OFFSET: -0x8
+            NAME: __temp_667 	TYPE: LABEL
+            NAME: __temp_678 	TYPE: LABEL
+            NAME: __temp_679 	TYPE: LABEL
+            NAME: __temp_680 	TYPE: LABEL
+            NAME: __temp_681 	TYPE: bool 	OFFSET: -0x10
+            NAME: len8 	TYPE: int64 	OFFSET: -0x18
+            NAME: src_n 	TYPE: int64 	OFFSET: -0x20
+            Local scope: SIZE: 0x38 {
+                NAME: __temp_668 	TYPE: int64 	OFFSET: -0x28
+                NAME: __temp_669 	TYPE: int64 	OFFSET: -0x30
+                NAME: __temp_670 	TYPE: LABEL
+                NAME: __temp_671 	TYPE: LABEL
+                NAME: __temp_672 	TYPE: LABEL
+                NAME: __temp_673 	TYPE: bool 	OFFSET: -0x38
+                Local scope: SIZE: 0x20 {
+                    NAME: __temp_674 	TYPE: int8* 	OFFSET: -0x40
+                    NAME: __temp_675 	TYPE: int64 	OFFSET: -0x48
+                    NAME: __temp_676 	TYPE: int8* 	OFFSET: -0x50
+                    NAME: __temp_677 	TYPE: int64 	OFFSET: -0x58
+                }
+            }
+            Local scope: SIZE: 0x10 {
+                NAME: __temp_682 	TYPE: int8 	OFFSET: -0x28
+                NAME: __temp_683 	TYPE: int64 	OFFSET: -0x30
+            }
+        }
+    }
+    Function scope: SIZE: 0x38 {
+        NAME: x 	TYPE: double 	OFFSET: +0x18
+        Local scope: SIZE: 0x38 {
+            NAME: __temp_213 	TYPE: double 	OFFSET: -0x8
+            NAME: __temp_214 	TYPE: LABEL
+            NAME: __temp_215 	TYPE: LABEL
+            NAME: __temp_216 	TYPE: LABEL
+            NAME: __temp_217 	TYPE: bool 	OFFSET: -0x10
+            NAME: n 	TYPE: double 	OFFSET: -0x18
+            NAME: y 	TYPE: double 	OFFSET: -0x20
+            Local scope: SIZE: 0x18 {
+                NAME: __temp_218 	TYPE: double 	OFFSET: -0x28
+                NAME: __temp_219 	TYPE: double 	OFFSET: -0x30
+                NAME: __temp_220 	TYPE: double 	OFFSET: -0x38
+            }
+        }
+    }
+    Function scope: SIZE: 0x20 {
+        NAME: tv_nsec 	TYPE: int64* 	OFFSET: +0x20
+        NAME: tv_sec 	TYPE: int64* 	OFFSET: +0x18
+        Local scope: SIZE: 0x20 {
+            NAME: __temp_694 	TYPE: int64 	OFFSET: -0x8
+            NAME: __temp_695 	TYPE: int64 	OFFSET: -0x10
+            NAME: __temp_696 	TYPE: int64 	OFFSET: -0x18
+            NAME: ret 	TYPE: int64 	OFFSET: -0x20
+        }
+    }
+    Function scope: SIZE: 0x0 {
+        NAME: c 	TYPE: int64 	OFFSET: +0x10
+        Local scope: SIZE: 0x0 {
+        }
+    }
+    Function scope: SIZE: 0xB0 {
+        NAME: n 	TYPE: int64 	OFFSET: +0x10
+        Local scope: SIZE: 0xB0 {
+            NAME: __temp_249 	TYPE: LABEL
+            NAME: __temp_250 	TYPE: bool 	OFFSET: -0x8
+            NAME: __temp_251 	TYPE: LABEL
+            NAME: __temp_254 	TYPE: int64 	OFFSET: -0x10
+            NAME: __temp_255 	TYPE: int64 	OFFSET: -0x18
+            NAME: __temp_256 	TYPE: int64 	OFFSET: -0x20
+            NAME: __temp_257 	TYPE: int64 	OFFSET: -0x28
+            NAME: __temp_258 	TYPE: int64 	OFFSET: -0x30
+            NAME: __temp_259 	TYPE: int64 	OFFSET: -0x38
+            NAME: __temp_260 	TYPE: int64 	OFFSET: -0x40
+            NAME: __temp_261 	TYPE: LABEL
+            NAME: __temp_262 	TYPE: bool 	OFFSET: -0x48
+            NAME: __temp_263 	TYPE: LABEL
+            NAME: __temp_264 	TYPE: int64 	OFFSET: -0x50
+            NAME: __temp_265 	TYPE: int64 	OFFSET: -0x58
+            NAME: __temp_266 	TYPE: int64 	OFFSET: -0x60
+            NAME: __temp_267 	TYPE: int64 	OFFSET: -0x68
+            NAME: __temp_268 	TYPE: int64 	OFFSET: -0x70
+            NAME: __temp_269 	TYPE: int64 	OFFSET: -0x78
+            NAME: __temp_270 	TYPE: LABEL
+            NAME: __temp_271 	TYPE: bool 	OFFSET: -0x80
+            NAME: __temp_272 	TYPE: LABEL
+            NAME: c 	TYPE: int64 	OFFSET: -0x88
+            NAME: count 	TYPE: int64 	OFFSET: -0x90
+            NAME: num 	TYPE: int64 	OFFSET: -0x98
+            NAME: num2 	TYPE: int64 	OFFSET: -0xA0
+            Local scope: SIZE: 0x10 {
+                NAME: __temp_252 	TYPE: int64 	OFFSET: -0xA8
+                NAME: __temp_253 	TYPE: int64 	OFFSET: -0xB0
+            }
+            Local scope: SIZE: 0x0 {
+            }
+            Local scope: SIZE: 0x0 {
+            }
+        }
+    }
+    Function scope: SIZE: 0x68 {
+        NAME: base_nsec 	TYPE: int64* 	OFFSET: +0x20
+        NAME: base_sec 	TYPE: int64* 	OFFSET: +0x18
+        Local scope: SIZE: 0x68 {
+            NAME: __temp_721 	TYPE: int64 	OFFSET: -0x8
+            NAME: __temp_722 	TYPE: int64* 	OFFSET: -0x10
+            NAME: __temp_723 	TYPE: int64* 	OFFSET: -0x18
+            NAME: __temp_724 	TYPE: LABEL
+            NAME: __temp_725 	TYPE: bool 	OFFSET: -0x20
+            NAME: __temp_726 	TYPE: LABEL
+            NAME: nsec 	TYPE: int64 	OFFSET: -0x28
+            NAME: rt 	TYPE: int64 	OFFSET: -0x30
+            NAME: sec 	TYPE: int64 	OFFSET: -0x38
+            NAME: tnsec 	TYPE: int64 	OFFSET: -0x40
+            NAME: tsec 	TYPE: int64 	OFFSET: -0x48
+            Local scope: SIZE: 0x20 {
+                NAME: __temp_727 	TYPE: int64* 	OFFSET: -0x50
+                NAME: __temp_728 	TYPE: int64* 	OFFSET: -0x58
+                NAME: __temp_729 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_730 	TYPE: int64 	OFFSET: -0x68
+            }
+            Local scope: SIZE: 0x0 {
+                Local scope: SIZE: 0x0 {
+                    Local scope: SIZE: 0x0 {
+                    }
+                    Local scope: SIZE: 0x0 {
+                    }
+                }
+            }
+        }
+    }
+    Function scope: SIZE: 0x70 {
+        NAME: d 	TYPE: double 	OFFSET: +0x10
+        Local scope: SIZE: 0x70 {
+            NAME: __temp_479 	TYPE: LABEL
+            NAME: __temp_480 	TYPE: bool 	OFFSET: -0x8
+            NAME: __temp_481 	TYPE: LABEL
+            NAME: __temp_483 	TYPE: LABEL
+            NAME: __temp_484 	TYPE: bool 	OFFSET: -0x10
+            NAME: __temp_485 	TYPE: LABEL
+            NAME: __temp_486 	TYPE: LABEL
+            NAME: __temp_487 	TYPE: bool 	OFFSET: -0x18
+            NAME: __temp_488 	TYPE: LABEL
+            NAME: __temp_489 	TYPE: int64 	OFFSET: -0x20
+            NAME: __temp_490 	TYPE: double 	OFFSET: -0x28
+            NAME: __temp_491 	TYPE: double 	OFFSET: -0x30
+            NAME: __temp_492 	TYPE: LABEL
+            NAME: __temp_493 	TYPE: LABEL
+            NAME: __temp_494 	TYPE: LABEL
+            NAME: __temp_495 	TYPE: bool 	OFFSET: -0x38
+            NAME: __temp_500 	TYPE: int64 	OFFSET: -0x40
+            NAME: i 	TYPE: int64 	OFFSET: -0x48
+            NAME: n 	TYPE: int64 	OFFSET: -0x50
+            Local scope: SIZE: 0x8 {
+                NAME: __temp_482 	TYPE: double 	OFFSET: -0x58
+            }
+            Local scope: SIZE: 0x0 {
+            }
+            Local scope: SIZE: 0x0 {
+            }
+            Local scope: SIZE: 0x20 {
+                NAME: __temp_496 	TYPE: double 	OFFSET: -0x58
+                NAME: __temp_497 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_498 	TYPE: double 	OFFSET: -0x68
+                NAME: __temp_499 	TYPE: double 	OFFSET: -0x70
+            }
+        }
+    }
+    Function scope: SIZE: 0x50 {
+        NAME: tv_nsec 	TYPE: int64 	OFFSET: +0x28
+        NAME: tv_nsec_from 	TYPE: int64* 	OFFSET: +0x18
+        NAME: tv_sec 	TYPE: int64 	OFFSET: +0x20
+        NAME: tv_sec_from 	TYPE: int64* 	OFFSET: +0x10
+        Local scope: SIZE: 0x50 {
+            NAME: __temp_697 	TYPE: LABEL
+            NAME: __temp_698 	TYPE: int64 	OFFSET: -0x8
+            NAME: __temp_699 	TYPE: bool 	OFFSET: -0x10
+            NAME: __temp_700 	TYPE: LABEL
+            NAME: __temp_705 	TYPE: int64 	OFFSET: -0x18
+            NAME: __temp_706 	TYPE: int64 	OFFSET: -0x20
+            NAME: __temp_707 	TYPE: int64 	OFFSET: -0x28
+            NAME: __temp_708 	TYPE: int64 	OFFSET: -0x30
+            Local scope: SIZE: 0x20 {
+                NAME: __temp_701 	TYPE: int64 	OFFSET: -0x38
+                NAME: __temp_702 	TYPE: int64 	OFFSET: -0x40
+                NAME: __temp_703 	TYPE: int64 	OFFSET: -0x48
+                NAME: __temp_704 	TYPE: int64 	OFFSET: -0x50
+            }
+        }
+    }
+    Function scope: SIZE: 0x80 {
+        NAME: d 	TYPE: int64 	OFFSET: +0x18
+        NAME: n 	TYPE: int64 	OFFSET: +0x10
+        Local scope: SIZE: 0x80 {
+            NAME: __temp_273 	TYPE: LABEL
+            NAME: __temp_274 	TYPE: bool 	OFFSET: -0x8
+            NAME: __temp_275 	TYPE: LABEL
+            NAME: __temp_278 	TYPE: LABEL
+            NAME: __temp_279 	TYPE: LABEL
+            NAME: __temp_280 	TYPE: LABEL
+            NAME: __temp_281 	TYPE: bool 	OFFSET: -0x10
+            NAME: __temp_289 	TYPE: LABEL
+            NAME: __temp_290 	TYPE: LABEL
+            NAME: __temp_291 	TYPE: LABEL
+            NAME: __temp_292 	TYPE: int64 	OFFSET: -0x18
+            NAME: __temp_293 	TYPE: bool 	OFFSET: -0x20
+            NAME: __temp_295 	TYPE: LABEL
+            NAME: __temp_296 	TYPE: LABEL
+            NAME: __temp_297 	TYPE: LABEL
+            NAME: __temp_298 	TYPE: bool 	OFFSET: -0x28
+            NAME: c 	TYPE: int64 	OFFSET: -0x30
+            NAME: count 	TYPE: int64 	OFFSET: -0x38
+            NAME: num 	TYPE: int64 	OFFSET: -0x40
+            NAME: num2 	TYPE: int64 	OFFSET: -0x48
+            Local scope: SIZE: 0x10 {
+                NAME: __temp_276 	TYPE: int64 	OFFSET: -0x50
+                NAME: __temp_277 	TYPE: int64 	OFFSET: -0x58
+            }
+            Local scope: SIZE: 0x38 {
+                NAME: __temp_282 	TYPE: int64 	OFFSET: -0x50
+                NAME: __temp_283 	TYPE: int64 	OFFSET: -0x58
+                NAME: __temp_284 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_285 	TYPE: int64 	OFFSET: -0x68
+                NAME: __temp_286 	TYPE: int64 	OFFSET: -0x70
+                NAME: __temp_287 	TYPE: int64 	OFFSET: -0x78
+                NAME: __temp_288 	TYPE: int64 	OFFSET: -0x80
+            }
+            Local scope: SIZE: 0x8 {
+                NAME: __temp_294 	TYPE: int64 	OFFSET: -0x50
+            }
+            Local scope: SIZE: 0x30 {
+                NAME: __temp_299 	TYPE: int64 	OFFSET: -0x50
+                NAME: __temp_300 	TYPE: int64 	OFFSET: -0x58
+                NAME: __temp_301 	TYPE: int64 	OFFSET: -0x60
+                NAME: __temp_302 	TYPE: int64 	OFFSET: -0x68
+                NAME: __temp_303 	TYPE: int64 	OFFSET: -0x70
+                NAME: __temp_304 	TYPE: int64 	OFFSET: -0x78
+            }
+        }
+    }
+    Function scope: SIZE: 0x98 {
+        NAME: d 	TYPE: double 	OFFSET: +0x10
+        Local scope: SIZE: 0x98 {
+            NAME: __temp_455 	TYPE: double* 	OFFSET: -0x8
+            NAME: __temp_456 	TYPE: int64 	OFFSET: -0x10
+            NAME: __temp_457 	TYPE: int64 	OFFSET: -0x18
+            NAME: __temp_458 	TYPE: int64 	OFFSET: -0x20
+            NAME: __temp_459 	TYPE: int64 	OFFSET: -0x28
+            NAME: __temp_460 	TYPE: int64 	OFFSET: -0x30
+            NAME: __temp_461 	TYPE: int64 	OFFSET: -0x38
+            NAME: __temp_462 	TYPE: int64 	OFFSET: -0x40
+            NAME: __temp_463 	TYPE: int64 	OFFSET: -0x48
+            NAME: __temp_464 	TYPE: LABEL
+            NAME: __temp_465 	TYPE: bool 	OFFSET: -0x50
+            NAME: __temp_466 	TYPE: LABEL
+            NAME: __temp_470 	TYPE: LABEL
+            NAME: __temp_471 	TYPE: bool 	OFFSET: -0x58
+            NAME: __temp_472 	TYPE: LABEL
+            NAME: __temp_476 	TYPE: LABEL
+            NAME: __temp_477 	TYPE: bool 	OFFSET: -0x60
+            NAME: __temp_478 	TYPE: LABEL
+            NAME: exp 	TYPE: int64 	OFFSET: -0x68
+            NAME: exp_raw 	TYPE: int64 	OFFSET: -0x70
+            NAME: frac 	TYPE: int64 	OFFSET: -0x78
+            NAME: frac_raw 	TYPE: int64 	OFFSET: -0x80
+            NAME: lv 	TYPE: int64 	OFFSET: -0x88
+            NAME: sign 	TYPE: int64 	OFFSET: -0x90
+            Local scope: SIZE: 0x8 {
+                NAME: __temp_467 	TYPE: LABEL
+                NAME: __temp_468 	TYPE: bool 	OFFSET: -0x98
+                NAME: __temp_469 	TYPE: LABEL
+                Local scope: SIZE: 0x0 {
+                }
+            }
+            Local scope: SIZE: 0x8 {
+                NAME: __temp_473 	TYPE: LABEL
+                NAME: __temp_474 	TYPE: bool 	OFFSET: -0x98
+                NAME: __temp_475 	TYPE: LABEL
+                Local scope: SIZE: 0x0 {
+                }
+                Local scope: SIZE: 0x0 {
+                }
+            }
+            Local scope: SIZE: 0x0 {
+            }
+        }
+    }
+}
+====================================================
+Resolving symbol 'main' -> 0x8000000DB
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol 'begin_time_sec' -> 0x20800000010
+Resolving symbol 'begin_time_nsec' -> 0x20800000008
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'ppoints' -> 0x20800001000
+Resolving symbol '__newr0' -> 0x800000039
+Resolving symbol 'init_task' -> 0x80000082E
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'ppoints' -> 0x20800001000
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol '__temp_232' -> 0x800000972
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol '__temp_230' -> 0x8000008D7
+Resolving symbol 'create_new_iter_task' -> 0x8000009CC
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'ppoints' -> 0x20800001000
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol '__newr0' -> 0x800000039
+Resolving symbol 'new_iter_task' -> 0x800000EA8
+Resolving symbol '__temp_86' -> 0x800001F5D
+Resolving symbol 'get_points_range' -> 0x8000025EC
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol '__temp_95' -> 0x8000016E1
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol 'ws' -> 0x20800021000
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol '__newr0' -> 0x800000039
+Resolving symbol 'calc_task' -> 0x8000027ED
+Resolving symbol '__temp_92' -> 0x800001EBF
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'ppoints' -> 0x20800001000
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol 'ws' -> 0x20800021000
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol 'ppoints' -> 0x20800001000
+Resolving symbol '__newr0' -> 0x800000039
+Resolving symbol 'calc_task' -> 0x8000027ED
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol '__temp_84' -> 0x800000F0E
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'begin_time_sec' -> 0x20800000010
+Resolving symbol 'begin_time_nsec' -> 0x20800000008
+Resolving symbol 'ws' -> 0x20800021000
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol '__newr0' -> 0x800000039
+Resolving symbol 'barrier_task' -> 0x80000337C
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol '__temp_4' -> 0x800002773
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol '__temp_2' -> 0x80000279F
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'get_points_range' -> 0x8000025EC
+Resolving symbol 'ws' -> 0x20800021000
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol '__temp_29' -> 0x80000306B
+Resolving symbol '__temp_32' -> 0x800002A94
+Resolving symbol '__temp_30' -> 0x8000029F5
+Resolving symbol '__temp_37' -> 0x800003061
+Resolving symbol '__temp_46' -> 0x800002D3C
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol '__temp_44' -> 0x800002BF9
+Resolving symbol 'exp' -> 0x800004ED7
+Resolving symbol '__temp_61' -> 0x800003034
+Resolving symbol '__temp_59' -> 0x800002E97
+Resolving symbol '__temp_35' -> 0x800002AB0
+Resolving symbol '__temp_26' -> 0x800003309
+Resolving symbol '__temp_72' -> 0x8000030AD
+Resolving symbol '__temp_69' -> 0x800003309
+Resolving symbol 'ppoints' -> 0x20800001000
+Resolving symbol 'memcpy' -> 0x800005098
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol '__temp_172' -> 0x800003445
+Resolving symbol '__temp_170' -> 0x800003447
+Resolving symbol '__temp_175' -> 0x80000354D
+Resolving symbol 'task_status' -> 0x20800002000
+Resolving symbol '__temp_181' -> 0x80000351E
+Resolving symbol '__temp_177' -> 0x800003520
+Resolving symbol '__temp_173' -> 0x80000345F
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol '__temp_186' -> 0x800003936
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'sqrt' -> 0x8000053EE
+Resolving symbol '__temp_193' -> 0x80000392C
+Resolving symbol 'ws' -> 0x20800021000
+Resolving symbol '__temp_199' -> 0x8000038FF
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol 'pcnt' -> 0x20800000020
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol '__temp_197' -> 0x80000372B
+Resolving symbol '__temp_191' -> 0x800003692
+Resolving symbol '__temp_183' -> 0x800003A2E
+Resolving symbol 'begin_time_sec' -> 0x20800000010
+Resolving symbol 'begin_time_nsec' -> 0x20800000008
+Resolving symbol 'gettime' -> 0x80000559C
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol 'iter' -> 0x20800000018
+Resolving symbol '__temp_215' -> 0x800003A6F
+Resolving symbol '__temp_213' -> 0x800004E7D
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_q' -> 0x8000057C7
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'begin_time_sec' -> 0x20800000010
+Resolving symbol 'begin_time_nsec' -> 0x20800000008
+Resolving symbol 'print_time_diff_and_update' -> 0x800005C4C
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_221' -> 0x800004E7B
+Resolving symbol 'w' -> 0x20800020000
+Resolving symbol 'output_double' -> 0x8000063AC
+Resolving symbol '__temp_226' -> 0x800004DE5
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_224' -> 0x800004E4E
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_219' -> 0x800004C65
+Resolving symbol 'create_new_iter_task' -> 0x8000009CC
+Resolving symbol 'reg1' -> 0x200000020
+Resolving symbol 'reg2' -> 0x200000028
+Resolving symbol 'reg1' -> 0x200000020
+Resolving symbol 'reg1' -> 0x200000020
+Resolving symbol 'reg2' -> 0x200000028
+Resolving symbol 'reg2' -> 0x200000028
+Resolving symbol 'reg1' -> 0x200000020
+Resolving symbol 'reg2' -> 0x200000028
+Resolving symbol '__temp_667' -> 0x800005128
+Resolving symbol '__temp_665' -> 0x8000052A3
+Resolving symbol '__temp_672' -> 0x8000052A3
+Resolving symbol '__temp_670' -> 0x80000516E
+Resolving symbol '__temp_680' -> 0x8000053A0
+Resolving symbol '__temp_678' -> 0x8000052A3
+Resolving symbol '__temp_216' -> 0x800005532
+Resolving symbol '__temp_214' -> 0x800005477
+Resolving symbol '__temp_251' -> 0x80000585B
+Resolving symbol '__temp_249' -> 0x800005903
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_263' -> 0x800005A5A
+Resolving symbol '__temp_261' -> 0x800005A64
+Resolving symbol 'output_q_j1' -> 0x800005933
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_272' -> 0x800005BF4
+Resolving symbol '__temp_270' -> 0x800005BFE
+Resolving symbol 'output_q_j2' -> 0x800005A7C
+Resolving symbol 'gettime' -> 0x80000559C
+Resolving symbol '__temp_726' -> 0x800006017
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_724' -> 0x800006346
+Resolving symbol 'time_subtract' -> 0x8000069BE
+Resolving symbol 'output_q' -> 0x8000057C7
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_q_digits' -> 0x800006CCC
+Resolving symbol '__temp_481' -> 0x800006475
+Resolving symbol '__temp_479' -> 0x800006501
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_485' -> 0x80000652B
+Resolving symbol '__temp_483' -> 0x8000065ED
+Resolving symbol 'output_double_binary' -> 0x800007236
+Resolving symbol '__temp_488' -> 0x800006617
+Resolving symbol '__temp_486' -> 0x8000066D9
+Resolving symbol 'output_double_binary' -> 0x800007236
+Resolving symbol 'output_q' -> 0x8000057C7
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_494' -> 0x800006970
+Resolving symbol 'output_q' -> 0x8000057C7
+Resolving symbol '__temp_492' -> 0x80000682D
+Resolving symbol '__temp_700' -> 0x800006A6A
+Resolving symbol '__temp_697' -> 0x800006B70
+Resolving symbol '__temp_275' -> 0x800006D60
+Resolving symbol '__temp_273' -> 0x800006E08
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_280' -> 0x800006F5F
+Resolving symbol '__temp_278' -> 0x800006E38
+Resolving symbol '__temp_291' -> 0x800007058
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_289' -> 0x800006F77
+Resolving symbol '__temp_297' -> 0x8000071E8
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_295' -> 0x800007070
+Resolving symbol '__temp_466' -> 0x8000073F2
+Resolving symbol '__temp_464' -> 0x8000074D3
+Resolving symbol '__temp_469' -> 0x80000741C
+Resolving symbol '__temp_467' -> 0x8000074D3
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_472' -> 0x8000074FD
+Resolving symbol '__temp_470' -> 0x8000078A2
+Resolving symbol '__temp_475' -> 0x800007719
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_473' -> 0x8000078A2
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol '__temp_478' -> 0x8000078CC
+Resolving symbol '__temp_476' -> 0x800007935
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_q' -> 0x8000057C7
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_char' -> 0x800005713
+Resolving symbol 'output_q' -> 0x8000057C7
+Maximum stack frame size: 0x200

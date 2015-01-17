@@ -1,0 +1,529 @@
+SCOPE 0x1d89840 type 0 {
+  _get_from_sar_array	FUNCTION (size:int64) =>int8*	
+  _get_new_pa	FUNCTION (size:int64) =>void*	
+  _get_new_sar	FUNCTION (size:int64, align_size:int64) =>int8*	
+  _get_new_sar_ext	FUNCTION (size:int64, align_size:int64, option:int64) =>int8*	
+  _output_debug	FUNCTION (x:int64) =>void	
+  _syscall_malloc	FUNCTION (size:int64) =>int8*	
+  _syscall_malloc_ext	FUNCTION (size:int64, option:int64) =>int8*	
+  edges	int64*	
+  edges_cnt	int64	
+  exp	FUNCTION (x:double) =>double	
+  get_my_task_id	FUNCTION () =>int64	
+  get_new_task_id	FUNCTION () =>int64	
+  in_neighbors	int64*	
+  init	FUNCTION () =>void	
+  init_PR_var	FUNCTION () =>void	
+  input_char	FUNCTION () =>int8	
+  input_double	FUNCTION (result:double*) =>int64	
+  input_line	FUNCTION (buf:int8*, maxlen:int64, len:int64*) =>int64	
+  input_long	FUNCTION (result:int64*) =>int64	
+  input_q	FUNCTION () =>int64	
+  ipow	FUNCTION (base:int64, exp:int64) =>int64	
+  main	FUNCTION () =>void	
+  output_char	FUNCTION (c:int64) =>void	
+  output_char_str	FUNCTION (s:int8*, sl:int64) =>void	
+  output_double	FUNCTION (d:double) =>void	
+  output_double_binary	FUNCTION (d:double) =>void	
+  output_id	FUNCTION () =>void	
+  output_q	FUNCTION (n:int64) =>void	
+  output_q_digits	FUNCTION (n:int64, d:int64) =>void	
+  output_q_hex	FUNCTION (n:int64) =>void	
+  output_str	FUNCTION (s:int8*) =>void	
+  p_align_to	FUNCTION (size:int64) =>int64	
+  p_vertices_cnt	int64*	
+  pedges_cnt	int64*	
+  pr_build_graph	FUNCTION () =>void	
+  pralloc	FUNCTION (size:int64) =>void*	
+  read_input	FUNCTION () =>void	
+  reg1	int64	
+  reg2	int64	
+  reg3	int64	
+  reg4	int64	
+  s_align_to	FUNCTION (size:int64) =>int64	
+  s_align_to_ext	FUNCTION (size:int64) =>int64	
+  s_align_to_page	FUNCTION (size:int64) =>int64	
+  shalloc	FUNCTION (size:int64) =>void*	
+  shalloc_ext	FUNCTION (size:int64, option:int64) =>int64	
+  shalloced_replicas	FUNCTION (addr:int64, nth:int64) =>int64	
+  shuffle	FUNCTION (id:int64) =>void	
+  sqrt	FUNCTION (x:double) =>double	
+  str_to_long	FUNCTION (str:int8*, maxlen:int64, pnext:int64*, result:int64*) =>int64	
+  task_id_to_ec_range	FUNCTION (id:int64, base:int64*, len:int64*) =>void	
+  vertices	int64*	
+  vertices_cnt	int64	
+  SCOPE 0x1e2da70 type 2 {
+    SCOPE 0x1e2dc30 type 3 {
+      __temp_0	LABEL	
+      __temp_1	bool	
+      __temp_13	int64	
+      __temp_14	LABEL	
+      __temp_15	LABEL	
+      __temp_16	LABEL	
+      __temp_17	bool	
+      __temp_2	LABEL	
+      __temp_3	LABEL	
+      __temp_32	int64	
+      __temp_33	LABEL	
+      __temp_34	LABEL	
+      __temp_35	LABEL	
+      __temp_36	bool	
+      __temp_4	LABEL	
+      __temp_5	LABEL	
+      __temp_54	int64	
+      __temp_55	LABEL	
+      __temp_56	LABEL	
+      __temp_57	LABEL	
+      __temp_58	bool	
+      __temp_6	bool	
+      __temp_65	int64	
+      __temp_66	void*	
+      __temp_67	int64	
+      __temp_68	LABEL	
+      __temp_69	LABEL	
+      __temp_70	LABEL	
+      __temp_71	bool	
+      __temp_72	int64	
+      __temp_73	LABEL	
+      __temp_74	LABEL	
+      __temp_75	LABEL	
+      __temp_76	bool	
+      __temp_89	int64	
+      cnt	int64	
+      dst	int64	
+      filled	int64*	
+      i	int64	
+      src	int64	
+      tmp1	int64	
+      tmp2	int64	
+      tmp3	int64	
+      tmp4	int64	
+      SCOPE 0x1e30c10 type 3 {
+        SCOPE 0x1e3ec60 type 3 {
+        }
+      }
+      SCOPE 0x1e40250 type 3 {
+        __temp_10	int64	
+        __temp_11	int64	
+        __temp_12	int64	
+        __temp_7	int64	
+        __temp_8	int64	
+        __temp_9	int64	
+      }
+      SCOPE 0x1e43100 type 3 {
+        __temp_18	int64	
+        __temp_19	int64	
+        __temp_20	int64	
+        __temp_21	int64	
+        __temp_22	int64	
+        __temp_23	int64	
+        __temp_24	int64	
+        __temp_25	int64	
+        __temp_26	int64	
+        __temp_27	int64	
+        __temp_28	int64	
+        __temp_29	int64	
+        __temp_30	int64	
+        __temp_31	int64	
+      }
+      SCOPE 0x1e47770 type 3 {
+        __temp_37	LABEL	
+        __temp_38	int64	
+        __temp_39	int64	
+        __temp_40	int64	
+        __temp_41	bool	
+        __temp_42	LABEL	
+        SCOPE 0x1e48310 type 3 {
+          __temp_51	int64*	
+          __temp_52	int64	
+          __temp_53	int64	
+        }
+        SCOPE 0x1e49100 type 3 {
+          __temp_43	int64	
+          __temp_44	int64	
+          __temp_45	int64	
+          __temp_46	double	
+          __temp_47	double	
+          __temp_48	int64*	
+          __temp_49	int64	
+          __temp_50	int64	
+        }
+      }
+      SCOPE 0x1e4ba00 type 3 {
+        __temp_59	int64	
+        __temp_60	int64	
+        __temp_61	int64	
+        __temp_62	int64	
+        __temp_63	int64	
+        __temp_64	int64	
+      }
+      SCOPE 0x1dbe060 type 3 {
+      }
+      SCOPE 0x1dbf580 type 3 {
+        __temp_77	int64	
+        __temp_78	int64	
+        __temp_79	int64	
+        __temp_80	int64	
+        __temp_81	int64	
+        __temp_82	int64	
+        __temp_83	int64	
+        __temp_84	int64	
+        __temp_85	int64	
+        __temp_86	int64	
+        __temp_87	int64	
+        __temp_88	int64	
+      }
+    }
+  }
+  SCOPE 0x1e95fe0 type 2 {
+    SCOPE 0x1e96180 type 3 {
+      __temp_105	bool	
+      __temp_106	LABEL	
+      __temp_107	LABEL	
+      __temp_108	LABEL	
+      __temp_136	int64	
+      __temp_137	bool	
+      __temp_138	int64	
+      __temp_90	LABEL	
+      __temp_91	LABEL	
+      __temp_92	LABEL	
+      buf	int8[255]	
+      cnt	int64	
+      cont	int64	
+      dst	int64	
+      len	int64	
+      maxlen	int64	
+      rt	int64	
+      src	int64	
+      SCOPE 0x1e98a20 type 3 {
+        __temp_100	LABEL	
+        __temp_101	LABEL	
+        __temp_102	int8	
+        __temp_103	bool	
+        __temp_104	LABEL	
+        __temp_93	int64	
+        __temp_94	int64*	
+        __temp_95	LABEL	
+        __temp_96	bool	
+        __temp_97	LABEL	
+        __temp_98	LABEL	
+        __temp_99	bool	
+      }
+      SCOPE 0x1e9b830 type 3 {
+        __temp_109	int64	
+        __temp_110	int64*	
+        __temp_111	int64*	
+        __temp_112	LABEL	
+        __temp_113	bool	
+        __temp_114	LABEL	
+        __temp_134	int64	
+        __temp_135	int64*	
+        SCOPE 0x1e9cc50 type 3 {
+          SCOPE 0x1ea10f0 type 3 {
+          }
+        }
+        SCOPE 0x1ea1900 type 3 {
+          __temp_115	int64	
+          __temp_116	int8*	
+          __temp_117	int64	
+          __temp_118	int64*	
+          __temp_119	int64*	
+          __temp_120	LABEL	
+          __temp_121	bool	
+          __temp_122	LABEL	
+          SCOPE 0x1ea2e10 type 3 {
+            SCOPE 0x1ea72e0 type 3 {
+            }
+          }
+          SCOPE 0x1ea7af0 type 3 {
+            __temp_123	int64	
+            __temp_124	int64	
+            __temp_125	int64	
+            __temp_126	int64	
+            __temp_127	LABEL	
+            __temp_128	bool	
+            __temp_129	LABEL	
+            __temp_130	LABEL	
+            __temp_131	bool	
+            __temp_132	LABEL	
+            __temp_133	int64	
+            SCOPE 0x1ea9440 type 3 {
+            }
+            SCOPE 0x1ea9ee0 type 3 {
+            }
+          }
+        }
+      }
+    }
+  }
+  SCOPE 0x1ed9c80 type 2 {
+    id	int64	
+    SCOPE 0x1ed9eb0 type 3 {
+      __temp_139	LABEL	
+      __temp_140	bool	
+      __temp_141	LABEL	
+      __temp_142	LABEL	
+      __temp_143	bool	
+      __temp_144	LABEL	
+      __temp_145	LABEL	
+      __temp_146	LABEL	
+      __temp_147	LABEL	
+      __temp_148	bool	
+      __temp_150	int64	
+      __temp_151	LABEL	
+      __temp_152	LABEL	
+      __temp_153	LABEL	
+      __temp_154	bool	
+      __temp_156	int64	
+      end	int64	
+      i	int64	
+      start	int64	
+      vend	int64	
+      vstart	int64	
+      SCOPE 0x1edb370 type 3 {
+      }
+      SCOPE 0x1ede9f0 type 3 {
+      }
+      SCOPE 0x1ee3910 type 3 {
+      }
+      SCOPE 0x1ee8d00 type 3 {
+        __temp_149	int64	
+      }
+      SCOPE 0x1eea300 type 3 {
+        __temp_155	int64	
+      }
+    }
+  }
+  SCOPE 0x1f563d0 type 2 {
+    SCOPE 0x1f56570 type 3 {
+      __temp_157	void*	
+      __temp_158	void*	
+      __temp_159	void*	
+      __temp_160	void*	
+      __temp_161	void*	
+      __temp_162	void*	
+      __temp_163	void*	
+      __temp_164	void*	
+      __temp_165	void*	
+      __temp_166	int64	
+      __temp_167	int64	
+      __temp_168	int64	
+      __temp_169	int64	
+      __temp_170	int64	
+      __temp_171	int64	
+      __temp_172	int64	
+      __temp_173	int64	
+      __temp_174	int64	
+      __temp_175	int64	
+      __temp_176	int64	
+      __temp_177	int64	
+      __temp_178	int64	
+      __temp_179	int64	
+      __temp_180	int64	
+      __temp_181	int64	
+      __temp_182	int64*	
+      __temp_183	int64	
+      __temp_184	int64	
+      __temp_185	int64	
+      __temp_186	int64	
+      __temp_187	int64	
+      __temp_188	void*	
+      __temp_189	void*	
+      __temp_190	int64	
+      __temp_191	int64	
+      __temp_192	int64	
+      __temp_193	int64	
+      __temp_194	int64	
+      __temp_195	int64	
+      __temp_196	int64	
+      __temp_197	int64	
+      __temp_198	int64	
+      __temp_199	int64	
+      __temp_200	int64	
+      __temp_201	int64*	
+      __temp_202	int64	
+      __temp_203	int64	
+      __temp_204	int64	
+      __temp_205	void*	
+      __temp_206	void*	
+      __temp_207	void*	
+      __temp_208	void*	
+      __temp_209	void*	
+      __temp_210	void*	
+      __temp_211	void*	
+      __temp_212	void*	
+      __temp_213	void*	
+      __temp_214	void*	
+      __temp_215	void*	
+      __temp_216	int64	
+      __temp_217	int64	
+      __temp_218	int64	
+      __temp_219	int64	
+      __temp_220	int64	
+      __temp_221	int64	
+      __temp_222	int64	
+      __temp_223	int64	
+      __temp_224	int64	
+      __temp_225	int64	
+      __temp_226	int64	
+      __temp_227	int64	
+      __temp_228	int64	
+      __temp_229	int64	
+      __temp_230	int64	
+      __temp_231	int64	
+      __temp_232	int64*	
+      __temp_233	int64	
+      __temp_234	int64	
+      __temp_235	int64	
+      __temp_236	int64	
+      __temp_237	int64	
+      __temp_238	void*	
+      __temp_239	void*	
+      __temp_240	int64	
+      __temp_241	int64	
+      __temp_242	int64	
+      __temp_243	int64	
+      __temp_244	int64	
+      __temp_245	int64	
+      __temp_246	int64	
+      __temp_247	int64	
+      __temp_248	int64	
+      __temp_249	int64	
+      __temp_250	int64	
+      __temp_251	int64*	
+      __temp_252	int64	
+      __temp_253	int64	
+      __temp_254	int64	
+      __temp_255	void*	
+      __temp_256	void*	
+      __temp_257	void*	
+      __temp_258	void*	
+      __temp_259	void*	
+      __temp_260	void*	
+      __temp_261	void*	
+      __temp_262	void*	
+      __temp_263	void*	
+      __temp_264	void*	
+      __temp_265	void*	
+      __temp_266	int64	
+      __temp_267	int64	
+      __temp_268	int64	
+      __temp_269	int64	
+      __temp_270	int64	
+      __temp_271	int64	
+      __temp_272	int64	
+      __temp_273	int64	
+      __temp_274	int64	
+      __temp_275	int64	
+      __temp_276	int64	
+      __temp_277	int64	
+      __temp_278	int64	
+      __temp_279	int64	
+      __temp_280	int64	
+      __temp_281	int64	
+      __temp_282	int64*	
+      __temp_283	int64	
+      __temp_284	int64	
+      __temp_285	int64	
+      __temp_286	int64	
+      __temp_287	int64	
+      __temp_288	void*	
+      __temp_289	void*	
+      __temp_290	int64	
+      __temp_291	int64	
+      __temp_292	int64	
+      __temp_293	int64	
+      __temp_294	int64	
+      __temp_295	int64	
+      __temp_296	int64	
+      __temp_297	int64	
+      __temp_298	int64	
+      __temp_299	int64	
+      __temp_300	int64	
+      __temp_301	int64*	
+      __temp_302	int64	
+      __temp_303	int64	
+      __temp_304	int64	
+      __temp_305	void*	
+      __temp_306	void*	
+      space	int64	
+    }
+  }
+  SCOPE 0x1f9c720 type 2 {
+    SCOPE 0x1f9c910 type 3 {
+      __temp_307	void*	
+      __temp_308	void*	
+      __temp_309	void*	
+      __temp_310	void*	
+      __temp_311	void*	
+      __temp_312	void*	
+      __temp_313	void*	
+      __temp_314	void*	
+      __temp_315	void*	
+      __temp_316	void*	
+      __temp_317	void*	
+      __temp_318	void*	
+      __temp_319	void*	
+      __temp_320	void*	
+      __temp_321	void*	
+      __temp_322	void*	
+      __temp_323	void*	
+      __temp_324	void*	
+      __temp_325	void*	
+      __temp_326	int64	
+      __temp_327	int64	
+      __temp_328	int64	
+      __temp_329	int64	
+      __temp_330	int64	
+      __temp_331	int64	
+      __temp_332	int64*	
+      __temp_333	int64	
+      __temp_334	int64	
+      __temp_335	int64	
+      __temp_336	void*	
+      __temp_337	void*	
+      __temp_338	int64	
+      __temp_339	int64	
+      __temp_340	int64	
+      __temp_341	int64	
+      __temp_342	int64	
+      __temp_343	int64	
+      __temp_344	int64	
+      __temp_345	int64	
+      __temp_346	int64	
+      __temp_347	int64	
+      __temp_348	int64	
+      __temp_349	int64*	
+      __temp_350	int64	
+      __temp_351	int64	
+      __temp_352	int64	
+      __temp_353	void*	
+      __temp_354	void*	
+      __temp_355	int64	
+      __temp_356	int64	
+      __temp_357	int64	
+      __temp_358	int64	
+      __temp_359	int64	
+      __temp_360	int64	
+      __temp_361	int64	
+      __temp_362	int64	
+      __temp_363	int64	
+      __temp_364	int64	
+      __temp_365	int64	
+      __temp_366	int64	
+      __temp_367	int64	
+      __temp_368	int64	
+      __temp_369	int64	
+      __temp_370	int64	
+      __temp_371	int64*	
+      __temp_372	int64	
+      __temp_373	int64	
+      __temp_374	int64	
+      __temp_375	int64	
+      __temp_376	int64	
+      __temp_377	void*	
+      __temp_378	void*	
+      space	int64	
+    }
+  }
+}

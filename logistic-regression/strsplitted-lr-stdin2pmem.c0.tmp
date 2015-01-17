@@ -1,0 +1,198 @@
+# 1 "strsplitted-lr-stdin2pmem.c0"
+# 1 "<command-line>"
+# 1 "strsplitted-lr-stdin2pmem.c0"
+# 15 "strsplitted-lr-stdin2pmem.c0"
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h" 1
+
+
+
+
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stdint.h" 1
+# 6 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h" 2
+# 19 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h"
+register long reg1;
+register long reg2;
+register long reg3;
+register long reg4;
+# 218 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h"
+long get_my_task_id();
+
+
+
+long get_new_task_id();
+
+
+
+void task_id_to_ec_range(long id, long *base, long *len);
+# 16 "strsplitted-lr-stdin2pmem.c0" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 1
+
+
+
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h" 1
+# 5 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/math.h" 1
+
+
+
+
+long ipow(long base, long exp);
+double exp(double x);
+double sqrt(double x);
+# 6 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 2
+# 15 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+void output_char(long c);
+# 41 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+void output_q(long n);
+
+
+
+void output_q_digits(long n, long d);
+
+
+
+void output_q_hex(long n);
+
+
+void output_id();
+
+
+void output_char_str(char* s, long sl);
+
+
+void output_str(char* s);
+# 69 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+char input_char();
+
+
+
+
+
+long input_q();
+
+
+
+long input_line(char *buf, long maxlen, long *len);
+# 89 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+long input_long(long *result);
+
+
+
+
+
+
+
+void output_double_binary(double d);
+
+void output_double(double d);
+# 110 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+long input_double(double *result);
+
+void output_double(double d);
+# 123 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+long input_double(double *result);
+# 17 "strsplitted-lr-stdin2pmem.c0" 2
+
+# 1 "config.h" 1
+# 19 "strsplitted-lr-stdin2pmem.c0" 2
+
+long pcnt;
+
+
+# 1 "common.h" 1
+
+void get_points_range(long i, long *p_begin, long *p_end)
+{
+
+    *p_begin = pcnt / (30) * i;
+    if (i == (30) - 1) {
+        *p_end = pcnt;
+    } else {
+        *p_end = pcnt / (30) * (i + 1);
+    }
+    return;
+}
+# 24 "strsplitted-lr-stdin2pmem.c0" 2
+
+void shuffle_task(long id)
+{
+    long *ppoints;
+    long p_begin;
+    long p_end;
+    long i;
+    long p;
+
+    ppoints = (long*)((((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1)) + 8);
+
+
+
+
+    get_points_range(id, &p_begin, &p_end);
+
+    p_begin = p_begin * ((20) + 1);
+    p_end = p_end * ((20) + 1);
+
+
+    p_end = p_end;
+
+    for (i = p_begin; i < p_end; i = i + (512)) {
+        ppoints[i] = ppoints[i];
+    }
+
+    commit;
+}
+
+void init_task()
+{
+    long *ppcnt;
+    double *ppoints;
+    long p_begin, p_end;
+    long i, j, rt, space;
+    double d;
+
+    ppcnt = (long*)(((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1));
+    ppoints = (double*)((((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1)) + 8);
+
+    pcnt = 0;
+    while (1) {
+        rt = input_double(&d);
+        if (rt != 0) goto init_task_reach_input_end;
+        *ppoints = d;
+        ppoints = (double*)((long)ppoints + 8);
+        for (i = 0; i < (20); i = i + 1) {
+            rt = input_double(&d);
+            if (rt != 0) goto init_task_reach_input_end;
+            ppoints[i] = d;
+        }
+        pcnt = pcnt + 1;
+        ppoints = (double*)((long)ppoints + 8 * (20));
+    }
+init_task_reach_input_end:
+    *ppcnt = pcnt;
+# 98 "strsplitted-lr-stdin2pmem.c0"
+    for (i = 0; i < (30); i = i + 1) {
+        get_points_range(i, &p_begin, &p_end);
+        space = (0x400000000000*(i+1));
+        runner shuffle_task(i)
+            using pcnt,
+            ((double*)((((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1))+8))[p_begin * ((20) + 1),, p_end * ((20) + 1)]
+            in space;
+    }
+
+
+    commit;
+}
+
+void main()
+{
+    long space;
+
+    space = (0x400000000000*(0));
+
+    runner init_task()
+        using pcnt,
+        ((double*)(((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1)))[0,,(8 + 8 * (1000000) * ((20) + 1))]
+        in space;
+
+    commit;
+}

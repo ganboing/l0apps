@@ -1,0 +1,425 @@
+SCOPE 0x1ebe300 type 0 {
+  __memcmp_se	FUNCTION (s1:int8*, s2:int8*, n:int64) =>int64	
+  barrier_task	FUNCTION (cur_iter:int64) =>void	
+  begin_time_nsec	int64	
+  begin_time_sec	int64	
+  calc_task	FUNCTION (id:int64) =>void	
+  create_new_iter_task	FUNCTION () =>void	
+  exp	FUNCTION (x:double) =>double	
+  get_my_task_id	FUNCTION () =>int64	
+  get_new_task_id	FUNCTION () =>int64	
+  get_points_range	FUNCTION (i:int64, p_begin:int64*, p_end:int64*) =>void	
+  get_time_diff_and_update	FUNCTION (base_sec:int64*, base_nsec:int64*) =>int64	
+  gettime	FUNCTION (tv_sec:int64*, tv_nsec:int64*) =>int64	
+  init_task	FUNCTION () =>void	
+  input_char	FUNCTION () =>int8	
+  input_double	FUNCTION (result:double*) =>int64	
+  input_line	FUNCTION (buf:int8*, maxlen:int64, len:int64*) =>int64	
+  input_long	FUNCTION (result:int64*) =>int64	
+  input_q	FUNCTION () =>int64	
+  ipow	FUNCTION (base:int64, exp:int64) =>int64	
+  iter	int64	
+  main	FUNCTION () =>void	
+  memcmp	FUNCTION (s1:int8*, s2:int8*, n:int64) =>int64	
+  memcpy	FUNCTION (src:int8*, len:int64, dst:int8*) =>void	
+  memset0	FUNCTION (m:int8*, len:int64) =>void	
+  new_iter_task	FUNCTION () =>void	
+  output_char	FUNCTION (c:int64) =>void	
+  output_char_str	FUNCTION (s:int8*, sl:int64) =>void	
+  output_double	FUNCTION (d:double) =>void	
+  output_double_binary	FUNCTION (d:double) =>void	
+  output_id	FUNCTION () =>void	
+  output_q	FUNCTION (n:int64) =>void	
+  output_q_digits	FUNCTION (n:int64, d:int64) =>void	
+  output_q_hex	FUNCTION (n:int64) =>void	
+  output_str	FUNCTION (s:int8*) =>void	
+  pcnt	int64	
+  ppoints	double*	
+  print_time_diff_and_update	FUNCTION (base_sec:int64*, base_nsec:int64*) =>int64	
+  reg1	int64	
+  reg2	int64	
+  reg3	int64	
+  reg4	int64	
+  sqrt	FUNCTION (x:double) =>double	
+  strncmp	FUNCTION (s1:int8*, s2:int8*, n:int64) =>int64	
+  task_id_to_ec_range	FUNCTION (id:int64, base:int64*, len:int64*) =>void	
+  task_status	int64[15360]	
+  time_add	FUNCTION (tv_sec_to:int64*, tv_nsec_to:int64*, tv_sec:int64, tv_nsec:int64) =>void	
+  time_subtract	FUNCTION (tv_sec_from:int64*, tv_nsec_from:int64*, tv_sec:int64, tv_nsec:int64) =>void	
+  w	double[20]	
+  ws	double[15360]	
+  SCOPE 0x1ef2f70 type 2 {
+    i	int64	
+    p_begin	int64*	
+    p_end	int64*	
+    SCOPE 0x1ef32b0 type 3 {
+      __temp_0	int64	
+      __temp_1	int64	
+      __temp_2	LABEL	
+      __temp_3	bool	
+      __temp_4	LABEL	
+      SCOPE 0x1ef4240 type 3 {
+      }
+      SCOPE 0x1ef47a0 type 3 {
+        __temp_5	int64	
+        __temp_6	int64	
+        __temp_7	int64	
+      }
+    }
+  }
+  SCOPE 0x1f07a60 type 2 {
+    SCOPE 0x1f07c00 type 3 {
+      __temp_10	void*	
+      __temp_11	void*	
+      __temp_12	void*	
+      __temp_13	void*	
+      __temp_14	void*	
+      __temp_15	void*	
+      __temp_16	void*	
+      __temp_17	void*	
+      __temp_18	void*	
+      __temp_19	int64	
+      __temp_20	void*	
+      __temp_21	void*	
+      __temp_8	void*	
+      __temp_9	void*	
+      space	int64	
+    }
+  }
+  SCOPE 0x1f36c80 type 2 {
+    id	int64	
+    SCOPE 0x1f36eb0 type 3 {
+      __temp_22	int64*	
+      __temp_23	int64*	
+      __temp_24	double*	
+      __temp_25	int64	
+      __temp_26	LABEL	
+      __temp_27	int64	
+      __temp_28	bool	
+      __temp_29	LABEL	
+      __temp_83	int64	
+      factor	double	
+      gradient	double*	
+      i	int64	
+      j	int64	
+      p	double*	
+      p_begin	int64	
+      p_end	int64	
+      ps	double*	
+      x	double*	
+      y	double	
+      SCOPE 0x1f3af50 type 3 {
+        __temp_69	LABEL	
+        __temp_70	int64	
+        __temp_71	bool	
+        __temp_72	LABEL	
+        SCOPE 0x1f3b6b0 type 3 {
+          __temp_73	double*	
+          __temp_74	int64	
+          __temp_75	int64	
+          __temp_76	int64	
+          __temp_77	int64	
+          __temp_78	int64	
+          __temp_79	int64	
+          __temp_80	double*	
+          __temp_81	int64	
+          __temp_82	int64	
+        }
+      }
+      SCOPE 0x1f3e1f0 type 3 {
+        __temp_30	LABEL	
+        __temp_31	LABEL	
+        __temp_32	LABEL	
+        __temp_33	bool	
+        __temp_34	int64	
+        __temp_35	LABEL	
+        __temp_36	LABEL	
+        __temp_37	LABEL	
+        __temp_38	bool	
+        __temp_68	int64	
+        SCOPE 0x1f3f050 type 3 {
+        }
+        SCOPE 0x1f40520 type 3 {
+          __temp_39	double*	
+          __temp_40	int64	
+          __temp_41	double	
+          __temp_42	double*	
+          __temp_43	double	
+          __temp_44	LABEL	
+          __temp_45	LABEL	
+          __temp_46	LABEL	
+          __temp_47	bool	
+          __temp_52	int64	
+          __temp_53	double	
+          __temp_54	double	
+          __temp_55	double	
+          __temp_56	double	
+          __temp_57	double	
+          __temp_58	double	
+          __temp_59	LABEL	
+          __temp_60	LABEL	
+          __temp_61	LABEL	
+          __temp_62	bool	
+          __temp_67	int64	
+          SCOPE 0x1f42e60 type 3 {
+            __temp_48	double	
+            __temp_49	double	
+            __temp_50	double	
+            __temp_51	double	
+          }
+          SCOPE 0x1f45a30 type 3 {
+            __temp_63	double	
+            __temp_64	double	
+            __temp_65	double	
+            __temp_66	double	
+          }
+        }
+      }
+    }
+  }
+  SCOPE 0x1f74270 type 2 {
+    SCOPE 0x1f74410 type 3 {
+      __temp_147	int64	
+      __temp_148	void*	
+      __temp_149	void*	
+      __temp_150	void*	
+      __temp_151	void*	
+      __temp_152	void*	
+      __temp_153	void*	
+      __temp_154	void*	
+      __temp_155	void*	
+      __temp_156	void*	
+      __temp_157	void*	
+      __temp_158	void*	
+      __temp_159	void*	
+      __temp_160	void*	
+      __temp_161	int64	
+      __temp_162	int64	
+      __temp_163	void*	
+      __temp_164	void*	
+      __temp_165	void*	
+      __temp_166	void*	
+      __temp_167	int64	
+      __temp_168	void*	
+      __temp_169	void*	
+      __temp_84	LABEL	
+      __temp_85	LABEL	
+      __temp_86	LABEL	
+      __temp_87	bool	
+      i	int64	
+      p_begin	int64	
+      p_end	int64	
+      space	int64	
+      SCOPE 0x1f76250 type 3 {
+        __temp_146	int64	
+        __temp_88	int64*	
+        __temp_89	int64*	
+        __temp_90	int64	
+        __temp_91	int64	
+        __temp_92	LABEL	
+        __temp_93	int64	
+        __temp_94	bool	
+        __temp_95	LABEL	
+        SCOPE 0x1f779a0 type 3 {
+          __temp_117	void*	
+          __temp_118	void*	
+          __temp_119	void*	
+          __temp_120	void*	
+          __temp_121	void*	
+          __temp_122	void*	
+          __temp_123	void*	
+          __temp_124	void*	
+          __temp_125	void*	
+          __temp_126	void*	
+          __temp_127	void*	
+          __temp_128	int64	
+          __temp_129	int64	
+          __temp_130	int64	
+          __temp_131	void*	
+          __temp_132	void*	
+          __temp_133	int64	
+          __temp_134	int64	
+          __temp_135	int64	
+          __temp_136	void*	
+          __temp_137	void*	
+          __temp_138	void*	
+          __temp_139	void*	
+          __temp_140	int64	
+          __temp_141	int64	
+          __temp_142	int64	
+          __temp_143	int64	
+          __temp_144	void*	
+          __temp_145	void*	
+        }
+        SCOPE 0x1f7b1d0 type 3 {
+          __temp_100	void*	
+          __temp_101	void*	
+          __temp_102	void*	
+          __temp_103	void*	
+          __temp_104	void*	
+          __temp_105	int64	
+          __temp_106	int64	
+          __temp_107	int64	
+          __temp_108	void*	
+          __temp_109	void*	
+          __temp_110	int64	
+          __temp_111	int64	
+          __temp_112	int64	
+          __temp_113	void*	
+          __temp_114	void*	
+          __temp_115	void*	
+          __temp_116	void*	
+          __temp_96	void*	
+          __temp_97	void*	
+          __temp_98	void*	
+          __temp_99	void*	
+        }
+      }
+    }
+  }
+  SCOPE 0x1fca9b0 type 2 {
+    cur_iter	int64	
+    SCOPE 0x1fcac20 type 3 {
+      __temp_170	LABEL	
+      __temp_171	bool	
+      __temp_172	LABEL	
+      __temp_173	LABEL	
+      __temp_174	LABEL	
+      __temp_175	LABEL	
+      __temp_176	bool	
+      __temp_182	int64	
+      __temp_183	LABEL	
+      __temp_184	int64	
+      __temp_185	bool	
+      __temp_186	LABEL	
+      __temp_212	int64	
+      __temp_213	LABEL	
+      __temp_214	bool	
+      __temp_215	LABEL	
+      factor	double	
+      i	int64	
+      j	int64	
+      wj	double*	
+      SCOPE 0x1fcbfb0 type 3 {
+      }
+      SCOPE 0x1fcd050 type 3 {
+        __temp_177	LABEL	
+        __temp_178	int64	
+        __temp_179	int64	
+        __temp_180	bool	
+        __temp_181	LABEL	
+        SCOPE 0x1fcd990 type 3 {
+        }
+      }
+      SCOPE 0x1fce200 type 3 {
+        __temp_209	int64	
+        __temp_210	int64*	
+        __temp_211	int64*	
+      }
+      SCOPE 0x1fcec80 type 3 {
+        __temp_187	double	
+        __temp_188	int64	
+        __temp_189	double	
+        __temp_190	double	
+        __temp_191	LABEL	
+        __temp_192	LABEL	
+        __temp_193	LABEL	
+        __temp_194	bool	
+        __temp_208	int64	
+        SCOPE 0x1fd07b0 type 3 {
+          __temp_195	double*	
+          __temp_196	int64	
+          __temp_197	LABEL	
+          __temp_198	LABEL	
+          __temp_199	LABEL	
+          __temp_200	bool	
+          __temp_207	int64	
+          SCOPE 0x1fd1f30 type 3 {
+            __temp_201	double	
+            __temp_202	double	
+            __temp_203	double	
+            __temp_204	double	
+            __temp_205	double	
+            __temp_206	double	
+          }
+        }
+      }
+      SCOPE 0x1fd3c50 type 3 {
+        __temp_216	int64	
+        __temp_217	int64*	
+        __temp_218	int64*	
+        __temp_219	LABEL	
+        __temp_220	LABEL	
+        __temp_221	LABEL	
+        __temp_222	bool	
+        __temp_227	int64	
+        SCOPE 0x1fd91a0 type 3 {
+        }
+        SCOPE 0x1fdf850 type 3 {
+        }
+        SCOPE 0x1fe0c80 type 3 {
+          __temp_223	double	
+          __temp_224	LABEL	
+          __temp_225	bool	
+          __temp_226	LABEL	
+          SCOPE 0x1fe1ab0 type 3 {
+          }
+          SCOPE 0x1fe2170 type 3 {
+            SCOPE 0x1fe22b0 type 3 {
+            }
+          }
+        }
+      }
+    }
+  }
+  SCOPE 0x1ff1070 type 2 {
+    SCOPE 0x1ff1210 type 3 {
+      __temp_228	int64	
+      __temp_229	int64	
+      __temp_230	LABEL	
+      __temp_231	LABEL	
+      __temp_232	LABEL	
+      __temp_233	bool	
+      __temp_234	int64	
+      i	int64	
+      j	int64	
+      SCOPE 0x1ff5720 type 3 {
+      }
+    }
+  }
+  SCOPE 0x2003d70 type 2 {
+    SCOPE 0x2003f10 type 3 {
+      __temp_235	void*	
+      __temp_236	void*	
+      __temp_237	void*	
+      __temp_238	void*	
+      __temp_239	void*	
+      __temp_240	void*	
+      __temp_241	void*	
+      __temp_242	void*	
+      __temp_243	void*	
+      __temp_244	void*	
+      __temp_245	void*	
+      __temp_246	void*	
+      __temp_247	void*	
+      __temp_248	void*	
+      __temp_249	void*	
+      __temp_250	void*	
+      __temp_251	void*	
+      __temp_252	int64	
+      __temp_253	int64	
+      __temp_254	int64	
+      __temp_255	int64	
+      __temp_256	int64	
+      __temp_257	int64	
+      __temp_258	double*	
+      __temp_259	int64	
+      __temp_260	int64	
+      __temp_261	int64	
+      __temp_262	int64	
+      __temp_263	void*	
+      __temp_264	void*	
+      space	int64	
+    }
+  }
+}

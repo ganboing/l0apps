@@ -1,0 +1,452 @@
+# 1 "strsplitted-lr-frompmem.c0"
+# 1 "<command-line>"
+# 1 "strsplitted-lr-frompmem.c0"
+
+
+
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h" 1
+
+
+
+
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stdint.h" 1
+# 6 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h" 2
+# 19 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h"
+register long reg1;
+register long reg2;
+register long reg3;
+register long reg4;
+# 218 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h"
+long get_my_task_id();
+
+
+
+long get_new_task_id();
+
+
+
+void task_id_to_ec_range(long id, long *base, long *len);
+# 5 "strsplitted-lr-frompmem.c0" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 1
+
+
+
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stddef.h" 1
+# 5 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/math.h" 1
+
+
+
+
+long ipow(long base, long exp);
+double exp(double x);
+double sqrt(double x);
+# 6 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 2
+# 15 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+void output_char(long c);
+# 41 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+void output_q(long n);
+
+
+
+void output_q_digits(long n, long d);
+
+
+
+void output_q_hex(long n);
+
+
+void output_id();
+
+
+void output_char_str(char* s, long sl);
+
+
+void output_str(char* s);
+# 69 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+char input_char();
+
+
+
+
+
+long input_q();
+
+
+
+long input_line(char *buf, long maxlen, long *len);
+# 89 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+long input_long(long *result);
+
+
+
+
+
+
+
+void output_double_binary(double d);
+
+void output_double(double d);
+# 110 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+long input_double(double *result);
+
+void output_double(double d);
+# 123 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h"
+long input_double(double *result);
+# 6 "strsplitted-lr-frompmem.c0" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stdint.h" 1
+# 7 "strsplitted-lr-frompmem.c0" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/string.h" 1
+# 9 "/home/progman/workspace/d-thinker/libi0/libi0/string.h"
+long strncmp(char *s1, char *s2, long n);
+
+void memcpy(char* src, long len, char* dst);
+
+
+long __memcmp_se(char* s1, char* s2, long n);
+# 27 "/home/progman/workspace/d-thinker/libi0/libi0/string.h"
+long memcmp(char* s1, char* s2, long n);
+
+void memset0(char* m, long len);
+# 8 "strsplitted-lr-frompmem.c0" 2
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/time.h" 1
+# 9 "/home/progman/workspace/d-thinker/libi0/libi0/time.h"
+# 1 "/home/progman/workspace/d-thinker/libi0/libi0/stdio.h" 1
+# 10 "/home/progman/workspace/d-thinker/libi0/libi0/time.h" 2
+# 20 "/home/progman/workspace/d-thinker/libi0/libi0/time.h"
+long gettime(long *tv_sec, long *tv_nsec);
+
+
+
+
+void time_subtract(long *tv_sec_from, long *tv_nsec_from,
+        long tv_sec, long tv_nsec);
+
+
+
+void time_add(long *tv_sec_to, long *tv_nsec_to,
+        long tv_sec, long tv_nsec);
+# 40 "/home/progman/workspace/d-thinker/libi0/libi0/time.h"
+long print_time_diff_and_update(long *base_sec, long *base_nsec);
+
+
+
+
+
+
+
+long get_time_diff_and_update(long *base_sec, long *base_nsec);
+# 9 "strsplitted-lr-frompmem.c0" 2
+
+# 1 "config.h" 1
+# 11 "strsplitted-lr-frompmem.c0" 2
+
+
+long pcnt;
+
+
+# 1 "common.h" 1
+
+void get_points_range(long i, long *p_begin, long *p_end)
+{
+
+    *p_begin = pcnt / (30) * i;
+    if (i == (30) - 1) {
+        *p_end = pcnt;
+    } else {
+        *p_end = pcnt / (30) * (i + 1);
+    }
+    return;
+}
+# 17 "strsplitted-lr-frompmem.c0" 2
+
+
+double *ppoints;
+
+
+double w[(20)];
+
+
+long iter;
+
+
+long begin_time_sec;
+long begin_time_nsec;
+
+
+standalone double ws[((512)) * (30)];
+
+
+standalone long task_status[(30) * (512)];
+
+
+void new_iter_task();
+void barrier_task(long cur_iter);
+
+void create_new_iter_task()
+{
+    long space;
+
+
+
+
+
+    space = (0x400000000000*(0));
+    runner new_iter_task()
+        using iter
+        , pcnt, ppoints
+        , task_status[0,,(30)*(512)]
+        in space
+        ;
+
+    return;
+}
+
+ void calc_task(long id)
+{
+    long p_begin;
+    long p_end;
+    double *ps;
+    double *p;
+
+    double *gradient;
+    double factor;
+    double *x;
+    double y;
+
+    long i, j;
+# 82 "strsplitted-lr-frompmem.c0"
+    get_points_range(id, &p_begin, &p_end);
+
+    ps = (double*)((0x400000000) + 8);
+    gradient = &ws[id*((512))];
+
+    if (iter == -1) {
+
+        if (*(long*)(0x400000000) != (0x8829eff20)) {
+
+
+
+            memcpy((char*)&ppoints[p_begin*((20) + 1)], 8 * ((p_end - p_begin) * ((20) + 1)), (char*)&ps[p_begin*((20) + 1)]);
+# 105 "strsplitted-lr-frompmem.c0"
+            *(long*)(0x400000000) = (0x8829eff20);
+        }
+    } else {
+# 121 "strsplitted-lr-frompmem.c0"
+        for (i = 0; i < (20); i = i + 1) {
+            gradient[i] = 0.0;
+        }
+
+        for (i = p_begin; i < p_end; i = i + 1) {
+            p = &ps[i * ((20) + 1)];
+            y = p[0];
+            x = &p[1];
+
+
+
+            factor = 0;
+            for (j = 0; j < (20); j = j + 1) {
+                factor = factor + w[j]*x[j];
+            }
+# 153 "strsplitted-lr-frompmem.c0"
+            factor = 1.0 / (1.0 + exp(factor * (0.0 - 1.0))) - y;
+
+
+            for (j = 0; j < (20); j = j + 1) {
+                gradient[j] = gradient[j] + x[j] * factor;
+            }
+# 171 "strsplitted-lr-frompmem.c0"
+        }
+# 191 "strsplitted-lr-frompmem.c0"
+    }
+
+
+    task_status[id*(512)] = 1;
+
+    commit;
+}
+
+ void new_iter_task()
+{
+    long i;
+
+    long p_begin;
+    long p_end;
+
+    long space;
+
+
+
+
+
+
+    for (i = 0; i < (30); i = i + 1) {
+
+        get_points_range(i, &p_begin, &p_end);
+# 229 "strsplitted-lr-frompmem.c0"
+        space = (0x400000000000*(i+1));
+
+        if (iter == -1) {
+            runner calc_task(i)
+                using
+                iter
+                , pcnt, ppoints
+                , task_status[i*(512),,i*(512) + 1]
+                , ws[i*((512)),,(i+1)*((512))]
+                , w[0,,(20)]
+                , ppoints[p_begin * ((20) + 1),, p_end * ((20) + 1)]
+                in space
+                ;
+        } else {
+            runner calc_task(i)
+                using
+                iter
+                , pcnt
+                , task_status[i*(512),,i*(512) + 1]
+                , ws[i*((512)),,(i+1)*((512))]
+                , w[0,,(20)]
+                in space
+                ;
+        }
+
+
+        task_status[i*(512)] = 0;
+    }
+
+
+
+    space = (0x400000000000*(0));
+    runner barrier_task(iter)
+        using iter, pcnt
+        , begin_time_sec, begin_time_nsec
+        , ws[0,,((30)+1)*((512))]
+        , w[0,,(20)]
+        watching task_status[0,,(30)*(512)]
+        in space
+        ;
+
+    commit;
+}
+
+ void barrier_task(long cur_iter)
+{
+    long i;
+    long j;
+    double *wj;
+    double factor;
+
+    if (cur_iter != iter) {
+
+
+
+
+
+
+
+        abortd;
+    }
+
+
+    for (i = 0; i < (30); i = i + 1) {
+        if (task_status[i*(512)] != 1) {
+            abort;
+        }
+    }
+
+
+    if (iter == -1) {
+
+        i = gettime(&begin_time_sec, &begin_time_nsec);
+    } else {
+        factor = 1.0 / sqrt((double)(iter + 1));
+
+
+        for (j = 0; j < (30); j = j + 1) {
+            wj = &ws[j * ((512))];
+
+
+
+
+
+            for (i = 0; i < (20); i = i + 1) {
+                w[i] = w[i] - factor * wj[i] / (double)pcnt;
+# 323 "strsplitted-lr-frompmem.c0"
+            }
+        }
+    }
+
+    iter = iter + 1;
+    if (iter == 10) {
+output_char('R');output_char('e');output_char('a');output_char('c');output_char('h');output_char('e');output_char('d');output_char(' ');output_char('m');output_char('a');output_char('x');output_char(' ');output_char('i');output_char('t');output_char('e');output_char('r');output_char(':');
+        output_q(10);
+output_char('.');{output_char((10));};
+
+output_char('T');output_char('i');output_char('m');output_char('e');output_char(' ');output_char('u');output_char('s');output_char('e');output_char('d');output_char(':');output_char(' ');
+        i = print_time_diff_and_update(&begin_time_sec, &begin_time_nsec);
+output_char(' ');output_char('s');output_char('e');output_char('c');output_char('o');output_char('n');output_char('d');output_char('s');output_char('.');{output_char((10));};
+
+
+        for (i = 0; i < (20); i = i + 1) {
+            output_double(w[i]);
+            if (i != (20) - 1) {
+                output_char(',');
+            } else {
+                {output_char((10));};
+            }
+        }
+
+        commitd;
+    }
+# 362 "strsplitted-lr-frompmem.c0"
+    create_new_iter_task();
+
+    commitd;
+}
+
+ void init_task()
+{
+    long i;
+    long j;
+
+
+
+
+
+    pcnt = *(long*)(((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1));
+    ppoints = (double*)((((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1)) + 8);
+
+
+
+    iter = -1;
+
+
+    for (j = 0; j < (20); j = j + 1) {
+        w[j] = 0.0;
+    }
+
+
+    create_new_iter_task();
+
+
+
+
+
+    commit;
+}
+
+ void main()
+{
+    long space;
+
+    space = (0x400000000000*(0));
+
+    runner init_task()
+        using iter
+        , w[0,,(20)]
+        , begin_time_sec, begin_time_nsec
+        , pcnt, ppoints
+        , ((double*)(((((0x800000000 + 0x20000000000 - 1) + 1) + 0x20000000000 - 1) + 1)))[0,,(8 + 8 * (1000000) * ((20) + 1))]
+        in space
+        ;
+    commit;
+}

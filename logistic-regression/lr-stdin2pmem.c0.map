@@ -1,0 +1,14 @@
+800000000	__crt0
+800000039	__newr0
+800001DD0	get_points_range
+800000602	init_task
+800000A6B	init_task_reach_input_end
+80000116F	input_double
+80000161B	input_double_after_dot
+80000180E	input_double_exit
+80000229E	input_long
+8000026DC	input_long_exit
+8000027C3	ipow
+8000000DB	main
+20800000008	pcnt
+800001FD1	shuffle_task

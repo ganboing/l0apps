@@ -1,0 +1,172 @@
+SCOPE 0x1ba9f80 type 0 {
+  exp	FUNCTION (x:double) =>double	
+  get_my_task_id	FUNCTION () =>int64	
+  get_new_task_id	FUNCTION () =>int64	
+  get_points_range	FUNCTION (i:int64, p_begin:int64*, p_end:int64*) =>void	
+  init_task	FUNCTION () =>void	
+  init_task_reach_input_end	LABEL	
+  input_char	FUNCTION () =>int8	
+  input_double	FUNCTION (result:double*) =>int64	
+  input_line	FUNCTION (buf:int8*, maxlen:int64, len:int64*) =>int64	
+  input_long	FUNCTION (result:int64*) =>int64	
+  input_q	FUNCTION () =>int64	
+  ipow	FUNCTION (base:int64, exp:int64) =>int64	
+  main	FUNCTION () =>void	
+  output_char	FUNCTION (c:int64) =>void	
+  output_char_str	FUNCTION (s:int8*, sl:int64) =>void	
+  output_double	FUNCTION (d:double) =>void	
+  output_double_binary	FUNCTION (d:double) =>void	
+  output_id	FUNCTION () =>void	
+  output_q	FUNCTION (n:int64) =>void	
+  output_q_digits	FUNCTION (n:int64, d:int64) =>void	
+  output_q_hex	FUNCTION (n:int64) =>void	
+  output_str	FUNCTION (s:int8*) =>void	
+  pcnt	int64	
+  reg1	int64	
+  reg2	int64	
+  reg3	int64	
+  reg4	int64	
+  shuffle_task	FUNCTION (id:int64) =>void	
+  sqrt	FUNCTION (x:double) =>double	
+  task_id_to_ec_range	FUNCTION (id:int64, base:int64*, len:int64*) =>void	
+  SCOPE 0x1bce470 type 2 {
+    i	int64	
+    p_begin	int64*	
+    p_end	int64*	
+    SCOPE 0x1bce7b0 type 3 {
+      __temp_0	int64	
+      __temp_1	int64	
+      __temp_2	LABEL	
+      __temp_3	bool	
+      __temp_4	LABEL	
+      SCOPE 0x1bcf740 type 3 {
+      }
+      SCOPE 0x1bcfca0 type 3 {
+        __temp_5	int64	
+        __temp_6	int64	
+        __temp_7	int64	
+      }
+    }
+  }
+  SCOPE 0x1be1a80 type 2 {
+    id	int64	
+    SCOPE 0x1be1ca0 type 3 {
+      __temp_10	int64	
+      __temp_11	int64	
+      __temp_12	LABEL	
+      __temp_13	LABEL	
+      __temp_14	LABEL	
+      __temp_15	bool	
+      __temp_17	int64	
+      __temp_8	int64*	
+      __temp_9	int64*	
+      i	int64	
+      p	int64	
+      p_begin	int64	
+      p_end	int64	
+      ppoints	int64*	
+      SCOPE 0x1be6f40 type 3 {
+        __temp_16	int64	
+      }
+    }
+  }
+  SCOPE 0x1c0f210 type 2 {
+    SCOPE 0x1c0f3c0 type 3 {
+      __temp_18	LABEL	
+      __temp_19	LABEL	
+      __temp_20	LABEL	
+      __temp_43	LABEL	
+      __temp_44	LABEL	
+      __temp_45	LABEL	
+      __temp_46	bool	
+      __temp_72	int64	
+      d	double	
+      i	int64	
+      j	int64	
+      p_begin	int64	
+      p_end	int64	
+      ppcnt	int64*	
+      ppoints	double*	
+      rt	int64	
+      space	int64	
+      SCOPE 0x1bc4020 type 3 {
+        __temp_21	int64	
+        __temp_22	double*	
+        __temp_23	LABEL	
+        __temp_24	bool	
+        __temp_25	LABEL	
+        __temp_26	int64	
+        __temp_27	int64	
+        __temp_28	double*	
+        __temp_29	LABEL	
+        __temp_30	LABEL	
+        __temp_31	LABEL	
+        __temp_32	bool	
+        __temp_38	int64	
+        __temp_39	int64	
+        __temp_40	int64	
+        __temp_41	int64	
+        __temp_42	double*	
+        SCOPE 0x1c17980 type 3 {
+          __temp_33	int64	
+          __temp_34	double*	
+          __temp_35	LABEL	
+          __temp_36	bool	
+          __temp_37	LABEL	
+        }
+      }
+      SCOPE 0x1c1b270 type 3 {
+        __temp_47	int64*	
+        __temp_48	int64*	
+        __temp_49	int64	
+        __temp_50	int64	
+        __temp_51	void*	
+        __temp_52	void*	
+        __temp_53	void*	
+        __temp_54	void*	
+        __temp_55	void*	
+        __temp_56	void*	
+        __temp_57	void*	
+        __temp_58	int64	
+        __temp_59	int64	
+        __temp_60	int64	
+        __temp_61	int64	
+        __temp_62	int64	
+        __temp_63	int64	
+        __temp_64	int64	
+        __temp_65	double*	
+        __temp_66	int64	
+        __temp_67	int64	
+        __temp_68	int64	
+        __temp_69	int64	
+        __temp_70	void*	
+        __temp_71	void*	
+      }
+    }
+  }
+  SCOPE 0x1c29c80 type 2 {
+    SCOPE 0x1c29e20 type 3 {
+      __temp_73	void*	
+      __temp_74	void*	
+      __temp_75	void*	
+      __temp_76	void*	
+      __temp_77	void*	
+      __temp_78	void*	
+      __temp_79	void*	
+      __temp_80	int64	
+      __temp_81	int64	
+      __temp_82	int64	
+      __temp_83	int64	
+      __temp_84	int64	
+      __temp_85	int64	
+      __temp_86	double*	
+      __temp_87	int64	
+      __temp_88	int64	
+      __temp_89	int64	
+      __temp_90	int64	
+      __temp_91	void*	
+      __temp_92	void*	
+      space	int64	
+    }
+  }
+}
