@@ -1,0 +1,413 @@
+// LR computation
+// The input (label,point) is already in the persistent memory
+
+#include <stddef.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <time.h>
+
+#include "config.h"
+
+// cnt of points
+long pcnt;
+
+// after pcnt
+#include "common.h"
+
+// points
+double *ppoints;
+
+// trained w
+double w[POINT_DIM];
+
+// iteration
+long iter;
+
+// time measurement
+long begin_time_sec;
+long begin_time_nsec;
+
+// each task's w
+standalone double ws[WS_SIZE_PER_PAGE * NUM_TASKS];
+
+// task status
+standalone long task_status[NUM_TASKS * N_LONG_PER_PAGE];
+
+// declaration
+void new_iter_task();
+void barrier_task(long cur_iter);
+
+void create_new_iter_task()
+{
+    long space;
+#ifdef DEBUG_TASKING
+    PRINTSTR("create_new_iter_task:");
+    putq(iter); wrln();
+#endif
+
+    space = SPACE_START(0);
+    runner new_iter_task()
+        using iter
+        , pcnt, ppoints
+        , task_status[0,,NUM_TASKS*N_LONG_PER_PAGE]
+        in space
+        ;
+
+    return;
+}
+
+__task__ void calc_task(long id)
+{
+    long p_begin;
+    long p_end;
+    double *ps;
+    double *p;
+
+    double *gradient;
+    double factor;
+    double *x;
+    double y;
+
+    long i, j;
+
+#ifdef DEBUG_TASKING
+#PRINTSTR calc_task(
+    putq(id);
+#PRINTSTR ) begin @ iter
+    putq(iter);
+    wrln();
+#endif
+
+    get_points_range(id, &p_begin, &p_end);
+
+    ps = (double*)CACHE_POINTS;
+    gradient = &ws[id*WS_SIZE_PER_PAGE];
+
+    if (iter == -1) {
+        // check whether local cache in sticky PR is ready
+        if (*(long*)CACHE_MAGIC_NUM_ADDR != CACHE_MAGIC_NUM) {
+#ifdef DEBUG_TASKING
+            PRINTLN("Cache points.");
+#endif
+            memcpy((char*)&ppoints[p_begin*(POINT_DIM + 1)], sizeof_double * ((p_end - p_begin) * (POINT_DIM + 1)), (char*)&ps[p_begin*(POINT_DIM + 1)]);
+
+#ifdef PRINT_INPUT
+            PRINTSTR("memcpy(");
+            output_long_hex((long)&ppoints[p_begin*(POINT_DIM + 1)]);
+            PRINTSTR(", ");
+            putlong(sizeof_double * ((p_end - p_begin) * (POINT_DIM + 1)));
+            PRINTSTR(", ");
+            output_long_hex((long)&ps[p_begin*(POINT_DIM + 1)]);
+            wrln();
+#endif
+
+            *(long*)CACHE_MAGIC_NUM_ADDR = CACHE_MAGIC_NUM;
+        }
+    } else { // iter != -1
+#ifdef DEBUG_CALC_W
+        PRINTSTR("w: ");
+        for (j = 0; j < POINT_DIM; j = j + 1) {
+            putdouble(w[j]);
+            if (j != POINT_DIM - 1) {
+                putchar(',');
+            } else {
+                wrln();
+            }
+        }
+#endif
+
+        // for each point [p_begin, p_end), compute and update gradient
+        for (i = 0; i < POINT_DIM; i = i + 1) {
+            gradient[i] = 0.0;
+        }
+
+        for (i = p_begin; i < p_end; i = i + 1) {
+            p = &ps[i * (POINT_DIM + 1)];
+            y = p[0];
+            x = &p[1];
+
+            // w dot p.x
+            // x[0] = 1.0
+            factor = 0;
+            for (j = 0; j < POINT_DIM; j = j + 1) {
+                factor = factor + w[j]*x[j];
+            }
+
+#ifdef DEBUG_CALC_W
+            PRINTSTR("p[");
+            putlong(i);
+            PRINTSTR("]: ");
+            PRINTSTR("y(");
+            putdouble(y);
+            PRINTSTR(");");
+            PRINTSTR("x(");
+            for (j = 0; j < POINT_DIM; j = j + 1) {
+                putdouble(x[j]);
+                PRINTSTR(",");
+            }
+            PRINTSTR(")");
+            wrln();
+#endif
+
+            factor =  1.0 / (1.0 + exp(factor * (0.0 - 1.0))) - y;
+
+            // gradient += p.x * factor
+            for (j = 0; j < POINT_DIM; j = j + 1) {
+                gradient[j] = gradient[j] + x[j] * factor;
+            }
+
+#ifdef DEBUG_CALC_W
+            for (j = 0; j < POINT_DIM; j = j + 1) {
+                putdouble(gradient[j]);
+                if (j != POINT_DIM - 1) {
+                    putchar(',');
+                } else {
+                    wrln();
+                }
+            }
+#endif
+
+        }
+
+#ifdef DEBUG_TASKING
+        PRINTSTR("calc_task(");
+        putq(id);
+        PRINTSTR(") done @ iter ");
+        putq(iter);
+        wrln();
+#endif
+
+#ifdef DEBUG_CALC_W
+        for (j = 0; j < POINT_DIM; j = j + 1) {
+            putdouble(gradient[j]);
+            if (j != POINT_DIM - 1) {
+                putchar(',');
+            } else {
+                wrln();
+            }
+        }
+#endif
+    } // end iter != -1
+
+    // mark finished
+    task_status[id*N_LONG_PER_PAGE] = TASK_STATUS_FINISHED;
+
+    commit;
+}
+
+__task__ void new_iter_task()
+{
+    long i;
+
+    long p_begin;
+    long p_end;
+
+    long space;
+
+#ifdef DEBUG_TASKING
+#PRINTSTR iter:
+    putq(iter); wrln();
+#endif
+
+    for (i = 0; i < NUM_TASKS; i = i + 1) {
+
+        get_points_range(i, &p_begin, &p_end);
+
+#ifdef DEBUG_TASKING
+        PRINTSTR("task(");
+        putq(i);
+        PRINTSTR(") => points[");
+        putq(p_begin);
+        PRINTSTR(",,");
+        putq(p_end);
+        PRINTSTR("] <");
+        putq(p_end - p_begin);
+        PRINTLN(">");
+#endif
+
+        space = SPACE_START(i+1);
+
+        if (iter == -1) {
+            runner calc_task(i)
+                using
+                iter
+                , pcnt, ppoints
+                , task_status[i*N_LONG_PER_PAGE,,i*N_LONG_PER_PAGE + 1]
+                , ws[i*WS_SIZE_PER_PAGE,,(i+1)*WS_SIZE_PER_PAGE]
+                , w[0,,POINT_DIM]
+                , ppoints[p_begin * (POINT_DIM + 1),, p_end * (POINT_DIM + 1)]
+                in space
+                ;
+        } else {
+            runner calc_task(i)
+                using
+                iter
+                , pcnt
+                , task_status[i*N_LONG_PER_PAGE,,i*N_LONG_PER_PAGE + 1]
+                , ws[i*WS_SIZE_PER_PAGE,,(i+1)*WS_SIZE_PER_PAGE]
+                , w[0,,POINT_DIM]
+                in space
+                ;
+        }
+
+        // mark created
+        task_status[i*N_LONG_PER_PAGE] = TASK_STATUS_CREATED;
+    }
+
+    // Note: to make time measurement accurate, the barrier task and the
+    // init_task should be run on the same node
+    space = SPACE_START(0);
+    runner barrier_task(iter)
+        using iter, pcnt
+        , begin_time_sec, begin_time_nsec
+        , ws[0,,(NUM_TASKS+1)*WS_SIZE_PER_PAGE]
+        , w[0,,POINT_DIM]
+        watching task_status[0,,NUM_TASKS*N_LONG_PER_PAGE]
+        in space
+        ;
+
+    commit;
+}
+
+__task__ void barrier_task(long cur_iter)
+{
+    long i;
+    long j;
+    double *wj;
+    double factor;
+
+    if (cur_iter != iter) {
+#ifdef DEBUG_TASKING
+        PRINTSTR("Waited for too long... My cur_iter: ");
+        putq(cur_iter);
+        PRINTSTR(", iter: ");
+        putq(iter);
+        PRINTLN(". abortd now.");
+#endif
+        abortd;
+    }
+
+    // check all tasks' status
+    for (i = 0; i < NUM_TASKS; i = i + 1) {
+        if (task_status[i*N_LONG_PER_PAGE] != TASK_STATUS_FINISHED) {
+            abort;
+        }
+    }
+
+    // all tasks have finished
+    if (iter == -1) {
+        // get begin time
+        i = gettime(&begin_time_sec, &begin_time_nsec);
+    } else {
+        factor = 1.0 / sqrt((double)(iter + 1));
+
+        // calculate new w
+        for (j = 0; j < NUM_TASKS; j = j + 1) {
+            wj = &ws[j * WS_SIZE_PER_PAGE];
+#ifdef DEBUG_CALC_W
+            PRINTSTR("w[");
+            putlong(j);
+            PRINTSTR("]: ");
+#endif
+            for (i = 0; i < POINT_DIM; i = i + 1) {
+                w[i] = w[i] - factor * wj[i] / (double)pcnt;
+#ifdef DEBUG_CALC_W
+                putdouble(wj[i]);
+                if (i != POINT_DIM - 1) {
+                    putchar(',');
+                } else {
+                    wrln();
+                }
+#endif
+            }
+        }
+    }
+
+    iter = iter + 1;
+    if (iter == MAX_ITER) {
+        PRINTSTR("Reached max iter:");
+        putq(MAX_ITER);
+        PRINTLN(".");
+
+        PRINTSTR("Time used: ");
+        i = print_time_diff_and_update(&begin_time_sec, &begin_time_nsec);
+        PRINTLN(" seconds.");
+
+        // print w
+        for (i = 0; i < POINT_DIM; i = i + 1) {
+            putdouble(w[i]);
+            if (i != POINT_DIM - 1) {
+                putchar(',');
+            } else {
+                wrln();
+            }
+        }
+
+        commitd;
+    }
+
+#ifdef DEBUG_TASKING
+    PRINTSTR("barrier_task(");
+    putq(cur_iter);
+    PRINTSTR(") => w:");
+    for (i = 0; i < POINT_DIM; i = i + 1) {
+        putdouble(w[i]);
+        PRINTSTR(",");
+    }
+    wrln();
+#endif
+
+    // start next iteration
+    create_new_iter_task();
+
+    commitd;
+}
+
+__task__ void init_task()
+{
+    long i;
+    long j;
+
+#ifdef DEBUG_TASKING
+    PRINTLN("Start init_task.");
+#endif
+
+    pcnt = *(long*)POINTS_ADDRESS;
+    ppoints = (double*)(POINTS_ADDRESS + sizeof_long);
+
+    // initialize controlling data
+    // -1 is a virtual iteration for loading data from disks to memory
+    iter = -1;
+
+    // initialize w
+    for (j = 0; j < POINT_DIM; j = j + 1) {
+        w[j] = 0.0; // 1.0 //0.0; //2.0;
+    }
+
+    // start iterations
+    create_new_iter_task();
+
+#ifdef DEBUG_TASKING
+    PRINTLN("End init_task.");
+#endif
+
+    commit;
+}
+
+__task__ void main()
+{
+    long space;
+
+    space = SPACE_START(0);
+
+    runner init_task()
+        using iter
+        , w[0,,POINT_DIM]
+        , begin_time_sec, begin_time_nsec
+        , pcnt, ppoints
+        , ((double*)POINTS_ADDRESS)[0,,POINTS_MAX_LEN]
+        in space
+        ;
+    commit;
+}

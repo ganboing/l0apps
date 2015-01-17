@@ -1,0 +1,436 @@
+class Program
+{
+    function main
+    {
+            mov space$0x18a9250, 0x0:i8
+            asm "mov $0x0:msq, 0x200001000:msq"
+            asm "mov $0x0:msq, 0x200001008:msq"
+            asm "mov $0x2:msq, 0x200001010:msq"
+            lda __temp_76$0x18a9250, pcnt$0x18bbc60
+            mov __temp_77$0x18a9250, 0x8:i
+            sti 0x200001018:i, __temp_76$0x18a9250
+            sti 0x200001020:i, __temp_77$0x18a9250
+            add __temp_80$0x18a9250, 0x800000000:i8, 0x20000000000:i8
+            sub __temp_81$0x18a9250, __temp_80$0x18a9250, 0x1:i8
+            add __temp_82$0x18a9250, __temp_81$0x18a9250, 0x1:i8
+            add __temp_83$0x18a9250, __temp_82$0x18a9250, 0x20000000000:i8
+            sub __temp_84$0x18a9250, __temp_83$0x18a9250, 0x1:i8
+            add __temp_85$0x18a9250, __temp_84$0x18a9250, 0x1:i8
+            conv __temp_86$0x18a9250, __temp_85$0x18a9250
+            mul __temp_87$0x18a9250, 0x8:i8, 0xF4240:i8
+            add __temp_88$0x18a9250, 0x14:i8, 0x1:i8
+            mul __temp_89$0x18a9250, __temp_87$0x18a9250, __temp_88$0x18a9250
+            add __temp_90$0x18a9250, 0x8:i8, __temp_89$0x18a9250
+            ldelema __temp_78$0x18a9250, __temp_86$0x18a9250, 0x0:i8
+            sub __temp_79$0x18a9250, __temp_90$0x18a9250, 0x0:i8
+            mul __temp_79$0x18a9250, 0x8:i, __temp_79$0x18a9250
+            sti 0x200001028:i, __temp_78$0x18a9250
+            sti 0x200001030:i, __temp_79$0x18a9250
+            asm "mov $0x0:msq, 0x200001038:msq"
+            asm "mov $__newr0:msq, 0x200001040:msq"
+            mov __temp_91$0x18a9250, space$0x18a9250
+            sti 0x200001048:i, __temp_91$0x18a9250
+            asm "mov $0x200001000:msq, 0x200001050:msq"
+            asm "mov $0x200001010:msq, 0x200001058:msq"
+            asm "mov $0x200001038:msq, 0x200001060:msq"
+            asm "mov $0x200001040:msq, 0x200001068:msq"
+            asm "mov $0x200001048:msq, 0x200001070:msq"
+            asm "spawnx 0x200001050, 0x200001058, 0x200001060, 0x200001068, 0x200001070"
+            ldi __temp_73$0x18a9250, 0x100000400:i
+            ldi __temp_74$0x18a9250, 0x100000408:i
+            add __temp_75$0x18a9250, __temp_73$0x18a9250, __temp_74$0x18a9250
+            lda __temp_92$0x18a9250, init_task$0x18bbc60
+            sub __temp_75$0x18a9250, __temp_75$0x18a9250, 0x8:i8
+            sti __temp_75$0x18a9250, __temp_92$0x18a9250
+            sub __temp_75$0x18a9250, __temp_75$0x18a9250, 0x8:i8
+            sti __temp_75$0x18a9250, 0x0:i8
+            asm "exit:c"
+    }
+    function init_task
+    {
+            mov ppcnt$0x188d4c0, 0x40800000000:i
+            mov ppoints$0x188d4c0, 0x40800000008:i
+            mov pcnt$0x18bbc60, 0x0:i8
+        __temp_18$0x188d4c0:
+            bz 0x1:i8, __temp_20$0x188d4c0
+            lda __temp_22$0x188d560, d$0x188d4c0
+            call input_double$0x18bbc60, __temp_21$0x188d560, __temp_22$0x188d560
+            mov rt$0x188d4c0, __temp_21$0x188d560
+            bne rt$0x188d4c0, 0x0:i8, __temp_25$0x188d560
+            br __temp_23$0x188d560
+        __temp_25$0x188d560:
+            br init_task_reach_input_end$0x188d560
+        __temp_23$0x188d560:
+            sti ppoints$0x188d4c0, d$0x188d4c0
+            conv __temp_26$0x188d560, ppoints$0x188d4c0
+            add __temp_27$0x188d560, __temp_26$0x188d560, 0x8:i8
+            conv ppoints$0x188d4c0, __temp_27$0x188d560
+            mov i$0x188d4c0, 0x0:i8
+        __temp_29$0x188d560:
+            ble 0x14:i8, i$0x188d4c0, __temp_31$0x188d560
+            lda __temp_34$0x188d600, d$0x188d4c0
+            call input_double$0x18bbc60, __temp_33$0x188d600, __temp_34$0x188d600
+            mov rt$0x188d4c0, __temp_33$0x188d600
+            bne rt$0x188d4c0, 0x0:i8, __temp_37$0x188d600
+            br __temp_35$0x188d600
+        __temp_37$0x188d600:
+            br init_task_reach_input_end$0x188d600
+        __temp_35$0x188d600:
+            stelem ppoints$0x188d4c0, i$0x188d4c0, d$0x188d4c0
+        __temp_30$0x188d560:
+            add i$0x188d4c0, i$0x188d4c0, 0x1:i8
+            br __temp_29$0x188d560
+        __temp_31$0x188d560:
+            add pcnt$0x18bbc60, pcnt$0x18bbc60, 0x1:i8
+            conv __temp_40$0x188d560, ppoints$0x188d4c0
+            add __temp_41$0x188d560, __temp_40$0x188d560, 0xA0:i8
+            conv ppoints$0x188d4c0, __temp_41$0x188d560
+        __temp_19$0x188d4c0:
+            br __temp_18$0x188d4c0
+        __temp_20$0x188d4c0:
+        init_task_reach_input_end$0x18bbc60:
+            sti ppcnt$0x188d4c0, pcnt$0x18bbc60
+            mov i$0x188d4c0, 0x0:i8
+        __temp_43$0x188d4c0:
+            ble 0x1E:i8, i$0x188d4c0, __temp_45$0x188d4c0
+            lda __temp_47$0x1898f20, p_begin$0x188d4c0
+            lda __temp_48$0x1898f20, p_end$0x188d4c0
+            call get_points_range$0x18bbc60, <missing>, i$0x188d4c0, __temp_47$0x1898f20, __temp_48$0x1898f20
+            add __temp_49$0x1898f20, i$0x188d4c0, 0x1:i8
+            mul space$0x188d4c0, 0x400000000000:i8, __temp_49$0x1898f20
+            asm "mov $0x0:msq, 0x200001000:msq"
+            asm "mov $0x0:msq, 0x200001008:msq"
+            asm "mov $0x2:msq, 0x200001010:msq"
+            lda __temp_54$0x1898f20, pcnt$0x18bbc60
+            mov __temp_55$0x1898f20, 0x8:i
+            sti 0x200001018:i, __temp_54$0x1898f20
+            sti 0x200001020:i, __temp_55$0x1898f20
+            add __temp_58$0x1898f20, 0x800000000:i8, 0x20000000000:i8
+            sub __temp_59$0x1898f20, __temp_58$0x1898f20, 0x1:i8
+            add __temp_60$0x1898f20, __temp_59$0x1898f20, 0x1:i8
+            add __temp_61$0x1898f20, __temp_60$0x1898f20, 0x20000000000:i8
+            sub __temp_62$0x1898f20, __temp_61$0x1898f20, 0x1:i8
+            add __temp_63$0x1898f20, __temp_62$0x1898f20, 0x1:i8
+            add __temp_64$0x1898f20, __temp_63$0x1898f20, 0x8:i8
+            conv __temp_65$0x1898f20, __temp_64$0x1898f20
+            add __temp_66$0x1898f20, 0x14:i8, 0x1:i8
+            mul __temp_67$0x1898f20, p_begin$0x188d4c0, __temp_66$0x1898f20
+            add __temp_68$0x1898f20, 0x14:i8, 0x1:i8
+            mul __temp_69$0x1898f20, p_end$0x188d4c0, __temp_68$0x1898f20
+            ldelema __temp_56$0x1898f20, __temp_65$0x1898f20, __temp_67$0x1898f20
+            sub __temp_57$0x1898f20, __temp_69$0x1898f20, __temp_67$0x1898f20
+            mul __temp_57$0x1898f20, 0x8:i, __temp_57$0x1898f20
+            sti 0x200001028:i, __temp_56$0x1898f20
+            sti 0x200001030:i, __temp_57$0x1898f20
+            asm "mov $0x0:msq, 0x200001038:msq"
+            asm "mov $__newr0:msq, 0x200001040:msq"
+            mov __temp_70$0x1898f20, space$0x188d4c0
+            sti 0x200001048:i, __temp_70$0x1898f20
+            asm "mov $0x200001000:msq, 0x200001050:msq"
+            asm "mov $0x200001010:msq, 0x200001058:msq"
+            asm "mov $0x200001038:msq, 0x200001060:msq"
+            asm "mov $0x200001040:msq, 0x200001068:msq"
+            asm "mov $0x200001048:msq, 0x200001070:msq"
+            asm "spawnx 0x200001050, 0x200001058, 0x200001060, 0x200001068, 0x200001070"
+            ldi __temp_51$0x1898f20, 0x100000400:i
+            ldi __temp_52$0x1898f20, 0x100000408:i
+            add __temp_53$0x1898f20, __temp_51$0x1898f20, __temp_52$0x1898f20
+            lda __temp_71$0x1898f20, shuffle_task$0x18bbc60
+            sub __temp_53$0x1898f20, __temp_53$0x1898f20, 0x8:i8
+            sti __temp_53$0x1898f20, __temp_71$0x1898f20
+            sub __temp_53$0x1898f20, __temp_53$0x1898f20, 0x8:i8
+            sti __temp_53$0x1898f20, 0x8:i8
+            sub __temp_53$0x1898f20, __temp_53$0x1898f20, 0x8:i8
+            sti __temp_53$0x1898f20, i$0x188d4c0
+        __temp_44$0x188d4c0:
+            add i$0x188d4c0, i$0x188d4c0, 0x1:i8
+            br __temp_43$0x188d4c0
+        __temp_45$0x188d4c0:
+            asm "exit:c"
+    }
+    function input_double
+    {
+            mov n$0x19da540, 0x0:i8
+            mov d$0x19da540, 0.000000:r8
+            mov is_neg$0x19da540, 0x0:i8
+            mov is_checking$0x19da540, 0x1:i8
+            neg ret$0x19da540, 0x1:i8
+            mov e$0x19da540, 0x0:i8
+        __temp_502$0x19da540:
+            ldi c$0x19da540, 0x100000200:i
+            neg __temp_507$0x19da610, 0x1:i8
+            beq c$0x19da540, __temp_507$0x19da610, __temp_509$0x19da610
+            br __temp_506$0x19da610
+        __temp_509$0x19da610:
+            br input_double_exit$0x19da610
+        __temp_506$0x19da610:
+            beq c$0x19da540, 0x2D:i8, __temp_512$0x19da610
+            ble c$0x19da540, 0x39:i8, __temp_515$0x19da610
+            br __temp_513$0x19da610
+        __temp_515$0x19da610:
+            ble 0x30:i8, c$0x19da540, __temp_518$0x19de7e0
+            br __temp_516$0x19de7e0
+        __temp_518$0x19de7e0:
+            mov is_checking$0x19da540, 0x0:i8
+            mov ret$0x19da540, 0x0:i8
+        __temp_516$0x19de7e0:
+        __temp_513$0x19da610:
+            br __temp_510$0x19da610
+        __temp_512$0x19da610:
+            ldi c$0x19da540, 0x100000200:i
+            ble c$0x19da540, 0x39:i8, __temp_522$0x19da6b0
+            br __temp_520$0x19da6b0
+        __temp_522$0x19da6b0:
+            ble 0x30:i8, c$0x19da540, __temp_525$0x19da750
+            br __temp_523$0x19da750
+        __temp_525$0x19da750:
+            mov is_neg$0x19da540, 0x1:i8
+            mov is_checking$0x19da540, 0x0:i8
+            mov ret$0x19da540, 0x0:i8
+        __temp_523$0x19da750:
+        __temp_520$0x19da6b0:
+        __temp_510$0x19da610:
+        __temp_503$0x19da540:
+            beq is_checking$0x19da540, 0x1:i8, __temp_502$0x19da540
+        __temp_504$0x19da540:
+            mov is_checking$0x19da540, 0x1:i8
+        __temp_527$0x19da540:
+            mul __temp_530$0x19e4580, n$0x19da540, 0xA:i8
+            add __temp_531$0x19e4580, __temp_530$0x19e4580, c$0x19da540
+            sub n$0x19da540, __temp_531$0x19e4580, 0x30:i8
+            ldi c$0x19da540, 0x100000200:i
+            neg __temp_535$0x19e4580, 0x1:i8
+            beq c$0x19da540, __temp_535$0x19e4580, __temp_537$0x19e4580
+            br __temp_534$0x19e4580
+        __temp_537$0x19e4580:
+            br input_double_exit$0x19e4580
+        __temp_534$0x19e4580:
+            beq c$0x19da540, 0x2E:i8, __temp_540$0x19e4580
+            br __temp_538$0x19e4580
+        __temp_540$0x19e4580:
+            br input_double_after_dot$0x19e4580
+        __temp_538$0x19e4580:
+            blt 0x39:i8, c$0x19da540, __temp_543$0x19e4580
+            br __temp_541$0x19e4580
+        __temp_543$0x19e4580:
+            mov is_checking$0x19da540, 0x0:i8
+        __temp_541$0x19e4580:
+            blt c$0x19da540, 0x30:i8, __temp_546$0x19e4580
+            br __temp_544$0x19e4580
+        __temp_546$0x19e4580:
+            mov is_checking$0x19da540, 0x0:i8
+        __temp_544$0x19e4580:
+        __temp_528$0x19da540:
+            beq is_checking$0x19da540, 0x1:i8, __temp_527$0x19da540
+        __temp_529$0x19da540:
+            br input_double_exit$0x19da540
+        input_double_after_dot$0x18bbc60:
+            mov is_checking$0x19da540, 0x1:i8
+            mov scale$0x19da540, 0.100000:r8
+        __temp_548$0x19da540:
+            ldi c$0x19da540, 0x100000200:i
+            neg __temp_553$0x19ec2b0, 0x1:i8
+            beq c$0x19da540, __temp_553$0x19ec2b0, __temp_555$0x19ec2b0
+            br __temp_552$0x19ec2b0
+        __temp_555$0x19ec2b0:
+            br input_double_exit$0x19ec2b0
+        __temp_552$0x19ec2b0:
+            ble c$0x19da540, 0x39:i8, __temp_558$0x19ec2b0
+            mov is_checking$0x19da540, 0x0:i8
+            br __temp_556$0x19ec2b0
+        __temp_558$0x19ec2b0:
+            ble 0x30:i8, c$0x19da540, __temp_561$0x19ec350
+            mov is_checking$0x19da540, 0x0:i8
+            br __temp_559$0x19ec350
+        __temp_561$0x19ec350:
+            sub c$0x19da540, c$0x19da540, 0x30:i8
+            conv __temp_563$0x19ec3f0, c$0x19da540
+            mul __temp_564$0x19ec3f0, scale$0x19da540, __temp_563$0x19ec3f0
+            add d$0x19da540, d$0x19da540, __temp_564$0x19ec3f0
+            div scale$0x19da540, scale$0x19da540, 10.000000:r8
+        __temp_559$0x19ec350:
+        __temp_556$0x19ec2b0:
+        __temp_549$0x19da540:
+            beq is_checking$0x19da540, 0x1:i8, __temp_548$0x19da540
+        __temp_550$0x19da540:
+        input_double_exit$0x18bbc60:
+            conv __temp_568$0x19da540, n$0x19da540
+            add d$0x19da540, d$0x19da540, __temp_568$0x19da540
+            beq c$0x19da540, 0x45:i8, __temp_572$0x19da540
+            br __temp_570$0x19da540
+        __temp_572$0x19da540:
+            lda __temp_574$0x19f3dd0, e$0x19da540
+            call input_long$0x18bbc60, __temp_573$0x19f3dd0, __temp_574$0x19f3dd0
+            mov rt$0x19da540, __temp_573$0x19f3dd0
+            bne rt$0x19da540, 0x0:i8, __temp_577$0x19f3dd0
+            br __temp_575$0x19f3dd0
+        __temp_577$0x19f3dd0:
+            mov e$0x19da540, 0x0:i8
+        __temp_575$0x19f3dd0:
+        __temp_570$0x19da540:
+            beq c$0x19da540, 0x65:i8, __temp_580$0x19da540
+            br __temp_578$0x19da540
+        __temp_580$0x19da540:
+            lda __temp_582$0x19f6330, e$0x19da540
+            call input_long$0x18bbc60, __temp_581$0x19f6330, __temp_582$0x19f6330
+            mov rt$0x19da540, __temp_581$0x19f6330
+            bne rt$0x19da540, 0x0:i8, __temp_585$0x19f6330
+            br __temp_583$0x19f6330
+        __temp_585$0x19f6330:
+            mov e$0x19da540, 0x0:i8
+        __temp_583$0x19f6330:
+        __temp_578$0x19da540:
+            blt 0x0:i8, e$0x19da540, __temp_588$0x19da540
+            blt e$0x19da540, 0x0:i8, __temp_591$0x19da540
+            br __temp_589$0x19da540
+        __temp_591$0x19da540:
+            call ipow$0x18bbc60, __temp_592$0x19f9f00, 0xA:i8, e$0x19da540
+            conv __temp_593$0x19f9f00, __temp_592$0x19f9f00
+            div d$0x19da540, d$0x19da540, __temp_593$0x19f9f00
+        __temp_589$0x19da540:
+            br __temp_586$0x19da540
+        __temp_588$0x19da540:
+            call ipow$0x18bbc60, __temp_595$0x19f8750, 0xA:i8, e$0x19da540
+            conv __temp_596$0x19f8750, __temp_595$0x19f8750
+            mul d$0x19da540, d$0x19da540, __temp_596$0x19f8750
+        __temp_586$0x19da540:
+            beq is_neg$0x19da540, 0x1:i8, __temp_600$0x19da540
+            br __temp_598$0x19da540
+        __temp_600$0x19da540:
+            sub d$0x19da540, 0.000000:r8, d$0x19da540
+        __temp_598$0x19da540:
+            sti result$0x19da4a0, d$0x19da540
+            ret ret$0x19da540
+    }
+    function get_points_range
+    {
+            div __temp_0$0x189c990, pcnt$0x18bbc60, 0x1E:i8
+            mul __temp_1$0x189c990, __temp_0$0x189c990, i$0x1883bf0
+            sti p_begin$0x1883bf0, __temp_1$0x189c990
+            beq i$0x1883bf0, 0x1D:i8, __temp_4$0x189c990
+            div __temp_5$0x189d410, pcnt$0x18bbc60, 0x1E:i8
+            add __temp_6$0x189d410, i$0x1883bf0, 0x1:i8
+            mul __temp_7$0x189d410, __temp_5$0x189d410, __temp_6$0x189d410
+            sti p_end$0x1883bf0, __temp_7$0x189d410
+            br __temp_2$0x189c990
+        __temp_4$0x189c990:
+            sti p_end$0x1883bf0, pcnt$0x18bbc60
+        __temp_2$0x189c990:
+            ret
+    }
+    function shuffle_task
+    {
+            mov ppoints$0x1884990, 0x40800000008:i
+            lda __temp_8$0x1884990, p_begin$0x1884990
+            lda __temp_9$0x1884990, p_end$0x1884990
+            call get_points_range$0x18bbc60, <missing>, id$0x1884910, __temp_8$0x1884990, __temp_9$0x1884990
+            mul p_begin$0x1884990, p_begin$0x1884990, 0x15:i8
+            mul p_end$0x1884990, p_end$0x1884990, 0x15:i8
+            mov p_end$0x1884990, p_end$0x1884990
+            mov i$0x1884990, p_begin$0x1884990
+        __temp_12$0x1884990:
+            ble p_end$0x1884990, i$0x1884990, __temp_14$0x1884990
+            ldelem __temp_16$0x1884100, ppoints$0x1884990, i$0x1884990
+            stelem ppoints$0x1884990, i$0x1884990, __temp_16$0x1884100
+        __temp_13$0x1884990:
+            add i$0x1884990, i$0x1884990, 0x200:i8
+            br __temp_12$0x1884990
+        __temp_14$0x1884990:
+            asm "exit:c"
+    }
+    function input_long
+    {
+            mov n$0x19a2990, 0x0:i8
+            mov is_neg$0x19a2990, 0x0:i8
+            mov is_checking$0x19a2990, 0x1:i8
+            neg ret$0x19a2990, 0x1:i8
+        __temp_408$0x19a2990:
+            ldi c$0x19a2990, 0x100000200:i
+            neg __temp_413$0x19a2730, 0x1:i8
+            beq c$0x19a2990, __temp_413$0x19a2730, __temp_415$0x19a2730
+            br __temp_412$0x19a2730
+        __temp_415$0x19a2730:
+            br input_long_exit$0x19a2730
+        __temp_412$0x19a2730:
+            beq c$0x19a2990, 0x2D:i8, __temp_418$0x19a2730
+            ble c$0x19a2990, 0x39:i8, __temp_421$0x19a2730
+            br __temp_419$0x19a2730
+        __temp_421$0x19a2730:
+            ble 0x30:i8, c$0x19a2990, __temp_424$0x19a6bf0
+            br __temp_422$0x19a6bf0
+        __temp_424$0x19a6bf0:
+            mov is_checking$0x19a2990, 0x0:i8
+            mov ret$0x19a2990, 0x0:i8
+        __temp_422$0x19a6bf0:
+        __temp_419$0x19a2730:
+            br __temp_416$0x19a2730
+        __temp_418$0x19a2730:
+            ldi c$0x19a2990, 0x100000200:i
+            ble c$0x19a2990, 0x39:i8, __temp_428$0x19a2810
+            br __temp_426$0x19a2810
+        __temp_428$0x19a2810:
+            ble 0x30:i8, c$0x19a2990, __temp_431$0x19a2a10
+            br __temp_429$0x19a2a10
+        __temp_431$0x19a2a10:
+            mov is_neg$0x19a2990, 0x1:i8
+            mov is_checking$0x19a2990, 0x0:i8
+            mov ret$0x19a2990, 0x0:i8
+        __temp_429$0x19a2a10:
+        __temp_426$0x19a2810:
+        __temp_416$0x19a2730:
+        __temp_409$0x19a2990:
+            beq is_checking$0x19a2990, 0x1:i8, __temp_408$0x19a2990
+        __temp_410$0x19a2990:
+            mov is_checking$0x19a2990, 0x1:i8
+        __temp_433$0x19a2990:
+            mul __temp_436$0x19aca90, n$0x19a2990, 0xA:i8
+            add __temp_437$0x19aca90, __temp_436$0x19aca90, c$0x19a2990
+            sub n$0x19a2990, __temp_437$0x19aca90, 0x30:i8
+            ldi c$0x19a2990, 0x100000200:i
+            neg __temp_441$0x19aca90, 0x1:i8
+            beq c$0x19a2990, __temp_441$0x19aca90, __temp_443$0x19aca90
+            br __temp_440$0x19aca90
+        __temp_443$0x19aca90:
+            br input_long_exit$0x19aca90
+        __temp_440$0x19aca90:
+            blt 0x39:i8, c$0x19a2990, __temp_446$0x19aca90
+            br __temp_444$0x19aca90
+        __temp_446$0x19aca90:
+            mov is_checking$0x19a2990, 0x0:i8
+        __temp_444$0x19aca90:
+            blt c$0x19a2990, 0x30:i8, __temp_449$0x19aca90
+            br __temp_447$0x19aca90
+        __temp_449$0x19aca90:
+            mov is_checking$0x19a2990, 0x0:i8
+        __temp_447$0x19aca90:
+        __temp_434$0x19a2990:
+            beq is_checking$0x19a2990, 0x1:i8, __temp_433$0x19a2990
+        __temp_435$0x19a2990:
+        input_long_exit$0x18bbc60:
+            beq is_neg$0x19a2990, 0x1:i8, __temp_453$0x19a2990
+            br __temp_451$0x19a2990
+        __temp_453$0x19a2990:
+            sub n$0x19a2990, 0x0:i8, n$0x19a2990
+        __temp_451$0x19a2990:
+            sti result$0x19a2910, n$0x19a2990
+            ret ret$0x19a2990
+    }
+    function ipow
+    {
+            mov result$0x18f0ed0, 0x1:i8
+        __temp_200$0x18f0ed0:
+            bz exp$0x18f0e30, __temp_202$0x18f0ed0
+            and __temp_204$0x18f0f70, exp$0x18f0e30, 0x1:i8
+            beq __temp_204$0x18f0f70, 0x1:i8, __temp_206$0x18f0f70
+            br __temp_203$0x18f0f70
+        __temp_206$0x18f0f70:
+            mul result$0x18f0ed0, result$0x18f0ed0, base$0x18f0e30
+        __temp_203$0x18f0f70:
+            div exp$0x18f0e30, exp$0x18f0e30, 0x2:i8
+            mul base$0x18f0e30, base$0x18f0e30, base$0x18f0e30
+        __temp_201$0x18f0ed0:
+            br __temp_200$0x18f0ed0
+        __temp_202$0x18f0ed0:
+            ret result$0x18f0ed0
+    }
+}

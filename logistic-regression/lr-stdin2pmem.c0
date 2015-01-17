@@ -1,0 +1,123 @@
+// read input for LR from STDIN
+
+// Usage:
+//     am run lr-stdin2pmem.bin input.txt
+//
+// where lr-stdin2pmem.bin is the compiled binary of this program.
+// and input.txt is the input file.
+
+// input.txt each line conains:
+// label,feature0 feature2 ... feature19
+
+// example:
+// 0.0,1.1419053154730547 0.9194079489827879 -0.9498666368908959 -1.1069902863993377 0.2809776380727795 0.6846227956326554 -0.8172214073987268 -1.3966434026780434 -0.19094451307087512 1.4862133923906502 0.8023071496873626 -0.12151292466549345 1.4105062239438624 -0.6402327822135738 -1.2096444592532913 0.35375769787202876 -0.4903496491990076 0.5507215382743629 -1.2035510019650835 0.3210160806416416
+
+#include <stddef.h>
+#include <stdio.h>
+
+#include "config.h"
+
+long pcnt;
+
+// after pcnt
+#include "common.h"
+
+void shuffle_task(long id)
+{
+    long *ppoints;
+    long p_begin;
+    long p_end;
+    long i;
+    long p;
+
+    ppoints = (long*)(POINTS_ADDRESS + sizeof_long);
+
+    // touch each page and commit, so that the points are shuffled
+    // to VMCs
+
+    get_points_range(id, &p_begin, &p_end);
+
+    p_begin = p_begin * (POINT_DIM + 1);
+    p_end = p_end * (POINT_DIM + 1);
+
+    // avoid false sharing
+    p_end = p_end;
+
+    for (i = p_begin; i < p_end; i = i + N_LONG_PER_PAGE) {
+        ppoints[i] = ppoints[i];
+    }
+
+    commit;
+}
+
+void init_task()
+{
+    long *ppcnt;
+    double *ppoints;
+    long p_begin, p_end;
+    long i, j, rt, space;
+    double d;
+
+    ppcnt = (long*)POINTS_ADDRESS;
+    ppoints = (double*)(POINTS_ADDRESS + sizeof_long);
+
+    pcnt = 0;
+    while (1) {
+        rt = input_double(&d);
+        if (rt != 0) goto init_task_reach_input_end;
+        *ppoints = d;
+        ppoints = (double*)((long)ppoints + sizeof_double);
+        for (i = 0; i < POINT_DIM; i = i + 1) {
+            rt = input_double(&d);
+            if (rt != 0) goto init_task_reach_input_end;
+            ppoints[i] = d;
+        }
+        pcnt = pcnt + 1;
+        ppoints = (double*)((long)ppoints + sizeof_double * POINT_DIM);
+    }
+init_task_reach_input_end:
+    *ppcnt = pcnt;
+
+#ifdef PRINT_INPUT
+    putq(*ppcnt); wrln();
+    ppoints = (double*)(POINTS_ADDRESS + sizeof_long);
+    for (i = 0; i < pcnt; i = i + 1) {
+        // putlong(i);putchar(':');
+        putdouble(*ppoints);putchar(',');
+        ppoints = (double*)((long)ppoints + sizeof_double);
+        for (j = 0; j < POINT_DIM; j = j + 1) {
+            putdouble(ppoints[j]);putchar(' ');
+        }
+        wrln();
+        ppoints = (double*)((long)ppoints + sizeof_double * POINT_DIM);
+    }
+#endif
+
+#ifdef SHUFFLE_INPUT
+    // shuffling data storage location
+    for (i = 0; i < NUM_TASKS; i = i + 1) {
+        get_points_range(i, &p_begin, &p_end);
+        space = SPACE_START(i+1);
+        runner shuffle_task(i)
+            using pcnt,
+            ((double*)(POINTS_ADDRESS+sizeof_long))[p_begin * (POINT_DIM + 1),, p_end * (POINT_DIM + 1)]
+            in space;
+    }
+#endif
+
+    commit;
+}
+
+void main()
+{
+    long space;
+
+    space = SPACE_START(0);
+
+    runner init_task()
+        using pcnt,
+        ((double*)POINTS_ADDRESS)[0,,POINTS_MAX_LEN]
+        in space;
+
+    commit;
+}

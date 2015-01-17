@@ -1,0 +1,7 @@
+*.bin
+*.il
+*.log
+*.map
+*.var
+*.objdump
+*.tmp

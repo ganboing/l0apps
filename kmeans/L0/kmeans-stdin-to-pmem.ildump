@@ -1,0 +1,491 @@
+class Program
+{
+    function main
+    {
+            asm "mov $0x0:msq, 0x200001000:msq"
+            asm "mov $0x0:msq, 0x200001008:msq"
+            asm "mov $0x2:msq, 0x200001010:msq"
+            div __temp_553$0x2994e30, 0xA:i8, 0xA:i8
+            add __temp_554$0x2994e30, __temp_553$0x2994e30, 0x1:i8
+            mul __temp_555$0x2994e30, __temp_554$0x2994e30, 0x200:i8
+            ldelema __temp_551$0x2994e30, trigger$0x299d8d0, 0x0:i8
+            sub __temp_552$0x2994e30, __temp_555$0x2994e30, 0x0:i8
+            mul __temp_552$0x2994e30, 0x8:i, __temp_552$0x2994e30
+            sti 0x200001018:i, __temp_551$0x2994e30
+            sti 0x200001020:i, __temp_552$0x2994e30
+            lda __temp_556$0x2994e30, pmem_in$0x299d8d0
+            mov __temp_557$0x2994e30, 0x8:i
+            sti 0x200001028:i, __temp_556$0x2994e30
+            sti 0x200001030:i, __temp_557$0x2994e30
+            asm "mov $0x0:msq, 0x200001038:msq"
+            asm "mov $__newr0:msq, 0x200001040:msq"
+            asm "mov $0x200001000:msq, 0x200001048:msq"
+            asm "mov $0x200001010:msq, 0x200001050:msq"
+            asm "mov $0x200001038:msq, 0x200001058:msq"
+            asm "mov $0x200001040:msq, 0x200001060:msq"
+            asm "newr 0x200001048, 0x200001050, 0x200001058, 0x200001060"
+            ldi __temp_548$0x2994e30, 0x100000400:i
+            ldi __temp_549$0x2994e30, 0x100000408:i
+            add __temp_550$0x2994e30, __temp_548$0x2994e30, __temp_549$0x2994e30
+            lda __temp_558$0x2994e30, init0_stdin_only$0x299d8d0
+            sub __temp_550$0x2994e30, __temp_550$0x2994e30, 0x8:i8
+            sti __temp_550$0x2994e30, __temp_558$0x2994e30
+            sub __temp_550$0x2994e30, __temp_550$0x2994e30, 0x8:i8
+            sti __temp_550$0x2994e30, 0x0:i8
+            asm "exit:c"
+    }
+    function init0_stdin_only
+    {
+            mov pmem_in$0x299d8d0, 0x40000000000:i
+            mov i$0x2980100, 0x0:i8
+        __temp_489$0x2980100:
+            ble 0xA:i8, i$0x2980100, __temp_491$0x2980100
+            div __temp_493$0x297feb0, i$0x2980100, 0xA:i8
+            mul __temp_494$0x297feb0, __temp_493$0x297feb0, 0x200:i8
+            stelem trigger$0x299d8d0, __temp_494$0x297feb0, 0x0:i8
+        __temp_490$0x2980100:
+            add i$0x2980100, i$0x2980100, 0xA:i8
+            br __temp_489$0x2980100
+        __temp_491$0x2980100:
+            asm "mov $0x0:msq, 0x200001000:msq"
+            asm "mov $0x0:msq, 0x200001008:msq"
+            asm "mov $0x6:msq, 0x200001010:msq"
+            ldelema __temp_499$0x2980100, x$0x299d8d0, 0x0:i8
+            sub __temp_500$0x2980100, 0xA:i8, 0x0:i8
+            mul __temp_500$0x2980100, 0x8:i, __temp_500$0x2980100
+            sti 0x200001018:i, __temp_499$0x2980100
+            sti 0x200001020:i, __temp_500$0x2980100
+            ldelema __temp_501$0x2980100, y$0x299d8d0, 0x0:i8
+            sub __temp_502$0x2980100, 0xA:i8, 0x0:i8
+            mul __temp_502$0x2980100, 0x8:i, __temp_502$0x2980100
+            sti 0x200001028:i, __temp_501$0x2980100
+            sti 0x200001030:i, __temp_502$0x2980100
+            ldelema __temp_503$0x2980100, z$0x299d8d0, 0x0:i8
+            sub __temp_504$0x2980100, 0xA:i8, 0x0:i8
+            mul __temp_504$0x2980100, 0x8:i, __temp_504$0x2980100
+            sti 0x200001038:i, __temp_503$0x2980100
+            sti 0x200001040:i, __temp_504$0x2980100
+            ldelema __temp_505$0x2980100, w$0x299d8d0, 0x0:i8
+            sub __temp_506$0x2980100, 0xA:i8, 0x0:i8
+            mul __temp_506$0x2980100, 0x8:i, __temp_506$0x2980100
+            sti 0x200001048:i, __temp_505$0x2980100
+            sti 0x200001050:i, __temp_506$0x2980100
+            div __temp_509$0x2980100, 0x0:i8, 0xA:i8
+            mul __temp_510$0x2980100, __temp_509$0x2980100, 0x200:i8
+            div __temp_511$0x2980100, 0xA:i8, 0xA:i8
+            add __temp_512$0x2980100, __temp_511$0x2980100, 0x1:i8
+            mul __temp_513$0x2980100, __temp_512$0x2980100, 0x200:i8
+            ldelema __temp_507$0x2980100, trigger$0x299d8d0, __temp_510$0x2980100
+            sub __temp_508$0x2980100, __temp_513$0x2980100, __temp_510$0x2980100
+            mul __temp_508$0x2980100, 0x8:i, __temp_508$0x2980100
+            sti 0x200001058:i, __temp_507$0x2980100
+            sti 0x200001060:i, __temp_508$0x2980100
+            lda __temp_514$0x2980100, pmem_in$0x299d8d0
+            mov __temp_515$0x2980100, 0x8:i
+            sti 0x200001068:i, __temp_514$0x2980100
+            sti 0x200001070:i, __temp_515$0x2980100
+            asm "mov $0x0:msq, 0x200001078:msq"
+            asm "mov $__newr0:msq, 0x200001080:msq"
+            asm "mov $0x200001000:msq, 0x200001088:msq"
+            asm "mov $0x200001010:msq, 0x200001090:msq"
+            asm "mov $0x200001078:msq, 0x200001098:msq"
+            asm "mov $0x200001080:msq, 0x2000010a0:msq"
+            asm "newr 0x200001088, 0x200001090, 0x200001098, 0x2000010a0"
+            ldi __temp_496$0x2980100, 0x100000400:i
+            ldi __temp_497$0x2980100, 0x100000408:i
+            add __temp_498$0x2980100, __temp_496$0x2980100, __temp_497$0x2980100
+            lda __temp_516$0x2980100, init_runner_stdin$0x299d8d0
+            sub __temp_498$0x2980100, __temp_498$0x2980100, 0x8:i8
+            sti __temp_498$0x2980100, __temp_516$0x2980100
+            sub __temp_498$0x2980100, __temp_498$0x2980100, 0x8:i8
+            sti __temp_498$0x2980100, 0x10:i8
+            sub __temp_498$0x2980100, __temp_498$0x2980100, 0x8:i8
+            sti __temp_498$0x2980100, 0xA:i8
+            sub __temp_498$0x2980100, __temp_498$0x2980100, 0x8:i8
+            sti __temp_498$0x2980100, 0x0:i8
+            asm "mov $0x0:msq, 0x200001000:msq"
+            asm "mov $0x0:msq, 0x200001008:msq"
+            asm "mov $0xb:msq, 0x200001010:msq"
+            ldelema __temp_520$0x2980100, cx$0x299d8d0, 0x0:i8
+            sub __temp_521$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_521$0x2980100, 0x8:i, __temp_521$0x2980100
+            sti 0x200001018:i, __temp_520$0x2980100
+            sti 0x200001020:i, __temp_521$0x2980100
+            ldelema __temp_522$0x2980100, cy$0x299d8d0, 0x0:i8
+            sub __temp_523$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_523$0x2980100, 0x8:i, __temp_523$0x2980100
+            sti 0x200001028:i, __temp_522$0x2980100
+            sti 0x200001030:i, __temp_523$0x2980100
+            ldelema __temp_524$0x2980100, cz$0x299d8d0, 0x0:i8
+            sub __temp_525$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_525$0x2980100, 0x8:i, __temp_525$0x2980100
+            sti 0x200001038:i, __temp_524$0x2980100
+            sti 0x200001040:i, __temp_525$0x2980100
+            ldelema __temp_526$0x2980100, cw$0x299d8d0, 0x0:i8
+            sub __temp_527$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_527$0x2980100, 0x8:i, __temp_527$0x2980100
+            sti 0x200001048:i, __temp_526$0x2980100
+            sti 0x200001050:i, __temp_527$0x2980100
+            ldelema __temp_528$0x2980100, x$0x299d8d0, 0x0:i8
+            sub __temp_529$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_529$0x2980100, 0x8:i, __temp_529$0x2980100
+            sti 0x200001058:i, __temp_528$0x2980100
+            sti 0x200001060:i, __temp_529$0x2980100
+            ldelema __temp_530$0x2980100, y$0x299d8d0, 0x0:i8
+            sub __temp_531$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_531$0x2980100, 0x8:i, __temp_531$0x2980100
+            sti 0x200001068:i, __temp_530$0x2980100
+            sti 0x200001070:i, __temp_531$0x2980100
+            ldelema __temp_532$0x2980100, z$0x299d8d0, 0x0:i8
+            sub __temp_533$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_533$0x2980100, 0x8:i, __temp_533$0x2980100
+            sti 0x200001078:i, __temp_532$0x2980100
+            sti 0x200001080:i, __temp_533$0x2980100
+            ldelema __temp_534$0x2980100, w$0x299d8d0, 0x0:i8
+            sub __temp_535$0x2980100, 0x2:i8, 0x0:i8
+            mul __temp_535$0x2980100, 0x8:i, __temp_535$0x2980100
+            sti 0x200001088:i, __temp_534$0x2980100
+            sti 0x200001090:i, __temp_535$0x2980100
+            ldelema __temp_536$0x2980100, trigger$0x299d8d0, 0x0:i8
+            sub __temp_537$0x2980100, 0xA:i8, 0x0:i8
+            mul __temp_537$0x2980100, 0x8:i, __temp_537$0x2980100
+            sti 0x200001098:i, __temp_536$0x2980100
+            sti 0x2000010A0:i, __temp_537$0x2980100
+            lda __temp_538$0x2980100, iter$0x299d8d0
+            mov __temp_539$0x2980100, 0x8:i
+            sti 0x2000010A8:i, __temp_538$0x2980100
+            sti 0x2000010B0:i, __temp_539$0x2980100
+            lda __temp_540$0x2980100, pmem_in$0x299d8d0
+            mov __temp_541$0x2980100, 0x8:i
+            sti 0x2000010B8:i, __temp_540$0x2980100
+            sti 0x2000010C0:i, __temp_541$0x2980100
+            asm "mov $0x1:msq, 0x2000010c8:msq"
+            div __temp_544$0x2980100, 0xA:i8, 0xA:i8
+            add __temp_545$0x2980100, __temp_544$0x2980100, 0x1:i8
+            mul __temp_546$0x2980100, __temp_545$0x2980100, 0x200:i8
+            ldelema __temp_542$0x2980100, trigger$0x299d8d0, 0x0:i8
+            sub __temp_543$0x2980100, __temp_546$0x2980100, 0x0:i8
+            mul __temp_543$0x2980100, 0x8:i, __temp_543$0x2980100
+            sti 0x2000010D0:i, __temp_542$0x2980100
+            sti 0x2000010D8:i, __temp_543$0x2980100
+            asm "mov $__newr0:msq, 0x2000010e0:msq"
+            asm "mov $0x200001000:msq, 0x2000010e8:msq"
+            asm "mov $0x200001010:msq, 0x2000010f0:msq"
+            asm "mov $0x2000010c8:msq, 0x2000010f8:msq"
+            asm "mov $0x2000010e0:msq, 0x200001100:msq"
+            asm "newr 0x2000010e8, 0x2000010f0, 0x2000010f8, 0x200001100"
+            ldi __temp_517$0x2980100, 0x100000400:i
+            ldi __temp_518$0x2980100, 0x100000408:i
+            add __temp_519$0x2980100, __temp_517$0x2980100, __temp_518$0x2980100
+            lda __temp_547$0x2980100, on_init1_finished_stdin_only$0x299d8d0
+            sub __temp_519$0x2980100, __temp_519$0x2980100, 0x8:i8
+            sti __temp_519$0x2980100, __temp_547$0x2980100
+            sub __temp_519$0x2980100, __temp_519$0x2980100, 0x8:i8
+            sti __temp_519$0x2980100, 0x0:i8
+            asm "exit:c"
+    }
+    function init_runner_stdin
+    {
+            mov i$0x2942620, 0x0:i8
+        __temp_313$0x2942620:
+            ble start$0x29425a0, i$0x2942620, __temp_315$0x2942620
+            call input_q$0x299d8d0, __temp_317$0x29423c0
+            mov t$0x2942620, __temp_317$0x29423c0
+            call input_q$0x299d8d0, __temp_318$0x29423c0
+            mov t$0x2942620, __temp_318$0x29423c0
+            call input_q$0x299d8d0, __temp_319$0x29423c0
+            mov t$0x2942620, __temp_319$0x29423c0
+            call input_q$0x299d8d0, __temp_320$0x29423c0
+            mov t$0x2942620, __temp_320$0x29423c0
+        __temp_314$0x2942620:
+            add i$0x2942620, i$0x2942620, 0x1:i8
+            br __temp_313$0x2942620
+        __temp_315$0x2942620:
+            mov i$0x2942620, start$0x29425a0
+        __temp_322$0x2942620:
+            ble end$0x29425a0, i$0x2942620, __temp_324$0x2942620
+            call input_q$0x299d8d0, __temp_326$0x29448c0
+            stelem x$0x299d8d0, i$0x2942620, __temp_326$0x29448c0
+            call input_q$0x299d8d0, __temp_327$0x29448c0
+            stelem y$0x299d8d0, i$0x2942620, __temp_327$0x29448c0
+            call input_q$0x299d8d0, __temp_328$0x29448c0
+            stelem z$0x299d8d0, i$0x2942620, __temp_328$0x29448c0
+            call input_q$0x299d8d0, __temp_329$0x29448c0
+            stelem w$0x299d8d0, i$0x2942620, __temp_329$0x29448c0
+        __temp_323$0x2942620:
+            add i$0x2942620, i$0x2942620, 0x1:i8
+            br __temp_322$0x2942620
+        __temp_324$0x2942620:
+            mov i$0x2942620, start$0x29425a0
+        __temp_331$0x2942620:
+            ble end$0x29425a0, i$0x2942620, __temp_333$0x2942620
+            div __temp_335$0x28e21d0, i$0x2942620, 0xA:i8
+            mul __temp_336$0x28e21d0, __temp_335$0x28e21d0, 0x200:i8
+            stelem trigger$0x299d8d0, __temp_336$0x28e21d0, 0x1:i8
+        __temp_332$0x2942620:
+            add i$0x2942620, i$0x2942620, 0x1:i8
+            br __temp_331$0x2942620
+        __temp_333$0x2942620:
+            asm "exit:c"
+    }
+    function on_init1_finished_stdin_only
+    {
+            mov i$0x297ac50, 0x0:i8
+        __temp_480$0x297ac50:
+            ble 0x200:i8, i$0x297ac50, __temp_482$0x297ac50
+            ldelem __temp_485$0x297aad0, trigger$0x299d8d0, i$0x297ac50
+            bne __temp_485$0x297aad0, 0x1:i8, __temp_487$0x297aad0
+            br __temp_484$0x297aad0
+        __temp_487$0x297aad0:
+            asm "exit:a"
+        __temp_484$0x297aad0:
+        __temp_481$0x297ac50:
+            add i$0x297ac50, i$0x297ac50, 0x200:i8
+            br __temp_480$0x297ac50
+        __temp_482$0x297ac50:
+            stelem trigger$0x299d8d0, 0x0:i8, 0x3:i8
+            call start_shuffle$0x299d8d0, <missing>
+            asm "exit:cd"
+    }
+    function input_q
+    {
+            mov n$0x2acd490, 0x0:i8
+            mov is_neg$0x2acd490, 0x0:i8
+            mov is_checking$0x2acd490, 0x1:i8
+        __temp_344$0x2acd490:
+            ldi c$0x2acd490, 0x100000200:i
+            neg __temp_349$0x2acd2a0, 0x1:i8
+            beq c$0x2acd490, __temp_349$0x2acd2a0, __temp_351$0x2acd2a0
+            br __temp_348$0x2acd2a0
+        __temp_351$0x2acd2a0:
+            br input_q_exit$0x2acd2a0
+        __temp_348$0x2acd2a0:
+            beq c$0x2acd490, 0x2D:i8, __temp_354$0x2acd2a0
+            ble c$0x2acd490, 0x39:i8, __temp_357$0x2acd2a0
+            br __temp_355$0x2acd2a0
+        __temp_357$0x2acd2a0:
+            ble 0x30:i8, c$0x2acd490, __temp_360$0x2ad1170
+            br __temp_358$0x2ad1170
+        __temp_360$0x2ad1170:
+            mov is_checking$0x2acd490, 0x0:i8
+        __temp_358$0x2ad1170:
+        __temp_355$0x2acd2a0:
+            br __temp_352$0x2acd2a0
+        __temp_354$0x2acd2a0:
+            ldi c$0x2acd490, 0x100000200:i
+            ble c$0x2acd490, 0x39:i8, __temp_364$0x2acd510
+            br __temp_362$0x2acd510
+        __temp_364$0x2acd510:
+            ble 0x30:i8, c$0x2acd490, __temp_367$0x2acd590
+            br __temp_365$0x2acd590
+        __temp_367$0x2acd590:
+            mov is_neg$0x2acd490, 0x1:i8
+            mov is_checking$0x2acd490, 0x0:i8
+        __temp_365$0x2acd590:
+        __temp_362$0x2acd510:
+        __temp_352$0x2acd2a0:
+        __temp_345$0x2acd490:
+            beq is_checking$0x2acd490, 0x1:i8, __temp_344$0x2acd490
+        __temp_346$0x2acd490:
+            mov is_checking$0x2acd490, 0x1:i8
+        __temp_369$0x2acd490:
+            mul __temp_372$0x2ad6a00, n$0x2acd490, 0xA:i8
+            add __temp_373$0x2ad6a00, __temp_372$0x2ad6a00, c$0x2acd490
+            sub n$0x2acd490, __temp_373$0x2ad6a00, 0x30:i8
+            ldi c$0x2acd490, 0x100000200:i
+            neg __temp_377$0x2ad6a00, 0x1:i8
+            beq c$0x2acd490, __temp_377$0x2ad6a00, __temp_379$0x2ad6a00
+            br __temp_376$0x2ad6a00
+        __temp_379$0x2ad6a00:
+            br input_q_exit$0x2ad6a00
+        __temp_376$0x2ad6a00:
+            blt 0x39:i8, c$0x2acd490, __temp_382$0x2ad6a00
+            br __temp_380$0x2ad6a00
+        __temp_382$0x2ad6a00:
+            mov is_checking$0x2acd490, 0x0:i8
+        __temp_380$0x2ad6a00:
+            blt c$0x2acd490, 0x30:i8, __temp_385$0x2ad6a00
+            br __temp_383$0x2ad6a00
+        __temp_385$0x2ad6a00:
+            mov is_checking$0x2acd490, 0x0:i8
+        __temp_383$0x2ad6a00:
+        __temp_370$0x2acd490:
+            beq is_checking$0x2acd490, 0x1:i8, __temp_369$0x2acd490
+        __temp_371$0x2acd490:
+        input_q_exit$0x299d8d0:
+            beq is_neg$0x2acd490, 0x1:i8, __temp_389$0x2acd490
+            br __temp_387$0x2acd490
+        __temp_389$0x2acd490:
+            sub n$0x2acd490, 0x0:i8, n$0x2acd490
+        __temp_387$0x2acd490:
+            ret n$0x2acd490
+    }
+    function start_shuffle
+    {
+            mov i$0x2962e30, 0x0:i8
+        __temp_417$0x2962e30:
+            ble 0xA:i8, i$0x2962e30, __temp_419$0x2962e30
+            div __temp_421$0x2962bd0, i$0x2962e30, 0xA:i8
+            mul __temp_422$0x2962bd0, __temp_421$0x2962bd0, 0x200:i8
+            stelem trigger$0x299d8d0, __temp_422$0x2962bd0, 0x0:i8
+            mul __temp_423$0x2962bd0, 0x202:i8, i$0x2962e30
+            div tmp1$0x2962e30, __temp_423$0x2962bd0, 0xA:i8
+            add __temp_425$0x2962bd0, tmp1$0x2962e30, 0x2:i8
+            add tmp2$0x2962e30, __temp_425$0x2962bd0, 0x200:i8
+            asm "mov $0x0:msq, 0x200001000:msq"
+            asm "mov $0x0:msq, 0x200001008:msq"
+            asm "mov $0x11:msq, 0x200001010:msq"
+            add __temp_432$0x2962bd0, i$0x2962e30, 0xA:i8
+            ldelema __temp_430$0x2962bd0, x$0x299d8d0, i$0x2962e30
+            sub __temp_431$0x2962bd0, __temp_432$0x2962bd0, i$0x2962e30
+            mul __temp_431$0x2962bd0, 0x8:i, __temp_431$0x2962bd0
+            sti 0x200001018:i, __temp_430$0x2962bd0
+            sti 0x200001020:i, __temp_431$0x2962bd0
+            add __temp_435$0x2962bd0, i$0x2962e30, 0xA:i8
+            ldelema __temp_433$0x2962bd0, y$0x299d8d0, i$0x2962e30
+            sub __temp_434$0x2962bd0, __temp_435$0x2962bd0, i$0x2962e30
+            mul __temp_434$0x2962bd0, 0x8:i, __temp_434$0x2962bd0
+            sti 0x200001028:i, __temp_433$0x2962bd0
+            sti 0x200001030:i, __temp_434$0x2962bd0
+            add __temp_438$0x2962bd0, i$0x2962e30, 0xA:i8
+            ldelema __temp_436$0x2962bd0, z$0x299d8d0, i$0x2962e30
+            sub __temp_437$0x2962bd0, __temp_438$0x2962bd0, i$0x2962e30
+            mul __temp_437$0x2962bd0, 0x8:i, __temp_437$0x2962bd0
+            sti 0x200001038:i, __temp_436$0x2962bd0
+            sti 0x200001040:i, __temp_437$0x2962bd0
+            add __temp_441$0x2962bd0, i$0x2962e30, 0xA:i8
+            ldelema __temp_439$0x2962bd0, w$0x299d8d0, i$0x2962e30
+            sub __temp_440$0x2962bd0, __temp_441$0x2962bd0, i$0x2962e30
+            mul __temp_440$0x2962bd0, 0x8:i, __temp_440$0x2962bd0
+            sti 0x200001048:i, __temp_439$0x2962bd0
+            sti 0x200001050:i, __temp_440$0x2962bd0
+            add __temp_444$0x2962bd0, i$0x2962e30, 0xA:i8
+            ldelema __temp_442$0x2962bd0, ci$0x299d8d0, i$0x2962e30
+            sub __temp_443$0x2962bd0, __temp_444$0x2962bd0, i$0x2962e30
+            mul __temp_443$0x2962bd0, 0x8:i, __temp_443$0x2962bd0
+            sti 0x200001058:i, __temp_442$0x2962bd0
+            sti 0x200001060:i, __temp_443$0x2962bd0
+            ldelema __temp_445$0x2962bd0, cx$0x299d8d0, 0x0:i8
+            sub __temp_446$0x2962bd0, 0x2:i8, 0x0:i8
+            mul __temp_446$0x2962bd0, 0x8:i, __temp_446$0x2962bd0
+            sti 0x200001068:i, __temp_445$0x2962bd0
+            sti 0x200001070:i, __temp_446$0x2962bd0
+            ldelema __temp_447$0x2962bd0, cy$0x299d8d0, 0x0:i8
+            sub __temp_448$0x2962bd0, 0x2:i8, 0x0:i8
+            mul __temp_448$0x2962bd0, 0x8:i, __temp_448$0x2962bd0
+            sti 0x200001078:i, __temp_447$0x2962bd0
+            sti 0x200001080:i, __temp_448$0x2962bd0
+            ldelema __temp_449$0x2962bd0, cz$0x299d8d0, 0x0:i8
+            sub __temp_450$0x2962bd0, 0x2:i8, 0x0:i8
+            mul __temp_450$0x2962bd0, 0x8:i, __temp_450$0x2962bd0
+            sti 0x200001088:i, __temp_449$0x2962bd0
+            sti 0x200001090:i, __temp_450$0x2962bd0
+            ldelema __temp_451$0x2962bd0, cw$0x299d8d0, 0x0:i8
+            sub __temp_452$0x2962bd0, 0x2:i8, 0x0:i8
+            mul __temp_452$0x2962bd0, 0x8:i, __temp_452$0x2962bd0
+            sti 0x200001098:i, __temp_451$0x2962bd0
+            sti 0x2000010A0:i, __temp_452$0x2962bd0
+            div __temp_455$0x2962bd0, i$0x2962e30, 0xA:i8
+            mul __temp_456$0x2962bd0, __temp_455$0x2962bd0, 0x200:i8
+            div __temp_457$0x2962bd0, i$0x2962e30, 0xA:i8
+            add __temp_458$0x2962bd0, __temp_457$0x2962bd0, 0x1:i8
+            mul __temp_459$0x2962bd0, __temp_458$0x2962bd0, 0x200:i8
+            ldelema __temp_453$0x2962bd0, trigger$0x299d8d0, __temp_456$0x2962bd0
+            sub __temp_454$0x2962bd0, __temp_459$0x2962bd0, __temp_456$0x2962bd0
+            mul __temp_454$0x2962bd0, 0x8:i, __temp_454$0x2962bd0
+            sti 0x2000010A8:i, __temp_453$0x2962bd0
+            sti 0x2000010B0:i, __temp_454$0x2962bd0
+            lda __temp_460$0x2962bd0, pmem_in$0x299d8d0
+            mov __temp_461$0x2962bd0, 0x8:i
+            sti 0x2000010B8:i, __temp_460$0x2962bd0
+            sti 0x2000010C0:i, __temp_461$0x2962bd0
+            mul __temp_464$0x2962bd0, 0x4:i8, i$0x2962e30
+            add __temp_465$0x2962bd0, i$0x2962e30, 0xA:i8
+            mul __temp_466$0x2962bd0, 0x4:i8, __temp_465$0x2962bd0
+            ldelema __temp_462$0x2962bd0, pmem_in$0x299d8d0, __temp_464$0x2962bd0
+            sub __temp_463$0x2962bd0, __temp_466$0x2962bd0, __temp_464$0x2962bd0
+            mul __temp_463$0x2962bd0, 0x8:i, __temp_463$0x2962bd0
+            sti 0x2000010C8:i, __temp_462$0x2962bd0
+            sti 0x2000010D0:i, __temp_463$0x2962bd0
+            ldelema __temp_467$0x2962bd0, lcx$0x299d8d0, tmp1$0x2962e30
+            sub __temp_468$0x2962bd0, tmp2$0x2962e30, tmp1$0x2962e30
+            mul __temp_468$0x2962bd0, 0x8:i, __temp_468$0x2962bd0
+            sti 0x2000010D8:i, __temp_467$0x2962bd0
+            sti 0x2000010E0:i, __temp_468$0x2962bd0
+            ldelema __temp_469$0x2962bd0, lcy$0x299d8d0, tmp1$0x2962e30
+            sub __temp_470$0x2962bd0, tmp2$0x2962e30, tmp1$0x2962e30
+            mul __temp_470$0x2962bd0, 0x8:i, __temp_470$0x2962bd0
+            sti 0x2000010E8:i, __temp_469$0x2962bd0
+            sti 0x2000010F0:i, __temp_470$0x2962bd0
+            ldelema __temp_471$0x2962bd0, lcz$0x299d8d0, tmp1$0x2962e30
+            sub __temp_472$0x2962bd0, tmp2$0x2962e30, tmp1$0x2962e30
+            mul __temp_472$0x2962bd0, 0x8:i, __temp_472$0x2962bd0
+            sti 0x2000010F8:i, __temp_471$0x2962bd0
+            sti 0x200001100:i, __temp_472$0x2962bd0
+            ldelema __temp_473$0x2962bd0, lcw$0x299d8d0, tmp1$0x2962e30
+            sub __temp_474$0x2962bd0, tmp2$0x2962e30, tmp1$0x2962e30
+            mul __temp_474$0x2962bd0, 0x8:i, __temp_474$0x2962bd0
+            sti 0x200001108:i, __temp_473$0x2962bd0
+            sti 0x200001110:i, __temp_474$0x2962bd0
+            ldelema __temp_475$0x2962bd0, lcn$0x299d8d0, tmp1$0x2962e30
+            sub __temp_476$0x2962bd0, tmp2$0x2962e30, tmp1$0x2962e30
+            mul __temp_476$0x2962bd0, 0x8:i, __temp_476$0x2962bd0
+            sti 0x200001118:i, __temp_475$0x2962bd0
+            sti 0x200001120:i, __temp_476$0x2962bd0
+            asm "mov $0x0:msq, 0x200001128:msq"
+            asm "mov $__newr0:msq, 0x200001130:msq"
+            asm "mov $0x200001000:msq, 0x200001138:msq"
+            asm "mov $0x200001010:msq, 0x200001140:msq"
+            asm "mov $0x200001128:msq, 0x200001148:msq"
+            asm "mov $0x200001130:msq, 0x200001150:msq"
+            asm "newr 0x200001138, 0x200001140, 0x200001148, 0x200001150"
+            ldi __temp_427$0x2962bd0, 0x100000400:i
+            ldi __temp_428$0x2962bd0, 0x100000408:i
+            add __temp_429$0x2962bd0, __temp_427$0x2962bd0, __temp_428$0x2962bd0
+            lda __temp_477$0x2962bd0, shuffle_runner$0x299d8d0
+            sub __temp_429$0x2962bd0, __temp_429$0x2962bd0, 0x8:i8
+            sti __temp_429$0x2962bd0, __temp_477$0x2962bd0
+            sub __temp_429$0x2962bd0, __temp_429$0x2962bd0, 0x8:i8
+            sti __temp_429$0x2962bd0, 0x10:i8
+            add __temp_478$0x2962bd0, i$0x2962e30, 0xA:i8
+            sub __temp_429$0x2962bd0, __temp_429$0x2962bd0, 0x8:i8
+            sti __temp_429$0x2962bd0, __temp_478$0x2962bd0
+            sub __temp_429$0x2962bd0, __temp_429$0x2962bd0, 0x8:i8
+            sti __temp_429$0x2962bd0, i$0x2962e30
+        __temp_418$0x2962e30:
+            add i$0x2962e30, i$0x2962e30, 0xA:i8
+            br __temp_417$0x2962e30
+        __temp_419$0x2962e30:
+            ret
+    }
+    function shuffle_runner
+    {
+            div partid$0x2955610, start$0x2955570, 0xA:i8
+            mov i$0x2955610, start$0x2955570
+        __temp_399$0x2955610:
+            ble end$0x2955570, i$0x2955610, __temp_401$0x2955610
+            ldelem xt$0x2955610, x$0x299d8d0, i$0x2955610
+            ldelem yt$0x2955610, y$0x299d8d0, i$0x2955610
+            ldelem zt$0x2955610, z$0x299d8d0, i$0x2955610
+            ldelem wt$0x2955610, w$0x299d8d0, i$0x2955610
+            mul __temp_407$0x29556b0, 0x4:i8, i$0x2955610
+            stelem pmem_in$0x299d8d0, __temp_407$0x29556b0, xt$0x2955610
+            mul __temp_408$0x29556b0, 0x4:i8, i$0x2955610
+            add __temp_409$0x29556b0, __temp_408$0x29556b0, 0x1:i8
+            stelem pmem_in$0x299d8d0, __temp_409$0x29556b0, yt$0x2955610
+            mul __temp_410$0x29556b0, 0x4:i8, i$0x2955610
+            add __temp_411$0x29556b0, __temp_410$0x29556b0, 0x2:i8
+            stelem pmem_in$0x299d8d0, __temp_411$0x29556b0, zt$0x2955610
+            mul __temp_412$0x29556b0, 0x4:i8, i$0x2955610
+            add __temp_413$0x29556b0, __temp_412$0x29556b0, 0x3:i8
+            stelem pmem_in$0x299d8d0, __temp_413$0x29556b0, wt$0x2955610
+        __temp_400$0x2955610:
+            add i$0x2955610, i$0x2955610, 0x1:i8
+            br __temp_399$0x2955610
+        __temp_401$0x2955610:
+            div __temp_415$0x2955610, start$0x2955570, 0xA:i8
+            mul __temp_416$0x2955610, __temp_415$0x2955610, 0x200:i8
+            stelem trigger$0x299d8d0, __temp_416$0x2955610, 0x2:i8
+            asm "exit:cd"
+    }
+}
